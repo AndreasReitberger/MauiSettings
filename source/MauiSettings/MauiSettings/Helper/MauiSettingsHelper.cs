@@ -56,7 +56,7 @@ namespace AndreasReitberger.Maui.Helper
         public static async Task<string> GetSecureSettingsValueAsync(string key, string defaultValue)
         {
             string settingsObject = await SecureStorage.Default.GetAsync(key);
-            if(settingsObject == null)
+            if (settingsObject == null)
             {
                 return defaultValue;
             }

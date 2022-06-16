@@ -264,13 +264,13 @@ namespace AndreasReitberger.Maui
                             break;
                     }
                     */
-}
+                }
             }
         }
         static async Task GetClassMetaAsyn(object settings, MauiSettingsActions mode)
         {
             //lock (lockObject)
-            if(true)
+            if (true)
             {
                 // Get all member infos from the passed settingsObject
                 IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
@@ -295,16 +295,16 @@ namespace AndreasReitberger.Maui
             {
                 if (value.Body is MemberExpression memberExpression)
                 {
-                    _ = ProcessSettingsInfo(new MauiSettingsMemberInfo() 
+                    _ = ProcessSettingsInfo(new MauiSettingsMemberInfo()
                     {
                         OrignalSettingsObject = settings,
                         Info = memberExpression.Member,
-                        
+
                     }, new MauiSettingsInfo(), mode);
                 }
             }
         }
-       
+
         static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode)
         {
             settingsInfo ??= new();
@@ -387,7 +387,7 @@ namespace AndreasReitberger.Maui
             }
             return true;
         }
-       
+
         static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode)
         {
             settingsInfo ??= new();
@@ -447,7 +447,7 @@ namespace AndreasReitberger.Maui
                 case MauiSettingsActions.Save:
                     // Get the value from the settingsObject
                     settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
-                    if(secure)
+                    if (secure)
                     {
                         if (settingsInfo.Value is string secureString)
                             await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString);
