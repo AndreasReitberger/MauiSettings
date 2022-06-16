@@ -31,7 +31,7 @@ namespace AndreasReitberger.Maui.Helper
         {
             try
             {
-                if(settingValue == null)
+                if (settingValue == null)
                 {
                     Debug.WriteLine($"MauiSettings: The setting value was null for {memberInfo.Name}");
                     return;
@@ -60,7 +60,7 @@ namespace AndreasReitberger.Maui.Helper
                     return;
                 }
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
 
             }
@@ -98,7 +98,7 @@ namespace AndreasReitberger.Maui.Helper
                     object obj = attr.DefaultValue;
                     if (obj?.GetType() != settingType)
                     {
-                        if(obj.GetType() == typeof(string))
+                        if (obj.GetType() == typeof(string))
                         {
                             // Try to pass the string object for the constructor
                             //return Activator.CreateInstance(settingType, new string[] { obj as string });
@@ -129,7 +129,7 @@ namespace AndreasReitberger.Maui.Helper
                         ? Activator.CreateInstance(settingsType, new string[] { setting as string })
                         : Convert.ChangeType(setting, settingsType);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return null;
                 }
