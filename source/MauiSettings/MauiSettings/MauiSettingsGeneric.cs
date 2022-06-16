@@ -2,10 +2,19 @@
 using AndreasReitberger.Maui.Enums;
 using AndreasReitberger.Maui.Helper;
 using AndreasReitberger.Maui.Utilities;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace AndreasReitberger.Maui
 {
+    /*
+     * Based on the idea of Advexp.Settings.Local by Alexey Ivakin
+     * Repo: https://bitbucket.org/advexp/component-advexp.settings
+     * License: Apache-2.0 (https://licenses.nuget.org/Apache-2.0)
+     * 
+     * Modifed by Andreas Reitberger to work on .NET MAUI
+     */
+
     public partial class MauiSettingsGeneric<SO> where SO : new()
     {
         #region Settings Object
@@ -43,9 +52,17 @@ namespace AndreasReitberger.Maui
         {
             LoadSettings(settings: SettingsObject);
         }
+        public static void LoadSetting<T>(Expression<Func<SO, T>> value)
+        {
+            LoadObjectSetting(SettingsObject, value);
+        }
         public void LoadObjectSettings()
         {
             LoadSettings(this);
+        }
+        public static void LoadObjectSetting<T>(object settingsObject, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings: settingsObject, value, MauiSettingsActions.Load);
         }
         public static void LoadSettings(object settings)
         {
@@ -72,6 +89,18 @@ namespace AndreasReitberger.Maui
         {
             SaveSettings(SettingsObject);
         }
+        public static void SaveSetting<T>(Expression<Func<SO, T>> value)
+        {
+            SaveObjectSetting(SettingsObject, value);
+        }
+        public static void SaveObjectSetting<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings, value, MauiSettingsActions.Save);
+        }
+        public void SaveObjectSetting<T>(Expression<Func<SO, T>> value)
+        {
+            SaveObjectSetting(this, value);
+        }
         public void SaveObjectSettings()
         {
             SaveSettings(this);
@@ -87,6 +116,18 @@ namespace AndreasReitberger.Maui
         {
             DeleteSettings(SettingsObject);
         }
+        public static void DeleteSetting<T>(Expression<Func<SO, T>> value)
+        {
+            DeleteObjectSetting(SettingsObject, value);
+        }
+        public void DeleteObjectSetting<T>(Expression<Func<SO, T>> value)
+        {
+            DeleteObjectSetting(this, value);
+        }
+        public static void DeleteObjectSetting<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings, value, MauiSettingsActions.Delete);
+        }
         public void DeleteObjectSettings()
         {
             DeleteSettings(this);
@@ -101,6 +142,20 @@ namespace AndreasReitberger.Maui
         public static void LoadDefaultSettings()
         {
             LoadDefaultSettings(SettingsObject);
+        }
+        public static void LoadDefaultSetting<T>(Expression<Func<SO, T>> value)
+        {
+            LoadObjectDefaultSetting(SettingsObject, value);
+        }
+
+        public void LoadObjectDefaultSetting<T>(Expression<Func<SO, T>> value)
+        {
+            LoadObjectDefaultSetting(this, value);
+        }
+
+        public static void LoadObjectDefaultSetting<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings, value, MauiSettingsActions.LoadDefaults);
         }
         public void LoadObjectDefaultSettings()
         {
@@ -128,7 +183,9 @@ namespace AndreasReitberger.Maui
                 {
                     settingsObjectInfo.OrignalSettingsObject = settings;
                     settingsObjectInfo.Info = mInfo;
-
+                    // Handles saving the settings to the Maui.Storage.Preferences
+                    _ = ProcessSettingsInfo(settingsObjectInfo, settingsInfo, mode);
+                    /*
                     MauiSettingBaseAttribute settingBaseAttribute = null;
                     if (settingsObjectInfo.Info is not null)
                     {
@@ -142,6 +199,7 @@ namespace AndreasReitberger.Maui
                         }
                         settingBaseAttribute = settingBaseAttributes.FirstOrDefault();
                     }
+                    
                     // Get the formated settings name
                     if (settingsObjectInfo.Info is not null)
                     {
@@ -205,10 +263,8 @@ namespace AndreasReitberger.Maui
                         default:
                             break;
                     }
-                }
-
-                // Save settingsObject to MauiSettings
-
+                    */
+}
             }
         }
         static async Task GetClassMetaAsyn(object settings, MauiSettingsActions mode)
@@ -227,91 +283,229 @@ namespace AndreasReitberger.Maui
                 {
                     settingsObjectInfo.OrignalSettingsObject = settings;
                     settingsObjectInfo.Info = mInfo;
-
-                    MauiSettingBaseAttribute settingBaseAttribute = null;
-                    if (settingsObjectInfo.Info is not null)
-                    {
-                        List<MauiSettingAttribute> settingBaseAttributes
-                            = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
-                            .ToList();
-                        if (settingBaseAttributes?.Count == 0)
-                        {
-                            // If the member has not the needed MauiSettingsAttribute, continue with the search
-                            continue;
-                        }
-                        settingBaseAttribute = settingBaseAttributes.FirstOrDefault();
-                    }
-                    bool? secure = false;
-                    if (settingBaseAttribute is MauiSettingAttribute settingAttribute)
-                    {
-                        secure = settingAttribute.Secure;
-                    }
-
-                    // Get the formated settings name
-                    if (settingsObjectInfo.Info is not null)
-                    {
-                        settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
-                        Type type = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
-                        //settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
-                        if (!secure ?? true)
-                        {
-                            settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
-                        }
-                        else if(settingsInfo.SettingsType == typeof(string))
-                        {
-                            settingsInfo.Value = await MauiSettingsHelper.GetSecureSettingsValueAsync(settingsInfo.Name, settingsInfo.Default as string);
-                        }
-                        else
-                        {
-                            throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
-                        }
-                    }
-
-                    switch (mode)
-                    {
-                        case MauiSettingsActions.Load:
-                            if(settingBaseAttribute?.DefaultValueInUse ?? false)
-                            {
-                                object defaultValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
-                            
-                            }
-                            // Sets the loaded value back to the settingsObject
-
-                            MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
-                            break;
-                        case MauiSettingsActions.Save:
-                            // Get the value from the settingsObject
-                            settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
-                            MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
-                            break;
-                        case MauiSettingsActions.Delete:
-                            object fallbackValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
-                            settingsInfo.Value = fallbackValue;
-                            settingsInfo.Default = fallbackValue;
-                            if (settingsObjectInfo.Info is not null)
-                            {
-                                MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, fallbackValue, settingsInfo.SettingsType);
-                            }
-                            break;
-                        case MauiSettingsActions.LoadDefaults:
-                            object defaulSettingtValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
-                            if (settingsObjectInfo.Info is not null)
-                            {
-                                MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, defaulSettingtValue, settingsInfo.SettingsType);
-                            }
-                            settingsInfo.Value = defaulSettingtValue;
-                            settingsInfo.Default = defaulSettingtValue;
-                            break;
-                        default:
-                            break;
-                    }
+                    // Handles saving the settings to the Maui.Storage.Preferences
+                    _ = await ProcessSettingsInfoAsync(settingsObjectInfo, settingsInfo, mode);
                 }
-
-                // Save settingsObject to MauiSettings
-
             }
         }
-#endregion
+
+        static void GetExpressionMeta<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode)
+        {
+            lock (lockObject)
+            {
+                if (value.Body is MemberExpression memberExpression)
+                {
+                    _ = ProcessSettingsInfo(new MauiSettingsMemberInfo() 
+                    {
+                        OrignalSettingsObject = settings,
+                        Info = memberExpression.Member,
+                        
+                    }, new MauiSettingsInfo(), mode);
+                }
+            }
+        }
+       
+        static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode)
+        {
+            settingsInfo ??= new();
+            MauiSettingBaseAttribute settingBaseAttribute = null;
+            if (settingsObjectInfo.Info is not null)
+            {
+                List<MauiSettingAttribute> settingBaseAttributes
+                    = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
+                    .ToList();
+                if (settingBaseAttributes?.Count == 0)
+                {
+                    // If the member has not the needed MauiSettingsAttribute, continue with the search
+                    return false;
+                }
+                settingBaseAttribute = settingBaseAttributes.FirstOrDefault();
+            }
+            if (settingsObjectInfo.Info is not null)
+            {
+                settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
+                settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
+
+                settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+
+                //Type type = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
+                //settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
+                settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+            }
+            bool? secure = false;
+            if (settingBaseAttribute is MauiSettingAttribute settingAttribute)
+            {
+                secure = settingAttribute.Secure;
+                if (secure ?? false)
+                {
+#if DEBUG
+
+#else
+                    throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+#endif
+                }
+            }
+
+            switch (mode)
+            {
+                case MauiSettingsActions.Load:
+                    if (settingBaseAttribute?.DefaultValueInUse ?? false)
+                    {
+                        object defaultValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+
+                    }
+                    // Sets the loaded value back to the settingsObject
+                    MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
+                    break;
+                case MauiSettingsActions.Save:
+                    // Get the value from the settingsObject
+                    settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
+                    MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    break;
+                case MauiSettingsActions.Delete:
+                    object fallbackValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+                    settingsInfo.Value = fallbackValue;
+                    settingsInfo.Default = fallbackValue;
+                    if (settingsObjectInfo.Info is not null)
+                    {
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, fallbackValue, settingsInfo.SettingsType);
+                    }
+                    MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    break;
+                case MauiSettingsActions.LoadDefaults:
+                    object defaulSettingtValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+                    if (settingsObjectInfo.Info is not null)
+                    {
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, defaulSettingtValue, settingsInfo.SettingsType);
+                    }
+                    settingsInfo.Value = defaulSettingtValue;
+                    settingsInfo.Default = defaulSettingtValue;
+                    MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+       
+        static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode)
+        {
+            settingsInfo ??= new();
+            MauiSettingBaseAttribute settingBaseAttribute = null;
+            if (settingsObjectInfo.Info is not null)
+            {
+                List<MauiSettingAttribute> settingBaseAttributes
+                    = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
+                    .ToList();
+                if (settingBaseAttributes?.Count == 0)
+                {
+                    // If the member has not the needed MauiSettingsAttribute, continue with the search
+                    return false;
+                }
+                settingBaseAttribute = settingBaseAttributes.FirstOrDefault();
+            }
+            if (settingsObjectInfo.Info is not null)
+            {
+                settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
+                settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
+
+                settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+
+                //Type type = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
+                //settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
+                settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+            }
+            bool secure = false;
+            if (settingBaseAttribute is MauiSettingAttribute settingAttribute)
+            {
+                secure = settingAttribute.Secure;
+                if (!secure)
+                {
+                    settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                }
+                else if (settingsInfo.SettingsType == typeof(string))
+                {
+                    settingsInfo.Value = await MauiSettingsHelper.GetSecureSettingsValueAsync(settingsInfo.Name, settingsInfo.Default as string);
+                }
+                else
+                {
+                    throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+                }
+            }
+
+            switch (mode)
+            {
+                case MauiSettingsActions.Load:
+                    if (settingBaseAttribute?.DefaultValueInUse ?? false)
+                    {
+                        object defaultValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+
+                    }
+                    // Sets the loaded value back to the settingsObject
+                    MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
+                    break;
+                case MauiSettingsActions.Save:
+                    // Get the value from the settingsObject
+                    settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
+                    if(secure)
+                    {
+                        if (settingsInfo.Value is string secureString)
+                            await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString);
+                        else
+                            throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+                    }
+                    else
+                    {
+                        MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    }
+
+                    break;
+                case MauiSettingsActions.Delete:
+                    object fallbackValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+                    settingsInfo.Value = fallbackValue;
+                    settingsInfo.Default = fallbackValue;
+                    if (settingsObjectInfo.Info is not null)
+                    {
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, fallbackValue, settingsInfo.SettingsType);
+                    }
+                    if (secure)
+                    {
+                        if (settingsInfo.Value is string secureString)
+                            await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString);
+                        else
+                            throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+                    }
+                    else
+                    {
+                        MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    }
+                    break;
+                case MauiSettingsActions.LoadDefaults:
+                    object defaulSettingtValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
+                    if (settingsObjectInfo.Info is not null)
+                    {
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, defaulSettingtValue, settingsInfo.SettingsType);
+                    }
+                    settingsInfo.Value = defaulSettingtValue;
+                    settingsInfo.Default = defaulSettingtValue;
+                    if (secure)
+                    {
+                        if (settingsInfo.Value is string secureString)
+                            await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString);
+                        else
+                            throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+                    }
+                    else
+                    {
+                        MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        #endregion
 
         #endregion
     }

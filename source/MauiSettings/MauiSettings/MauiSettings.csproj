@@ -19,15 +19,15 @@
 		<Copyright>Andreas Reitberger</Copyright>
 		<PackageProjectUrl>https://github.com/AndreasReitberger/MauiSettings</PackageProjectUrl>
 		<Description>A .NET MAUI library to store settings locally and in the cloud</Description>
-		<RepositoryUrl>https://github.com/AndreasReitberger/MauiCloudSync</RepositoryUrl>
+		<RepositoryUrl>https://github.com/AndreasReitberger/MauiSettings</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags> MAUI, dotnet, NET, Settings, Preference</PackageTags>
 		<PackageLicenseExpression>apache-2.0</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>MauiSettings</Title>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
-		<FileVersion>1.0.0</FileVersion>
+		<AssemblyVersion>1.0.1</AssemblyVersion>
+		<FileVersion>1.0.1</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
