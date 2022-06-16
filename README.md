@@ -1,6 +1,13 @@
 # MauiSettings
 A nuget to improve settings storage (locally and eventually in the cloud) on .NET MAUI projects.
 
+The plugin idea is based on the Advexp.Settings.Local nuget by Alexey Ivakin</br>
+Repo: https://bitbucket.org/advexp/component-advexp.settings/src/master/</br>
+License: Apache-2.0 (https://licenses.nuget.org/Apache-2.0)</br>
+
+This project was created from scratch, however uses the basic idea to keep all Settings in the
+static object. All taken and changed files have been marked so.
+
 # Usage
 ## Settings Object
 In the .NET MAUI project, create a new `Class` (for instance `SettingsApp.cs`) holding your setting properties.
