@@ -1,0 +1,63 @@
+# Based on: https://github.com/xamarin/Xamarin.Forms/actions/runs/1430256868
+name: Code format check
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+        
+permissions:
+  pull-requests: write
+  contents: write        
+        
+jobs:
+  dotnet-format:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run dotnet format
+        run: dotnet format whitespace source --folder
+    
+      - name: Commit files
+        if: steps.format.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update'
+          
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: '[housekeeping] Automated PR to fix formatting errors'
+          body: |
+            Automated PR to fix formatting errors
+          committer: GitHub <noreply@github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          labels: t/housekeeping ♻︎
+          assignees: AndreasReitberger
+          reviewers: AndreasReitberger
+          branch: housekeeping/fix-codeformatting
+
+      # Pushing won't work to forked repos
+      # - name: Commit files
+      #   if: steps.format.outputs.has-changes == 'true'
+      #   run: |
+      #     git config --local user.name "github-actions[bot]"
+      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git commit -a -m 'Automated dotnet-format update
+      #     Co-authored-by: ${{ github.event.pull_request.user.login }} <${{ github.event.pull_request.user.id }}+${{ github.event.pull_request.user.login }}@users.noreply.github.com>'
+
+      # - name: Push changes
+      #   if: steps.format.outputs.has-changes == 'true'
+      #   uses: ad-m/github-push-action@v0.6.0
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.event.pull_request.head.ref }} 
