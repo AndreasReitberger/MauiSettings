@@ -8,6 +8,11 @@ License: Apache-2.0 (https://licenses.nuget.org/Apache-2.0)</br>
 This project was created from scratch, however uses the basic idea to keep all Settings in the
 static object. All taken and changed files have been marked so.
 
+# Nuget
+Get the latest version from nuget.org<br>
+[![NuGet](https://img.shields.io/nuget/v/SettingsMaui.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/SettingsMaui/)
+[![NuGet](https://img.shields.io/nuget/dt/SettingsMaui.svg)](https://www.nuget.org/packages/SettingsMaui)
+
 # Usage
 ## Settings Object
 In the .NET MAUI project, create a new `Class` (for instance `SettingsApp.cs`) holding your setting properties.
