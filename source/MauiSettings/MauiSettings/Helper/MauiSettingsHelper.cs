@@ -44,7 +44,7 @@ namespace AndreasReitberger.Maui.Helper
                     break;
                 default:
                     // For all other types try to serialize it as JSON
-                    string jsonString = Preferences.Get(key, string.Empty);
+                    string jsonString = Preferences.Get(key, string.Empty) ?? string.Empty;
                     returnValue = JsonConvert.DeserializeObject<T>(jsonString);
                     break;
             }

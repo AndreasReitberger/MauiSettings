@@ -22,12 +22,13 @@
 		<RepositoryUrl>https://github.com/AndreasReitberger/MauiSettings</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags> MAUI, dotnet, NET, Settings, Preference</PackageTags>
-		<PackageLicenseExpression>apache-2.0</PackageLicenseExpression>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>MauiSettings</Title>
 		<AssemblyVersion>1.0.1</AssemblyVersion>
 		<FileVersion>1.0.1</FileVersion>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
