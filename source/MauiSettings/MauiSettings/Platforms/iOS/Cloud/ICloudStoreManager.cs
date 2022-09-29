@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,11 +25,11 @@ namespace AndreasReitberger.Maui.Cloud
             return Store?.GetString(key);
         }
 
-        public static void SetValue<T>(string key, T value, bool synchronize = true) where T : string
+        public static void SetValue<T>(string key, T value, bool synchronize = true)
         {
             // Maximum key size - Key names cannot be longer than 64 bytes.
             // Maximum value size - You cannot store more than 64 kilobytes in a single value.
-            long size = key?.Length * sizeof(char);
+            long size = key?.Length ?? 0 * sizeof(char);
             if(size > LimitKey)
             {
                 throw new ArgumentOutOfRangeException($"The size of the key '{key}' exceeds the limit of '{LimitKey}' (current size is '{size}')!");
@@ -45,6 +46,11 @@ namespace AndreasReitberger.Maui.Cloud
                 if(synchronize)
                     Store?.Synchronize();
             }
+        }
+
+        public static void SeString(string key, string value, bool synchronize = true)
+        {
+            SetValue(key, value, synchronize);  
         }
 
         public static void DeleteValue(string key, bool synchronize = true)
