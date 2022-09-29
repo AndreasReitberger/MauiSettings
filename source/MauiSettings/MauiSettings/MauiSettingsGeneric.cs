@@ -79,7 +79,7 @@ namespace AndreasReitberger.Maui
         {
             await Task.Run(async delegate
             {
-                await GetClassMetaAsyn(settings: settings, mode: MauiSettingsActions.Load);
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load);
             });
         }
         #endregion
@@ -188,7 +188,7 @@ namespace AndreasReitberger.Maui
                 }
             }
         }
-        static async Task GetClassMetaAsyn(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
+        static async Task GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
         {
             //lock (lockObject)
             if (true)
@@ -539,8 +539,8 @@ namespace AndreasReitberger.Maui
             }
             return true;
         }
-#endregion
+        #endregion
 
-#endregion
+        #endregion
     }
 }
