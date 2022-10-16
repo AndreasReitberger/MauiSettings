@@ -7,6 +7,7 @@
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class MauiSettingBaseAttribute : Attribute
     {
         #region Properties

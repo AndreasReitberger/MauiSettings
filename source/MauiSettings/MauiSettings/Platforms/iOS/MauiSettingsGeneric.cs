@@ -1,4 +1,5 @@
 ﻿using AndreasReitberger.Maui.Enums;
+using System.Linq.Expressions;
 
 namespace AndreasReitberger.Maui
 {
@@ -6,26 +7,63 @@ namespace AndreasReitberger.Maui
     public partial class MauiSettingsGeneric<SO> where SO : new()
     {
         #region Methods
-        public async Task SyncSettingsToICloud()
+
+        #region Save
+        public async Task SyncSettingsToICloudAsync()
         {
             await Task.Run(async delegate
             {
-                await SyncSettingsToICloud(settings: SettingsObject);
+                await SyncSettingsToICloudAsync(settings: SettingsObject);
             });
         }
 
-        public async Task SyncSettingsToICloud(object settings)
+        public void SyncSettingsToICloud<T>(Expression<Func<SO, T>> value)
+        {
+            SyncSettingsToICloud(settings: SettingsObject, value: value);
+        }
+
+        public async Task SyncSettingsToICloudAsync(object settings)
         {
             await Task.Run(async delegate
             {
-                await GetClassMetaAsyn(settings: settings, mode: MauiSettingsActions.Load);
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save, target: MauiSettingsTarget.ICloud);
+            });
+        }
+        public void SyncSettingsToICloud<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings: settings, value: value, mode: MauiSettingsActions.Save, target: MauiSettingsTarget.ICloud);
+        }
+
+        #endregion
+
+        #region Load
+
+        public async Task SyncSettingsFromICloudAsync()
+        {
+            await Task.Run(async delegate
+            {
+                await SyncSettingsFromICloudAsync(settings: SettingsObject);
             });
         }
 
-        public async Task SyncSettingsFromICloud()
+        public void SyncSettingsFromICloud<T>(Expression<Func<SO, T>> value)
         {
-
+            SyncSettingsFromICloud(settings: SettingsObject, value: value);
         }
+
+        public async Task SyncSettingsFromICloudAsync(object settings)
+        {
+            await Task.Run(async delegate
+            {
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, target: MauiSettingsTarget.ICloud);
+            });
+        }
+        public void SyncSettingsFromICloud<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            GetExpressionMeta(settings: settings, value: value, mode: MauiSettingsActions.Load, target: MauiSettingsTarget.ICloud);
+        }
+        #endregion
+
         #endregion
     }
 }

@@ -1,4 +1,7 @@
 ﻿using AndreasReitberger.Maui.Attributes;
+#if IOS
+using AndreasReitberger.Maui.Cloud;
+#endif
 using AndreasReitberger.Maui.Enums;
 using AndreasReitberger.Maui.Helper;
 using AndreasReitberger.Maui.Utilities;
@@ -79,7 +82,7 @@ namespace AndreasReitberger.Maui
         {
             await Task.Run(async delegate
             {
-                await GetClassMetaAsyn(settings: settings, mode: MauiSettingsActions.Load);
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load);
             });
         }
         #endregion
@@ -188,7 +191,7 @@ namespace AndreasReitberger.Maui
                 }
             }
         }
-        static async Task GetClassMetaAsyn(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
+        static async Task GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
         {
             //lock (lockObject)
             if (true)
@@ -255,7 +258,7 @@ namespace AndreasReitberger.Maui
                 {
 #if IOS
                     case MauiSettingsTarget.ICloud:
-
+                        settingsInfo.Value = ICloudStoreManager.GetValue(settingsInfo.Name) ?? settingsInfo.Default;
                         break;
 #endif
                     case MauiSettingsTarget.Local:
@@ -272,8 +275,8 @@ namespace AndreasReitberger.Maui
                 secure = settingAttribute.Secure;
                 if (secure ?? false)
                 {
-#if DEBUG
-
+#if IOS
+                    throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
 #else
                     throw new NotSupportedException("SecureStorage is only available in the Async methods!");
 #endif
@@ -298,7 +301,7 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -319,7 +322,16 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            if (settingsInfo.Value != null)
+                            {
+                                // If there is a default value, do not delete the key. Instead write the default value
+                                ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
+                            }
+                            else
+                            {
+                                // Otherwise delete the key from the cloud storage
+                                ICloudStoreManager.DeleteValue(settingsInfo.Name);
+                            }
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -340,7 +352,7 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -392,7 +404,7 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            settingsInfo.Value = ICloudStoreManager.GetValue(settingsInfo.Name) ?? settingsInfo.Default;
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -408,8 +420,8 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
-                            break;
+                            throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                            //break;
 #endif
                         case MauiSettingsTarget.Local:
                         default:
@@ -419,7 +431,11 @@ namespace AndreasReitberger.Maui
                 }
                 else
                 {
+#if IOS
+                    throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+#else
                     throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+#endif
                 }
             }
 
@@ -441,7 +457,7 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -476,7 +492,16 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            if (settingsInfo.Value != null)
+                            {
+                                // If there is a default value, do not delete the key. Instead write the default value
+                                ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
+                            }
+                            else
+                            {
+                                // Otherwise delete the key from the cloud storage
+                                ICloudStoreManager.DeleteValue(settingsInfo.Name);
+                            }
                             break;
 #endif
                         case MauiSettingsTarget.Local:
@@ -511,7 +536,7 @@ namespace AndreasReitberger.Maui
                     {
 #if IOS
                         case MauiSettingsTarget.ICloud:
-
+                            ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             break;
 #endif
                         case MauiSettingsTarget.Local:
