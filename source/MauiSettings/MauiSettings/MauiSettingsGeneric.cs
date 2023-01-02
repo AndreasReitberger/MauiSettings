@@ -508,7 +508,7 @@ namespace AndreasReitberger.Maui
                                 MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
                             }
                             break;
-                    }                  
+                    }
                     break;
                 case MauiSettingsActions.Delete:
                     object fallbackValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
@@ -552,7 +552,7 @@ namespace AndreasReitberger.Maui
                                 MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value);
                             }
                             break;
-                    }                
+                    }
                     break;
                 case MauiSettingsActions.LoadDefaults:
                     object defaulSettingtValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
@@ -594,7 +594,7 @@ namespace AndreasReitberger.Maui
             }
             return true;
         }
-#endregion
+        #endregion
 
         #endregion
     }
