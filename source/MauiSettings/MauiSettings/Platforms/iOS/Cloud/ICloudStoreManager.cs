@@ -30,11 +30,11 @@ namespace AndreasReitberger.Maui.Cloud
             // Maximum key size - Key names cannot be longer than 64 bytes.
             // Maximum value size - You cannot store more than 64 kilobytes in a single value.
             long size = key?.Length ?? 0 * sizeof(char);
-            if(size > LimitKey)
+            if (size > LimitKey)
             {
                 throw new ArgumentOutOfRangeException($"The size of the key '{key}' exceeds the limit of '{LimitKey}' (current size is '{size}')!");
             }
-            if(value is string valueString)
+            if (value is string valueString)
             {
                 size = valueString.Length * sizeof(char);
                 if (size > LimitKey)
@@ -43,14 +43,14 @@ namespace AndreasReitberger.Maui.Cloud
                 }
 
                 Store?.SetString(key, valueString);  // key and value
-                if(synchronize)
+                if (synchronize)
                     Store?.Synchronize();
             }
         }
 
         public static void SeString(string key, string value, bool synchronize = true)
         {
-            SetValue(key, value, synchronize);  
+            SetValue(key, value, synchronize);
         }
 
         public static void DeleteValue(string key, bool synchronize = true)
