@@ -32,7 +32,6 @@
 		<FileVersion>1.0.2</FileVersion>
 		<Version>1.0.2</Version>
 		<Product>Settings.Maui</Product>
-		<PackageId>SettingsMaui </PackageId>
 	</PropertyGroup>
 
 	<ItemGroup>
