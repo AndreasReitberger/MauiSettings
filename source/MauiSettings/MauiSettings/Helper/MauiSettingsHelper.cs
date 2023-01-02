@@ -45,7 +45,16 @@ namespace AndreasReitberger.Maui.Helper
                 default:
                     // For all other types try to serialize it as JSON
                     string jsonString = Preferences.Get(key, string.Empty) ?? string.Empty;
-                    returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+                    if (defaultValue == null)
+                    {
+                        // In this case it's unkown to what data type the string should be deserialized.
+                        // So just return the string as it is to avoid exceptions while converting.
+                        returnValue = jsonString;
+                    }
+                    else
+                    {
+                        returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+                    }
                     break;
             }
             return (T)Convert.ChangeType(returnValue, typeof(T));

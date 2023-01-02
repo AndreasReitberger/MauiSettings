@@ -112,6 +112,20 @@ namespace AndreasReitberger.Maui
         {
             GetClassMeta(settings, MauiSettingsActions.Save);
         }
+        public static async Task SaveSettingsAsync()
+        {
+            await Task.Run(async delegate
+            {
+                await SaveSettingsAsync(settings: SettingsObject);
+            });
+        }
+        public static async Task SaveSettingsAsync(object settings)
+        {
+            await Task.Run(async delegate
+            {
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save);
+            });
+        }
         #endregion
 
         #region DeleteSettings
@@ -276,7 +290,15 @@ namespace AndreasReitberger.Maui
                 if (secure ?? false)
                 {
 #if IOS
-                    throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                    switch (target)
+                    {
+                        case MauiSettingsTarget.ICloud:
+                            throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                        case MauiSettingsTarget.Local:
+                        default:
+                            throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+
+                    }
 #else
                     throw new NotSupportedException("SecureStorage is only available in the Async methods!");
 #endif
@@ -432,7 +454,15 @@ namespace AndreasReitberger.Maui
                 else
                 {
 #if IOS
-                    throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                    switch (target)
+                    {
+                        case MauiSettingsTarget.ICloud:
+                            throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                        case MauiSettingsTarget.Local:
+                        default:
+                            throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
+
+                    }
 #else
                     throw new InvalidDataException($"Only data type of '{typeof(string)}' is allowed for secure storage!");
 #endif
@@ -566,6 +596,6 @@ namespace AndreasReitberger.Maui
         }
 #endregion
 
-#endregion
+        #endregion
     }
 }
