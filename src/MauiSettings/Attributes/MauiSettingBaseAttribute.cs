@@ -11,7 +11,7 @@
     public class MauiSettingBaseAttribute : Attribute
     {
         #region Properties
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         private object _default;
         public object DefaultValue
