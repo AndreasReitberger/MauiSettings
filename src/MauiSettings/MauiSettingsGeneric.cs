@@ -85,6 +85,20 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load);
             });
         }
+        public static async Task LoadSecureSettingsAsync()
+        {
+            await Task.Run(async delegate
+            {
+                await LoadSecureSettingsAsync(settings: SettingsObject);
+            });
+        }
+        public static async Task LoadSecureSettingsAsync(object settings)
+        {
+            await Task.Run(async delegate
+            {
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, secureOnly: true);
+            });
+        }
         #endregion
 
         #region SaveSettings
@@ -205,7 +219,7 @@ namespace AndreasReitberger.Maui
                 }
             }
         }
-        static async Task GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
+        static async Task GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false)
         {
             //lock (lockObject)
             if (true)
@@ -222,7 +236,7 @@ namespace AndreasReitberger.Maui
                     settingsObjectInfo.OrignalSettingsObject = settings;
                     settingsObjectInfo.Info = mInfo;
                     // Handles saving the settings to the Maui.Storage.Preferences
-                    _ = await ProcessSettingsInfoAsync(settingsObjectInfo, settingsInfo, mode, target);
+                    _ = await ProcessSettingsInfoAsync(settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly);
                 }
             }
         }
@@ -243,7 +257,7 @@ namespace AndreasReitberger.Maui
             }
         }
 
-        static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target)
+        static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool throwOnError = false)
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute settingBaseAttribute = null;
@@ -300,7 +314,7 @@ namespace AndreasReitberger.Maui
 
                     }
 #else
-                    throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                    if (throwOnError) throw new NotSupportedException("SecureStorage is only available in the Async methods!");
 #endif
                 }
             }
@@ -389,7 +403,7 @@ namespace AndreasReitberger.Maui
             return true;
         }
 
-        static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target)
+        static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool secureOnly = false)
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute settingBaseAttribute = null;
@@ -422,6 +436,9 @@ namespace AndreasReitberger.Maui
                 secure = settingAttribute.Secure;
                 if (!secure)
                 {
+                    // If only secure storage should be loaded, stop here.
+                    if (secureOnly) 
+                        return true;
                     switch (target)
                     {
 #if IOS
