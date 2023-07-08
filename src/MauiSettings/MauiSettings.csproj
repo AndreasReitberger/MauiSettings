@@ -28,7 +28,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Settings.Maui</Title>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 		<Product>Settings.Maui</Product>
 		<PackageId>SettingsMaui </PackageId>
 	</PropertyGroup>
