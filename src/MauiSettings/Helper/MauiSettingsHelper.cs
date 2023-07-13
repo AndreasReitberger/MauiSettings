@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Security;
 
 namespace AndreasReitberger.Maui.Helper
 {
@@ -109,7 +110,12 @@ namespace AndreasReitberger.Maui.Helper
         }
         public static async Task SetSecureSettingsValueAsync(string key, string value)
         {
-            await SecureStorage.Default.SetAsync(key, value);
+            if (string.IsNullOrEmpty(value))
+            {
+                // It's not allowed to set a secure value to an empty string, so remove it.
+                SecureStorage.Default.Remove(key);
+            }
+            else await SecureStorage.Default.SetAsync(key, value);
         }
 
         public static void ClearSettings()

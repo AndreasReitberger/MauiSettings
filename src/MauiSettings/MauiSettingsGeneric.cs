@@ -140,6 +140,20 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save);
             });
         }
+        public static async Task SaveSecureSettingsAsync()
+        {
+            await Task.Run(async delegate
+            {
+                await SaveSecureSettingsAsync(settings: SettingsObject);
+            });
+        }
+        public static async Task SaveSecureSettingsAsync(object settings)
+        {
+            await Task.Run(async delegate
+            {
+                await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save, secureOnly: true);
+            });
+        }
         #endregion
 
         #region DeleteSettings
