@@ -58,7 +58,13 @@ namespace AndreasReitberger.Maui.Helper
                     }
                     break;
             }
-            return (T)Convert.ChangeType(returnValue, typeof(T));
+            return ChangeSettingsType<T>(returnValue, defaultValue);
+            //return (T)Convert.ChangeType(returnValue, typeof(T));
+        }
+
+        public static T ChangeSettingsType<T>(object settingsValue, T defaultValue)
+        {
+            return (T)Convert.ChangeType(settingsValue, typeof(T));
         }
 
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
