@@ -61,6 +61,13 @@ namespace AndreasReitberger.Maui
         {
             LoadObjectSetting(SettingsObject, value);
         }
+        public static async Task LoadSettingAsync<T>(Expression<Func<SO, T>> value)
+        {
+            await Task.Run(async delegate
+            {
+                await LoadObjectSettingAsync(SettingsObject, value);
+            });
+        }
         public void LoadObjectSettings()
         {
             LoadSettings(this);
@@ -68,6 +75,13 @@ namespace AndreasReitberger.Maui
         public static void LoadObjectSetting<T>(object settingsObject, Expression<Func<SO, T>> value)
         {
             GetExpressionMeta(settings: settingsObject, value, MauiSettingsActions.Load);
+        }
+        public static async Task LoadObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value)
+        {
+            await Task.Run(async delegate
+            {
+                await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load);
+            });
         }
         public static void LoadSettings(object settings)
         {
@@ -106,6 +120,13 @@ namespace AndreasReitberger.Maui
             await Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, save: save);
+            });
+        }
+        public static async Task LoadSettingsAsync(string key, Tuple<object, Type> data, bool save = true)
+        {
+            await Task.Run(async delegate
+            {
+                await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { key, data} }, save: save);
             });
         }
         public static async Task LoadSettingsAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, bool save = true)
@@ -313,6 +334,16 @@ namespace AndreasReitberger.Maui
             return setting;
         }
 
+        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value)
+        {
+            return await ToSettingsTupleAsync(settings: SettingsObject, value: value);
+        }
+
+        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            MauiSettingsInfo info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value);
+            return new(info.Name, new(info.Value, info.SettingsType));
+        }
         #endregion
 
         #region Private
@@ -421,6 +452,34 @@ namespace AndreasReitberger.Maui
                     }, new MauiSettingsInfo(), mode, target);
                 }
             }
+        }
+
+        static async Task GetExpressionMetaAsync<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
+        {
+
+            if (value.Body is MemberExpression memberExpression)
+            {
+                _ = await ProcessSettingsInfoAsync(new MauiSettingsMemberInfo()
+                {
+                    OrignalSettingsObject = settings,
+                    Info = memberExpression.Member,
+
+                }, new MauiSettingsInfo(), mode, target);
+            }        
+        }
+
+        static async Task<MauiSettingsInfo> GetExpressionMetaAsKeyValuePairAsync<T>(object settings, Expression<Func<SO, T>> value)
+        {
+            if (value.Body is MemberExpression memberExpression)
+            {
+                return await ProcessSettingsInfoAsKeyValuePairAsync(new MauiSettingsMemberInfo()
+                {
+                    OrignalSettingsObject = settings,
+                    Info = memberExpression.Member,
+
+                }, new MauiSettingsInfo());
+            }
+            return new();
         }
 
         static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool throwOnError = false)
