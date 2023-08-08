@@ -532,10 +532,12 @@ namespace AndreasReitberger.Maui
                     switch (target)
                     {
                         case MauiSettingsTarget.ICloud:
-                            throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                            if (throwOnError) throw new NotSupportedException("SecureStorage is not available for iCloud sync!");
+                            else break;
                         case MauiSettingsTarget.Local:
                         default:
-                            throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                            if (throwOnError) throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                            else break;
 
                     }
 #else
