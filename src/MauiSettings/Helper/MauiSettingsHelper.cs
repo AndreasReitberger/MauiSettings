@@ -20,43 +20,51 @@ namespace AndreasReitberger.Maui.Helper
         public static T GetSettingsValue<T>(string key, T defaultValue)
         {
             object returnValue = null;
-            switch (defaultValue)
+            try
             {
-                case bool b:
-                    returnValue = Preferences.Get(key, b);
-                    break;
-                case double d:
-                    returnValue = Preferences.Get(key, d);
-                    break;
-                case int i:
-                    returnValue = Preferences.Get(key, i);
-                    break;
-                case float f:
-                    returnValue = Preferences.Get(key, f);
-                    break;
-                case long l:
-                    returnValue = Preferences.Get(key, l);
-                    break;
-                case string s:
-                    returnValue = Preferences.Get(key, s);
-                    break;
-                case DateTime dt:
-                    returnValue = Preferences.Get(key, dt);
-                    break;
-                default:
-                    // For all other types try to serialize it as JSON
-                    string jsonString = Preferences.Get(key, string.Empty) ?? string.Empty;
-                    if (defaultValue == null)
-                    {
-                        // In this case it's unkown to what data type the string should be deserialized.
-                        // So just return the string as it is to avoid exceptions while converting.
-                        returnValue = jsonString;
-                    }
-                    else
-                    {
-                        returnValue = JsonConvert.DeserializeObject<T>(jsonString);
-                    }
-                    break;
+                switch (defaultValue)
+                {
+                    case bool b:
+                        returnValue = Preferences.Get(key, b);
+                        break;
+                    case double d:
+                        returnValue = Preferences.Get(key, d);
+                        break;
+                    case int i:
+                        returnValue = Preferences.Get(key, i);
+                        break;
+                    case float f:
+                        returnValue = Preferences.Get(key, f);
+                        break;
+                    case long l:
+                        returnValue = Preferences.Get(key, l);
+                        break;
+                    case string s:
+                        returnValue = Preferences.Get(key, s);
+                        break;
+                    case DateTime dt:
+                        returnValue = Preferences.Get(key, dt);
+                        break;
+                    default:
+                        // For all other types try to serialize it as JSON
+                        string jsonString = Preferences.Get(key, string.Empty) ?? string.Empty;
+                        if (defaultValue == null)
+                        {
+                            // In this case it's unkown to what data type the string should be deserialized.
+                            // So just return the string as it is to avoid exceptions while converting.
+                            returnValue = jsonString;
+                        }
+                        else
+                        {
+                            returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                SetSettingsValue(key, defaultValue);
+                return defaultValue;
             }
             return ChangeSettingsType<T>(returnValue, defaultValue);
             //return (T)Convert.ChangeType(returnValue, typeof(T));
