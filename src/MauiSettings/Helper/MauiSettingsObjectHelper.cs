@@ -62,23 +62,30 @@ namespace AndreasReitberger.Maui.Helper
             }
             catch (Exception)
             {
-                
+                //throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}", exc);
             }
-            throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}");
+            
         }
 
         public static Type GetSettingType(MemberInfo memberInfo)
         {
-            if (memberInfo is FieldInfo fieldInfo)
+            try
             {
-                return fieldInfo.FieldType;
+                if (memberInfo is FieldInfo fieldInfo)
+                {
+                    return fieldInfo.FieldType;
+                }
+                if (memberInfo is PropertyInfo propertyInfo)
+                {
+                    return propertyInfo.PropertyType;
+                }
+                else
+                    return default;
             }
-
-            if (memberInfo is PropertyInfo propertyInfo)
+            catch (Exception exc)
             {
-                return propertyInfo.PropertyType;
+                throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}", exc);
             }
-            throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}");
         }
 
         public static object GetTypeDefaultValue(Type type)
@@ -107,7 +114,6 @@ namespace AndreasReitberger.Maui.Helper
                     }
                     return obj;
                 }
-
                 return GetTypeDefaultValue(settingType);
             }
             catch (Exception)
@@ -124,7 +130,6 @@ namespace AndreasReitberger.Maui.Helper
                 {
                     if (setting?.GetType() == settingsType)
                         return setting;
-                    //
                     return setting.GetType() == typeof(string)
                         ? Activator.CreateInstance(settingsType, new string[] { setting as string })
                         : Convert.ChangeType(setting, settingsType);
