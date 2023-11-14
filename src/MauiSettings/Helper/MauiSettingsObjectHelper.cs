@@ -60,9 +60,9 @@ namespace AndreasReitberger.Maui.Helper
                     return;
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}", exc);
+                //throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}", exc);
             }
             
         }
