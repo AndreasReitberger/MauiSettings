@@ -61,7 +61,11 @@ namespace AndreasReitberger.Maui.Helper
                         break;
                 }
             }
+#if DEBUG
             catch (Exception ex)
+#else
+            catch (Exception)
+#endif
             {
                 SetSettingsValue(key, defaultValue);
                 return defaultValue;
@@ -141,6 +145,6 @@ namespace AndreasReitberger.Maui.Helper
         {
             SecureStorage.Default.RemoveAll();
         }
-        #endregion
+#endregion
     }
 }
