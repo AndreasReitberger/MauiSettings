@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AndreasReitberger.Shared.Core.Utilities;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiSettings.Example.Models.Settings;
 
@@ -9,6 +10,9 @@ namespace MauiSettings.Example.ViewModels
         #region Settings
         [ObservableProperty]
         bool isLoading = false;
+
+        [ObservableProperty]
+        string hashKey = App.Hash;
 
         [ObservableProperty]
         string licenseInfo = string.Empty;
@@ -49,6 +53,15 @@ namespace MauiSettings.Example.ViewModels
         async Task LoadSettingsFromDevice()
         {
             await SettingsApp.LoadSettingsAsync(key: App.Hash);
+            LoadSettings();
+        }
+
+        [RelayCommand]
+        async Task ExchangeHashKey()
+        {
+            string newKey = EncryptionManager.GenerateBase64Key();
+            await SettingsApp.ExhangeKeyAsync(oldKey: App.Hash, newKey: newKey);
+            App.Hash = HashKey = newKey;
             LoadSettings();
         }
 

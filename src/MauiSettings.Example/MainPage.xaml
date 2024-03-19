@@ -15,17 +15,38 @@
             <Label
                 Text="License"
                 Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+                SemanticProperties.HeadingLevel="Level1"
+                />
 
             <Editor
                 Text="{Binding LicenseInfo}"
                 />
+            <Label
+                Text="New hash"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level1"
+                />
+            <Grid
+                ColumnDefinitions="*,Auto"
+                >
+                <Editor
+                    Text="{Binding HashKey}"
+                    />
+                <Button
+                    Margin="4,2"
+                    Grid.Column="1"
+                    x:Name="ExchangeBtn"
+                    Text="New key"
+                    Command="{Binding ExchangeHashKeyCommand}"
+                    />
+            </Grid>
 
             <Button
                 x:Name="SaveBtn"
                 Text="Save Settings"
                 Command="{Binding SaveSettingsCommand}"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill" 
+                />
 
             <Button
                 x:Name="LoadBtn"

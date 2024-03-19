@@ -26,7 +26,7 @@ namespace AndreasReitberger.Maui
     {
         #region Settings Object
 
-        static object _settingsObject;
+        static object? _settingsObject;
         public static SO SettingsObject
         {
             get
@@ -68,9 +68,7 @@ namespace AndreasReitberger.Maui
 
         #region LoadSettings
         public static void LoadSettings() => LoadSettings(settings: SettingsObject);
-        //public static void LoadSettings(string? key = null) => LoadSettings(settings: SettingsObject, key: key);
-        
-        //public static void LoadSetting<T>(Expression<Func<SO, T>> value, string? key = null) => LoadObjectSetting(SettingsObject, value, key: key);
+
         public static void LoadSetting<T>(Expression<Func<SO, T>> value) => LoadObjectSetting(SettingsObject, value);
         
         public static async Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null)
@@ -80,10 +78,9 @@ namespace AndreasReitberger.Maui
                 await LoadObjectSettingAsync(SettingsObject, value, key: key);
             });
         }
-        //public void LoadObjectSettings(string? key = null) => LoadSettings(this, key: key);
+
         public void LoadObjectSettings() => LoadSettings(this);
         
-        //public static void LoadObjectSetting<T>(object settingsObject, Expression<Func<SO, T>> value, string? key = null) 
         public static void LoadObjectSetting<T>(object settingsObject, Expression<Func<SO, T>> value) 
             => GetExpressionMeta(settings: settingsObject, value, MauiSettingsActions.Load);
         
@@ -296,6 +293,17 @@ namespace AndreasReitberger.Maui
             MauiSettingsInfo? info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value);
             return new(info.Name, new(info.Value, info.SettingsType));
         }
+        #endregion
+
+        #region MyRegion
+
+        public static Task ExhangeKeyAsync(string? newKey = null, string? oldKey = null)
+            => Task.Run(async delegate
+            {
+                await LoadSecureSettingsAsync(key: oldKey);
+                await SaveSettingsAsync(key: newKey);
+            });
+
         #endregion
 
         #region Private
