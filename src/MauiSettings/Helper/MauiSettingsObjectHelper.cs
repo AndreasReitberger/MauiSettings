@@ -64,7 +64,7 @@ namespace AndreasReitberger.Maui.Helper
             {
                 //throw new NotSupportedException($"MauiSettings: The type '{memberInfo.GetType()}' is not supported for the field: {memberInfo.Name}", exc);
             }
-            
+
         }
 
         public static Type GetSettingType(MemberInfo memberInfo)

@@ -23,7 +23,7 @@ namespace MauiSettings.Example
             { 
                 await SettingsApp.LoadSettingsAsync(Hash);
             });*/
-            MainPage = new AppShell(); 
+            MainPage = new AppShell();
         }
 
         protected override void OnSleep()
