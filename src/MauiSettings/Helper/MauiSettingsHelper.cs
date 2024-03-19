@@ -74,7 +74,7 @@ namespace AndreasReitberger.Maui.Helper
         }
 
         public static T ChangeSettingsType<T>(object settingsValue, T defaultValue) => (T)Convert.ChangeType(settingsValue, typeof(T));
-        
+
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
         // Only string is allowed for secure storage
         public static async Task<string> GetSecureSettingsValueAsync(string key, string defaultValue)
@@ -126,9 +126,9 @@ namespace AndreasReitberger.Maui.Helper
         }
 
         public static void ClearSettings() => Preferences.Clear();
-        
+
         public static void ClearSecureSettings() => SecureStorage.Default.RemoveAll();
-        
-    #endregion
+
+        #endregion
     }
 }
