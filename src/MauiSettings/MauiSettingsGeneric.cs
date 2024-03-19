@@ -71,13 +71,18 @@ namespace AndreasReitberger.Maui
 
         public static void LoadSetting<T>(Expression<Func<SO, T>> value) => LoadObjectSetting(SettingsObject, value);
 
-        public static async Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null)
-        {
-            await Task.Run(async delegate
+        public static Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null)
+        => Task.Run(async delegate
             {
                 await LoadObjectSettingAsync(SettingsObject, value, key: key);
             });
-        }
+        
+        public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null)
+            => Task.Run(async delegate
+            {
+                await LoadSecureObjectSettingAsync(SettingsObject, value, key: key);
+            });
+        
 
         public void LoadObjectSettings() => LoadSettings(this);
 
@@ -88,6 +93,11 @@ namespace AndreasReitberger.Maui
             => Task.Run(async delegate
             {
                 await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load, key: key);
+            });
+        public static Task LoadSecureObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, string? key = null)
+            => Task.Run(async delegate
+            {
+                await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load, secureOnly: true, key: key);
             });
 
         public static void LoadSettings(object settings) => GetClassMeta(settings: settings, mode: MauiSettingsActions.Load, key: null);
@@ -307,7 +317,7 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region Private
-        static List<MemberInfo> GetClassMetaAsList(object settings)
+        static List<MemberInfo>? GetClassMetaAsList(object settings)
         {
             lock (lockObject)
             {
@@ -415,7 +425,7 @@ namespace AndreasReitberger.Maui
             }
         }
 
-        static async Task GetExpressionMetaAsync<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, string? key = null)
+        static async Task GetExpressionMetaAsync<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null)
         {
 
             if (value.Body is MemberExpression memberExpression)
@@ -425,7 +435,7 @@ namespace AndreasReitberger.Maui
                     OrignalSettingsObject = settings,
                     Info = memberExpression.Member,
 
-                }, new MauiSettingsInfo(), mode, target, key: key);
+                }, new MauiSettingsInfo(), mode, target, secureOnly: secureOnly, key: key);
             }
         }
 
