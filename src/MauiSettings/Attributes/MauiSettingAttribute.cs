@@ -13,6 +13,8 @@
     {
         #region Properties
         public bool Secure { get; set; } = false;
+        public bool Encrypt { get; set; } = false;
+        public bool SkipForExport { get; set; } = false;
         #endregion
     }
 }
