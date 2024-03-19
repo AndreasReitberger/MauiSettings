@@ -11,9 +11,8 @@
     // All the code in this file is included in all platforms.
     public class MauiSettings<T> : MauiSettingsGeneric<T> where T : new()
     {
-        public MauiSettings()
-        {
-
-        }
+        public MauiSettings() { }
+        //public MauiSettings(string key) : base(key) { }
+        //public MauiSettings(T settingsObject, string key) : base(settingsObject, key) { }
     }
 }

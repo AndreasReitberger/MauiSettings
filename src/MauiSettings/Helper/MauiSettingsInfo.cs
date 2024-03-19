@@ -14,6 +14,9 @@
         public object Value { get; set; }
         public Type SettingsType { get; set; }
         public object Default { get; set; }
+        public bool IsSecure { get; set; } = false;
+        public bool Encrypt { get; set; } = false;
+        public bool SkipForExport { get; set; } = false;
         #endregion
     }
 }

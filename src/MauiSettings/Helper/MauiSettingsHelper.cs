@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Security;
 
 namespace AndreasReitberger.Maui.Helper
 {
@@ -19,7 +18,7 @@ namespace AndreasReitberger.Maui.Helper
         */
         public static T GetSettingsValue<T>(string key, T defaultValue)
         {
-            object returnValue = null;
+            object? returnValue = null;
             try
             {
                 switch (defaultValue)
@@ -74,24 +73,14 @@ namespace AndreasReitberger.Maui.Helper
             //return (T)Convert.ChangeType(returnValue, typeof(T));
         }
 
-        public static T ChangeSettingsType<T>(object settingsValue, T defaultValue)
-        {
-            return (T)Convert.ChangeType(settingsValue, typeof(T));
-        }
-
+        public static T ChangeSettingsType<T>(object settingsValue, T defaultValue) => (T)Convert.ChangeType(settingsValue, typeof(T));
+        
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
         // Only string is allowed for secure storage
         public static async Task<string> GetSecureSettingsValueAsync(string key, string defaultValue)
         {
-            string settingsObject = await SecureStorage.Default.GetAsync(key);
-            if (settingsObject == null)
-            {
-                return defaultValue;
-            }
-            else
-            {
-                return settingsObject;
-            }
+            string? settingsObject = await SecureStorage.Default.GetAsync(key);
+            return settingsObject == null ? defaultValue : settingsObject;
         }
 
         public static void SetSettingsValue(string key, object value)
@@ -121,7 +110,7 @@ namespace AndreasReitberger.Maui.Helper
                     break;
                 default:
                     // For all other types try to serialize it as JSON
-                    string jsonString = JsonConvert.SerializeObject(value, Formatting.Indented);
+                    string? jsonString = JsonConvert.SerializeObject(value, Formatting.Indented);
                     Preferences.Set(key, jsonString);
                     break;
             }
@@ -136,15 +125,10 @@ namespace AndreasReitberger.Maui.Helper
             else await SecureStorage.Default.SetAsync(key, value);
         }
 
-        public static void ClearSettings()
-        {
-            Preferences.Clear();
-        }
-
-        public static void ClearSecureSettings()
-        {
-            SecureStorage.Default.RemoveAll();
-        }
-#endregion
+        public static void ClearSettings() => Preferences.Clear();
+        
+        public static void ClearSecureSettings() => SecureStorage.Default.RemoveAll();
+        
+    #endregion
     }
 }
