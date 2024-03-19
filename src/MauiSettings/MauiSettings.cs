@@ -12,6 +12,7 @@
     public class MauiSettings<T> : MauiSettingsGeneric<T> where T : new()
     {
         public MauiSettings() { }
-        public MauiSettings(T settingsObject, string key) : base(settingsObject, key) { }
+        //public MauiSettings(string key) : base(key) { }
+        //public MauiSettings(T settingsObject, string key) : base(settingsObject, key) { }
     }
 }
