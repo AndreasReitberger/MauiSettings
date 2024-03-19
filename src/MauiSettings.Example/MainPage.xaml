@@ -28,6 +28,12 @@
                 HorizontalOptions="Fill" />
 
             <Button
+                x:Name="LoadBtn"
+                Text="Load Settings"
+                Command="{Binding LoadSettingsFromDeviceCommand}"
+                HorizontalOptions="Fill" />
+
+            <Button
                 x:Name="ExportBtn"
                 Text="To dictionary"
                 Command="{Binding ToDictionaryCommand}"

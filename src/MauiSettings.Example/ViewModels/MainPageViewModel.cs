@@ -43,16 +43,20 @@ namespace MauiSettings.Example.ViewModels
 
         #region Commands
         [RelayCommand]
-        void SaveSettings()
+        async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(key: App.Hash);
+
+        [RelayCommand]
+        async Task LoadSettingsFromDevice()
         {
-            SettingsApp.SaveSettings(App.Hash);
+            await SettingsApp.LoadSettingsAsync(key: App.Hash);
+            LoadSettings();
         }
 
         [RelayCommand]
-        void ToDictionary()
+        async Task ToDictionary()
         {
             // All "SkipForExport" should be missing here.
-            var dict = SettingsApp.ToDictionaryAsync();
+            var dict = await SettingsApp.ToDictionaryAsync();
         }
         #endregion
     }
