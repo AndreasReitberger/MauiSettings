@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="MauiSettings.Example.MainPage"
     xmlns:viewModels="clr-namespace:MauiSettings.Example.ViewModels"
-    
+    xmlns:settings="clr-namespace:MauiSettings.Example.Models.Settings"
     x:DataType="viewModels:MainPageViewModel"
     >
 
@@ -59,6 +59,28 @@
                 Text="To dictionary"
                 Command="{Binding ToDictionaryCommand}"
                 HorizontalOptions="Fill" />
+
+            <CollectionView
+                ItemsSource="{Binding Settings}"
+                >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate
+                        x:DataType="settings:SettingsItem"
+                        >
+                        <Grid
+                            ColumnDefinitions="*,*"
+                            >
+                            <Label
+                                Text="{Binding Key}"
+                                />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Value}"
+                                />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 

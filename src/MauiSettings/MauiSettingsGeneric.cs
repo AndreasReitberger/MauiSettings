@@ -222,83 +222,66 @@ namespace AndreasReitberger.Maui
         public static Task<Dictionary<string, Tuple<object, Type>>> ToDictionaryAsync()
             => ToDictionaryAsync(settings: SettingsObject);
 
-        public static async Task<Dictionary<string, Tuple<object, Type>>> ToDictionaryAsync(object settings)
+        public static Task<Dictionary<string, Tuple<object, Type>>> ToDictionaryAsync(bool secureOnly = false, string? key = null)
+            => ToDictionaryAsync(settings: SettingsObject, secureOnly: secureOnly, key: key);
+
+        public static async Task<Dictionary<string, Tuple<object, Type>>> ToDictionaryAsync(object? settings, bool secureOnly = false, string? key = null)
         {
             if (true)
             {
                 Dictionary<string, Tuple<object, Type>> setting = [];
-                IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
+                IEnumerable<MemberInfo>? declaredMembers = settings?.GetType().GetTypeInfo().DeclaredMembers;
 
                 MauiSettingsMemberInfo settingsObjectInfo = new();
                 MauiSettingsInfo settingsInfo = new();
+                if (declaredMembers is null) return setting;
 
                 foreach (MemberInfo mInfo in declaredMembers)
                 {
                     settingsObjectInfo.OrignalSettingsObject = settings;
                     settingsObjectInfo.Info = mInfo;
                     // Handles saving the settings to the Maui.Storage.Preferences
-                    MauiSettingsInfo settingsPair = await ProcessSettingsInfoAsKeyValuePairAsync(settingsObjectInfo, settingsInfo);
+                    MauiSettingsInfo? settingsPair = await ProcessSettingsInfoAsKeyValuePairAsync(settingsObjectInfo, settingsInfo, secureOnly: secureOnly, key: key, keeyEncrypted: true);
                     if (settingsPair != null && !settingsPair.SkipForExport)
                     {
                         setting.TryAdd(settingsPair.Name, new Tuple<object, Type>(settingsPair.Value ?? settingsPair.Default, settingsPair.SettingsType));
                     }
                 }
-                /*
-                members?.ForEach(member =>
-                {
-                    settingsObjectInfo.OrignalSettingsObject = settings;
-                    settingsObjectInfo.Info = member;
-                    var settingsPair = ProcessSettingsInfoAsKeyValuePair(settingsObjectInfo, settingsInfo);
-                    if (settingsPair != null)
-                    {
-                        setting.TryAdd(settingsPair.Name, new Tuple<object, Type>(settingsPair.Value ?? settingsPair.Default, settingsPair.SettingsType));
-                    }
-                });
-                */
                 return setting;
             }
         }
 
         public static Task<ConcurrentDictionary<string, Tuple<object, Type>>> ToConcurrentDictionaryAsync()
             => ToConcurrentDictionaryAsync(settings: SettingsObject);
+        public static Task<ConcurrentDictionary<string, Tuple<object, Type>>> ToConcurrentDictionaryAsync(bool secureOnly = false, string? key = null)
+            => ToConcurrentDictionaryAsync(settings: SettingsObject, secureOnly: secureOnly, key: key);
 
-        public static async Task<ConcurrentDictionary<string, Tuple<object, Type>>> ToConcurrentDictionaryAsync(object settings)
+        public static async Task<ConcurrentDictionary<string, Tuple<object, Type>>> ToConcurrentDictionaryAsync(object? settings, bool secureOnly = false, string? key = null)
         {
             ConcurrentDictionary<string, Tuple<object, Type>> setting = new();
-            List<MemberInfo> members = GetClassMetaAsList(settings);
+            List<MemberInfo>? members = GetClassMetaAsList(settings);
 
             MauiSettingsMemberInfo settingsObjectInfo = new();
             MauiSettingsInfo settingsInfo = new();
+            if (members is null) return setting;
 
             foreach (MemberInfo mInfo in members)
             {
                 settingsObjectInfo.OrignalSettingsObject = settings;
                 settingsObjectInfo.Info = mInfo;
                 // Handles saving the settings to the Maui.Storage.Preferences
-                MauiSettingsInfo settingsPair = await ProcessSettingsInfoAsKeyValuePairAsync(settingsObjectInfo, settingsInfo);
+                MauiSettingsInfo? settingsPair = await ProcessSettingsInfoAsKeyValuePairAsync(settingsObjectInfo, settingsInfo, secureOnly: secureOnly, key: key, keeyEncrypted: true);
                 if (settingsPair != null && !settingsPair.SkipForExport)
                 {
                     setting.TryAdd(settingsPair.Name, new Tuple<object, Type>(settingsPair.Value ?? settingsPair.Default, settingsPair.SettingsType));
                 }
             }
-            /*
-            members?.ForEach(member =>
-            {
-                settingsObjectInfo.OrignalSettingsObject = settings;
-                settingsObjectInfo.Info = member;
-                var settingsPair = ProcessSettingsInfoAsKeyValuePair(settingsObjectInfo, settingsInfo);
-                if(settingsPair != null)
-                {
-                    setting.TryAdd(settingsPair.Name, new Tuple<object, Type>(settingsPair.Value ?? settingsPair.Default, settingsPair.SettingsType));
-                }
-            });
-            */
             return setting;
         }
 
         public static Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value) => ToSettingsTupleAsync(settings: SettingsObject, value: value);
 
-        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(object settings, Expression<Func<SO, T>> value)
+        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(object? settings, Expression<Func<SO, T>> value)
         {
             MauiSettingsInfo? info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value);
             return new(info.Name, new(info.Value, info.SettingsType));
@@ -317,12 +300,13 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region Private
-        static List<MemberInfo>? GetClassMetaAsList(object settings)
+        static List<MemberInfo>? GetClassMetaAsList(object? settings)
         {
+            if (settings is null) return null;
             lock (lockObject)
             {
                 // Get all member infos from the passed settingsObject
-                IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
+                IEnumerable<MemberInfo>? declaredMembers = settings?.GetType().GetTypeInfo().DeclaredMembers;
 
                 MauiSettingsMemberInfo settingsObjectInfo = new();
                 MauiSettingsInfo settingsInfo = new();
@@ -439,7 +423,7 @@ namespace AndreasReitberger.Maui
             }
         }
 
-        static async Task<MauiSettingsInfo?> GetExpressionMetaAsKeyValuePairAsync<T>(object settings, Expression<Func<SO, T>> value, string? key = null)
+        static async Task<MauiSettingsInfo?> GetExpressionMetaAsKeyValuePairAsync<T>(object? settings, Expression<Func<SO, T>> value, string? key = null)
         {
             if (value.Body is MemberExpression memberExpression)
             {
@@ -608,7 +592,7 @@ namespace AndreasReitberger.Maui
             return true;
         }
 
-        static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null)
+        static async Task<bool> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null, bool keepEncrypted = false)
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
@@ -623,9 +607,9 @@ namespace AndreasReitberger.Maui
                     return false;
                 }
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
-            }
-            if (settingsObjectInfo.Info is not null)
-            {
+            //}
+            //if (settingsObjectInfo.Info is not null)
+            //{
                 settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
@@ -704,7 +688,7 @@ namespace AndreasReitberger.Maui
                     {
                         object defaultValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
                     }
-                    if (secure && settingsInfo.Encrypt && !string.IsNullOrEmpty(key))
+                    if (secure && settingsInfo.Encrypt && !string.IsNullOrEmpty(key) && !keepEncrypted)
                     {
                         if (settingsInfo.Value is string secureString)
                         {
@@ -716,7 +700,6 @@ namespace AndreasReitberger.Maui
                     }
                     // Sets the loaded value back to the settingsObject
                     MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
-
                     break;
                 case MauiSettingsActions.Save:
                     // Get the value from the settingsObject
@@ -854,7 +837,7 @@ namespace AndreasReitberger.Maui
             return true;
         }
 
-        static async Task<MauiSettingsInfo?> ProcessSettingsInfoAsKeyValuePairAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, bool secureOnly = false, string? key = null)
+        static async Task<MauiSettingsInfo?> ProcessSettingsInfoAsKeyValuePairAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, bool secureOnly = false, string? key = null, bool keeyEncrypted = false)
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
@@ -869,16 +852,12 @@ namespace AndreasReitberger.Maui
                     return null;
                 }
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
-            }
-            if (settingsObjectInfo.Info is not null)
-            {
+            //}
+            //if (settingsObjectInfo.Info is not null)
+            //{
                 settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
-
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
-                //Type type = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
-                //settingsInfo.Value = MauiSettingsObjectHelper.GetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject);
-                //settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
             }
             if (settingBaseAttribute is MauiSettingAttribute settingAttribute)
             {
@@ -897,7 +876,7 @@ namespace AndreasReitberger.Maui
                 else if (settingsInfo.SettingsType == typeof(string))
                 {
                     settingsInfo.Value = await MauiSettingsHelper.GetSecureSettingsValueAsync(settingsInfo.Name, settingsInfo.Default as string);
-                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(key))
+                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(key) && !keeyEncrypted)
                     {
                         // Decrypt string
                         string decryptedString = EncryptionManager.DecryptStringFromBase64String(settingsInfo.Value as string, key);
