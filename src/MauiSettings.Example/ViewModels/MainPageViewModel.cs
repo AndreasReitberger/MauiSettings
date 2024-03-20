@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MauiSettings.Example.Models.Settings;
+using System.Collections.ObjectModel;
 
 namespace MauiSettings.Example.ViewModels
 {
@@ -25,6 +26,8 @@ namespace MauiSettings.Example.ViewModels
             }
         }
 
+        [ObservableProperty]
+        ObservableCollection<SettingsItem> settings = [];
         #endregion
 
         #region Ctor
@@ -52,8 +55,15 @@ namespace MauiSettings.Example.ViewModels
         [RelayCommand]
         async Task LoadSettingsFromDevice()
         {
-            await SettingsApp.LoadSettingsAsync(key: App.Hash);
-            LoadSettings();
+            try
+            {
+                await SettingsApp.LoadSettingsAsync(key: App.Hash);
+                LoadSettings();
+            }
+            catch(Exception)
+            {
+                // Throus if the key missmatches
+            }
         }
 
         [RelayCommand]
@@ -69,7 +79,8 @@ namespace MauiSettings.Example.ViewModels
         async Task ToDictionary()
         {
             // All "SkipForExport" should be missing here.
-            var dict = await SettingsApp.ToDictionaryAsync();
+            Dictionary<string, Tuple<object, Type>> dict = await SettingsApp.ToDictionaryAsync();
+            Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value.Item1.ToString() })];
         }
         #endregion
     }
