@@ -10,9 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedNetCoreLibrary", "..\..\SharedMauiCoreLibrary\src\SharedNetCoreLibrary\SharedNetCoreLibrary.csproj", "{CA7C2653-5783-4A4C-960A-97CA4038748F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiSettings.Example", "MauiSettings.Example\MauiSettings.Example.csproj", "{343E7298-7A56-4737-A1A2-312835BCB98C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiSettings.Example", "MauiSettings.Example\MauiSettings.Example.csproj", "{343E7298-7A56-4737-A1A2-312835BCB98C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +22,6 @@ Global
 		{9A79D717-2C07-48A4-A78D-BD252E9BCA25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A79D717-2C07-48A4-A78D-BD252E9BCA25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A79D717-2C07-48A4-A78D-BD252E9BCA25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA7C2653-5783-4A4C-960A-97CA4038748F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA7C2653-5783-4A4C-960A-97CA4038748F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA7C2653-5783-4A4C-960A-97CA4038748F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA7C2653-5783-4A4C-960A-97CA4038748F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{343E7298-7A56-4737-A1A2-312835BCB98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{343E7298-7A56-4737-A1A2-312835BCB98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{343E7298-7A56-4737-A1A2-312835BCB98C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -37,9 +31,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{CA7C2653-5783-4A4C-960A-97CA4038748F} = {26232A22-4BBC-4509-99A5-987CE67F1882}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2733F837-2A02-4993-BB5C-771792807C3C}
