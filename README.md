@@ -56,6 +56,19 @@ public partial class SettingsApp : MauiSettings<SettingsApp>
 
     #endregion
 
+    #region Secure
+
+    // Encrypt: The value is encrypt before saving it on the device, and decrypt when loaded
+    // Note: Only `Secure` properties can be encrypted
+    [MauiSetting(Name = nameof(Localization_CultureCode), DefaultValue ="", Secure = true, Encrypt = true)]
+    public static string User_Username { get; set; }
+
+    // SkipForExport: Value is not added to the Dictionary when exporting the settings
+    [MauiSetting(Name = nameof(Localization_CultureCode), DefaultValue ="", Secure = true, Encrypt = true, SkipForExport = true)]
+    public static string User_Password { get; set; }
+
+    #endregion
+
     #endregion
 }
 ```
@@ -65,3 +78,130 @@ To load the settings from the storage, call `SettingsApp.LoadSettings()` (mostly
 
 ## Save
 Whenever you do make changes to a settings property of your class, call `SettingsApp.SaveSettings()`. This will write the settings to the storage.
+
+# Encryption
+Starting from version `1.0.6`, you can encrypt secure properties with a `AES`encryption. An example how it works is shown below.
+Sample: https://github.com/AndreasReitberger/MauiSettings/tree/main/src/MauiSettings.Example
+
+## App.xaml.cs
+An example of how to load the settings from the `App.xaml`.
+
+```cs
+public partial class App : Application
+{
+    // Example key, it is recommended to generate the key on the device and save it as `Secure` property instead of
+    // adding it in clear text to the source code.
+    public static string Hash = "mYGUbR61NUNjIvdEv/veySPxQEWcCRUZ3SZ7TT72IuI=";
+    public App()
+    {
+        InitializeComponent();
+
+        // Example of how to generate a new key
+        //string t = EncryptionManager.GenerateBase64Key();
+
+        // Only Async methods do support encryption!
+        _ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));
+        MainPage = new AppShell();
+    }
+
+    protected override void OnSleep()
+    {
+        base.OnSleep();
+        if (SettingsApp.SettingsChanged)
+        {
+            try
+            {
+                SettingsApp.SaveSettings(Hash);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+    }
+}
+```
+
+## MainPageViewModel
+An example of a`ViewModel` loading and saving encrypted settings.
+```cs
+public partial class MainPageViewModel : ObservableObject
+{
+    #region Settings
+    [ObservableProperty]
+    bool isLoading = false;
+
+    [ObservableProperty]
+    string hashKey = App.Hash;
+
+    [ObservableProperty]
+    string licenseInfo = string.Empty;
+    partial void OnLicenseInfoChanged(string value)
+    {
+        if (!IsLoading)
+        {
+            SettingsApp.LicenseInfo = value;
+            SettingsApp.SettingsChanged = true;
+        }
+    }
+
+    [ObservableProperty]
+    ObservableCollection<SettingsItem> settings = [];
+    #endregion
+
+    #region Ctor
+    public MainPageViewModel()
+    {
+        LoadSettings();
+    }
+    #endregion
+
+    #region Methods
+    void LoadSettings()
+    {
+        IsLoading = true;
+
+        LicenseInfo = SettingsApp.LicenseInfo;
+
+        IsLoading = false;
+    }
+    #endregion
+
+    #region Commands
+    [RelayCommand]
+    async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(key: App.Hash);
+
+    [RelayCommand]
+    async Task LoadSettingsFromDevice()
+    {
+        try
+        {
+            await SettingsApp.LoadSettingsAsync(key: App.Hash);
+            LoadSettings();
+        }
+        catch(Exception)
+        {
+            // Throus if the key missmatches
+        }
+    }
+
+    [RelayCommand]
+    async Task ExchangeHashKey()
+    {
+        string newKey = EncryptionManager.GenerateBase64Key();
+        await SettingsApp.ExhangeKeyAsync(oldKey: App.Hash, newKey: newKey);
+        App.Hash = HashKey = newKey;
+        LoadSettings();
+    }
+
+    [RelayCommand]
+    async Task ToDictionary()
+    {
+        // All "SkipForExport" should be missing here.
+        Dictionary<string, Tuple<object, Type>> dict = await SettingsApp.ToDictionaryAsync();
+        Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value.Item1.ToString() })];
+    }
+    #endregion
+}
+```
+For more information, please see the example project.
