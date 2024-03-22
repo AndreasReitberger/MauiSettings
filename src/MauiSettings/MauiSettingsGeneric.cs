@@ -9,8 +9,6 @@ using AndreasReitberger.Shared.Core.Utilities;
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security;
 
 namespace AndreasReitberger.Maui
 {
@@ -52,14 +50,14 @@ namespace AndreasReitberger.Maui
             _settingsObject = settingsObject;
         }
         /*
-        public MauiSettingsGeneric(string key)
+        public MauiSettingsGeneric(string settingsKey)
         {
-            _passPhrase = key;
+            _passPhrase = settingsKey;
         }
-        public MauiSettingsGeneric(SO settingsObject, string key)
+        public MauiSettingsGeneric(SO settingsObject, string settingsKey)
         {
             _settingsObject = settingsObject;
-            _passPhrase = key;
+            _passPhrase = settingsKey;
         }
         */
         #endregion
@@ -132,10 +130,10 @@ namespace AndreasReitberger.Maui
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, save: save, key: key);
             });
 
-        public static Task LoadSettingsAsync(string key, Tuple<object, Type> data, bool save = true, string? skey = null)
+        public static Task LoadSettingsAsync(string settingsKey, Tuple<object, Type> data, bool save = true, string? key = null)
             => Task.Run(async delegate
             {
-                await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { key, data } }, save: save, key: skey);
+                await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, save: save, key: key);
             });
 
         public static Task LoadSettingsAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, bool save = true, string? key = null)
@@ -366,7 +364,7 @@ namespace AndreasReitberger.Maui
                 foreach (MemberInfo mInfo in declaredMembers)
                 {
                     bool useValueFromSettingsInfo = false;
-                    // Try to find the matching key
+                    // Try to find the matching settingsKey
                     KeyValuePair<string, Tuple<object, Type>>? keyPair = dictionary?.FirstOrDefault(keypair =>
                         keypair.Key.EndsWith(mInfo.Name
                         //?.Replace("get_", string.Empty)
@@ -374,7 +372,7 @@ namespace AndreasReitberger.Maui
                     if (keyPair?.Key != null)
                     {
                         useValueFromSettingsInfo = true;
-                        // If a matching key was found, prepare the settingsInfo with the loaded data
+                        // If a matching settingsKey was found, prepare the settingsInfo with the loaded data
                         settingsInfo = new()
                         {
                             Name = mInfo.Name?.Replace("get_", string.Empty),
@@ -549,12 +547,12 @@ namespace AndreasReitberger.Maui
                         case MauiSettingsTarget.ICloud:
                             if (settingsInfo.Value != null)
                             {
-                                // If there is a default value, do not delete the key. Instead write the default value
+                                // If there is a default value, do not delete the settingsKey. Instead write the default value
                                 ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             }
                             else
                             {
-                                // Otherwise delete the key from the cloud storage
+                                // Otherwise delete the settingsKey from the cloud storage
                                 ICloudStoreManager.DeleteValue(settingsInfo.Name);
                             }
                             break;
@@ -752,12 +750,12 @@ namespace AndreasReitberger.Maui
                         case MauiSettingsTarget.ICloud:
                             if (settingsInfo.Value != null)
                             {
-                                // If there is a default value, do not delete the key. Instead write the default value
+                                // If there is a default value, do not delete the settingsKey. Instead write the default value
                                 ICloudStoreManager.SetValue(settingsInfo.Name, settingsInfo.Value?.ToString());
                             }
                             else
                             {
-                                // Otherwise delete the key from the cloud storage
+                                // Otherwise delete the settingsKey from the cloud storage
                                 ICloudStoreManager.DeleteValue(settingsInfo.Name);
                             }
                             break;

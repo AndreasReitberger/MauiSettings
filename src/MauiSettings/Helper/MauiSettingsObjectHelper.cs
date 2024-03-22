@@ -103,6 +103,8 @@ namespace AndreasReitberger.Maui.Helper
                 if (attr != null && attr.DefaultValueInUse)
                 {
                     object obj = attr.DefaultValue;
+                    if (obj is null)
+                        return GetTypeDefaultValue(settingType);
                     if (obj?.GetType() != settingType)
                     {
                         if (obj.GetType() == typeof(string))
