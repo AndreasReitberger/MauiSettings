@@ -60,7 +60,7 @@ namespace MauiSettings.Example.ViewModels
                 await SettingsApp.LoadSettingsAsync(key: App.Hash);
                 LoadSettings();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // Throus if the key missmatches
             }

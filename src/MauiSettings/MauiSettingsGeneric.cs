@@ -74,13 +74,13 @@ namespace AndreasReitberger.Maui
             {
                 await LoadObjectSettingAsync(SettingsObject, value, key: key);
             });
-        
+
         public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null)
             => Task.Run(async delegate
             {
                 await LoadSecureObjectSettingAsync(SettingsObject, value, key: key);
             });
-        
+
 
         public void LoadObjectSettings() => LoadSettings(this);
 
@@ -849,9 +849,6 @@ namespace AndreasReitberger.Maui
                     return null;
                 }
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
-            //}
-            //if (settingsObjectInfo.Info is not null)
-            //{
                 settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
