@@ -849,9 +849,6 @@ namespace AndreasReitberger.Maui
                     return null;
                 }
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
-                //}
-                //if (settingsObjectInfo.Info is not null)
-                //{
                 settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
