@@ -758,7 +758,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (settingsInfo.Value is string secureString)
                                 {
-                                    if (settingsInfo.Encrypt)
+                                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(secureString))
                                     {
                                         if (string.IsNullOrEmpty(key))
                                             throw new ArgumentNullException(nameof(key));
@@ -823,8 +823,10 @@ namespace AndreasReitberger.Maui
                             {
                                 if (settingsInfo.Value is string secureString)
                                 {
-                                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(key))
+                                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(secureString))
                                     {
+                                        if (string.IsNullOrEmpty(key))
+                                            throw new ArgumentNullException(nameof(key));
                                         // Encrypt string
                                         try
                                         {
@@ -877,9 +879,11 @@ namespace AndreasReitberger.Maui
                             {
                                 if (settingsInfo.Value is string secureString)
                                 {
-                                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(key))
+                                    if (settingsInfo.Encrypt && !string.IsNullOrEmpty(secureString))
                                     {
-                                        // Decrypt string
+                                        if (string.IsNullOrEmpty(key))
+                                            throw new ArgumentNullException(nameof(key));
+                                        // Encrypt string
                                         try
                                         {
                                             string encryptedString = EncryptionManager.EncryptStringToBase64String(secureString, key);
