@@ -105,6 +105,18 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, key: key);
             });
 
+        public static Task<bool> TryLoadSettingsAsync(string? key = null)
+            => Task.Run(async delegate
+            {
+                return await TryLoadSettingsAsync(settings: SettingsObject, key: key);
+            });
+
+        public static Task<bool> TryLoadSettingsAsync(object settings, string? key = null)
+            => Task.Run(async delegate
+            {
+                return await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, key: key, justTryLoading: true);
+            });
+
         public static Task LoadSecureSettingsAsync(string? key = null)
             => Task.Run(async delegate
             {
@@ -123,10 +135,22 @@ namespace AndreasReitberger.Maui
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, save: save, key: key);
             });
 
+        public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object, Type>> dictionary, string? key = null)
+            => Task.Run(async delegate
+            {
+                return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, key: key);
+            });
+
         public static Task LoadSettingsAsync(string settingsKey, Tuple<object, Type> data, bool save = true, string? key = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, save: save, key: key);
+            });
+
+        public static Task<bool> TryLoadSettingsAsync(string settingsKey, Tuple<object, Type> data, string? key = null)
+            => Task.Run(async delegate
+            {
+                return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, key: key);
             });
 
         public static Task LoadSettingsAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, bool save = true, string? key = null)
@@ -135,6 +159,11 @@ namespace AndreasReitberger.Maui
                 await GetMetaFromDictionaryAsync(settings: settings, dictionary: dictionary, mode: MauiSettingsActions.Load, secureOnly: false, key: key);
                 // Save the restored settings right away
                 if (save) await SaveSettingsAsync(settings: settings, key: key);
+            });
+        public static Task<bool> TryLoadSettingsAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, string? key = null)
+            => Task.Run(async delegate
+            {
+                return await GetMetaFromDictionaryAsync(settings: settings, dictionary: dictionary, mode: MauiSettingsActions.Load, secureOnly: false, key: key, justTryLoading: true);
             });
 
         #endregion
@@ -324,7 +353,7 @@ namespace AndreasReitberger.Maui
                 }
             }
         }
-        static async Task GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null)
+        static async Task<bool> GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
         {
             // Get all member infos from the passed settingsObject
             IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
@@ -337,11 +366,12 @@ namespace AndreasReitberger.Maui
                 settingsObjectInfo.OrignalSettingsObject = settings;
                 settingsObjectInfo.Info = mInfo;
                 // Handles saving the settings to the Maui.Storage.Preferences
-                MauiSettingsResults result = await ProcessSettingsInfoAsync(settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, key: key);
-                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed) { break; }
-            }       
+                MauiSettingsResults result = await ProcessSettingsInfoAsync(settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, key: key, justTryLoading: justTryLoading);
+                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed) { return false; }
+            }
+            return true;
         }
-        static async Task GetMetaFromDictionaryAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null)
+        static async Task<bool> GetMetaFromDictionaryAsync(object settings, Dictionary<string, Tuple<object, Type>> dictionary, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
         {
             // Get all member infos from the passed settingsObject
             IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
@@ -374,9 +404,10 @@ namespace AndreasReitberger.Maui
                 settingsObjectInfo.Info = mInfo;
                 // Handles saving the settings to the Maui.Storage.Preferences
                 MauiSettingsResults result = await ProcessSettingsInfoAsync(
-                    settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, useValueFromSettingsInfo: useValueFromSettingsInfo, key: key);
-                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed) { break; }
-            }       
+                    settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, useValueFromSettingsInfo: useValueFromSettingsInfo, key: key, justTryLoading: justTryLoading);
+                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed) { return false; }
+            }
+            return true;
         }
 
         static void GetExpressionMeta<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
@@ -423,7 +454,10 @@ namespace AndreasReitberger.Maui
             return new();
         }
 
-        static bool ProcessSettingsInfo(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool throwOnError = false)
+        static bool ProcessSettingsInfo(
+            MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target,
+            bool throwOnError = false, bool justTryLoading = false
+            )
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
@@ -486,7 +520,7 @@ namespace AndreasReitberger.Maui
 
                     }
 #else
-                    if (throwOnError) throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                    if (throwOnError && mode != MauiSettingsActions.LoadDefaults) throw new NotSupportedException("SecureStorage is only available in the Async methods!");
 #endif
                 }
                 else if (settingsInfo.Encrypt)
@@ -502,7 +536,8 @@ namespace AndreasReitberger.Maui
                         object defaultValue = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
                     }
                     // Sets the loaded value back to the settingsObject
-                    MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
+                    if (!justTryLoading)
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
                     break;
                 case MauiSettingsActions.Save:
                     // Get the value from the settingsObject
@@ -577,7 +612,10 @@ namespace AndreasReitberger.Maui
             return true;
         }
 
-        static async Task<MauiSettingsResults> ProcessSettingsInfoAsync(MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null, bool keepEncrypted = false)
+        static async Task<MauiSettingsResults> ProcessSettingsInfoAsync(
+            MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, 
+            bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null, bool keepEncrypted = false, bool justTryLoading = false
+            )
         {
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
@@ -682,7 +720,8 @@ namespace AndreasReitberger.Maui
                                 // Throw on key missmatch
                                 if (string.IsNullOrEmpty(decryptedString) && !string.IsNullOrEmpty(secureString))
                                     throw new Exception($"The secure string is not empty, but the decrypted string is. This indicates a key missmatch!");
-                                MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, decryptedString, settingsInfo.SettingsType);
+                                if (!justTryLoading)
+                                    MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, decryptedString, settingsInfo.SettingsType);
                             }
                             catch(Exception ex)
                             {
@@ -697,7 +736,8 @@ namespace AndreasReitberger.Maui
                         }
                     }
                     // Sets the loaded value back to the settingsObject
-                    MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
+                    if (!justTryLoading)
+                        MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, settingsInfo.Value, settingsInfo.SettingsType);
                     break;
                 case MauiSettingsActions.Save:
                     // Get the value from the settingsObject
