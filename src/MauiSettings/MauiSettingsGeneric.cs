@@ -300,22 +300,22 @@ namespace AndreasReitberger.Maui
             return setting;
         }
 
-        public static Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value) 
-            => ToSettingsTupleAsync(settings: SettingsObject, value: value);
+        public static Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value, string? key = null)
+            => ToSettingsTupleAsync(settings: SettingsObject, value: value, key: key);
 
-        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(object? settings, Expression<Func<SO, T>> value)
+        public static async Task<Tuple<string, Tuple<object, Type>>> ToSettingsTupleAsync<T>(object? settings, Expression<Func<SO, T>> value, string? key = null)
         {
-            MauiSettingsInfo? info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value);
+            MauiSettingsInfo? info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value, key: key);
             return new(info.Name, new(info.Value, info.SettingsType));
         }
         #endregion
 
         #region Encryption
 
-        public static Task ExhangeKeyAsync(string newKey, string? oldKey = null)
+        public static Task ExhangeKeyAsync(string newKey, string? oldKey = null, bool reloadSettings = false)
             => Task.Run(async delegate
             {
-                await LoadSecureSettingsAsync(key: oldKey);
+                if (reloadSettings) await LoadSecureSettingsAsync(key: oldKey);
                 await SaveSettingsAsync(key: newKey);
             });
 
@@ -406,7 +406,10 @@ namespace AndreasReitberger.Maui
                 // Handles saving the settings to the Maui.Storage.Preferences
                 MauiSettingsResults result = await ProcessSettingsInfoAsync(
                     settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, useValueFromSettingsInfo: useValueFromSettingsInfo, key: key, justTryLoading: justTryLoading);
-                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed) { return false; }
+                if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed)
+                {
+                    return false; 
+                }
             }
             return true;
         }
@@ -450,7 +453,7 @@ namespace AndreasReitberger.Maui
                     OrignalSettingsObject = settings,
                     Info = memberExpression.Member,
 
-                }, new MauiSettingsInfo(), key: key);
+                }, new MauiSettingsInfo(), key: key, keeyEncrypted: true);
             }
             return new();
         }
