@@ -16,7 +16,9 @@ namespace AndreasReitberger.Maui.Utilities
         public const string Version = "v1";
         public const string NamePrefix = "AR";
         #endregion
-        public static string GetFullSettingName(Type settingsType, MemberInfo mi, MauiSettingBaseAttribute baseSettingAttr)
+
+        #region Methods
+        public static string GetFullSettingName(Type? settingsType, MemberInfo mi, MauiSettingBaseAttribute? baseSettingAttr)
         {
             string name;
             if (string.IsNullOrEmpty(baseSettingAttr?.Name))
@@ -30,5 +32,7 @@ namespace AndreasReitberger.Maui.Utilities
             }
             return $"{NamePrefix}_{Version}_{name}{(settingsType == null ? "" : $"_{settingsType}")}";
         }
+        public static string GetSettingsNamePrefix() => $"{NamePrefix}_{Version}";
+        #endregion
     }
 }
