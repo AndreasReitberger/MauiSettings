@@ -8,6 +8,16 @@ License: Apache-2.0 (https://licenses.nuget.org/Apache-2.0)</br>
 This project was created from scratch, however uses the basic idea to keep all Settings in the
 static object. All taken and changed files have been marked so.
 
+# Support me
+If you want to support me, you can order over following affilate links (I'll get a small share from your purchase from the corresponding store).
+
+- Prusa: http://www.prusa3d.com/#a_aid=AndreasReitberger *
+- Jake3D: https://tidd.ly/3x9JOBp * 
+- Amazon: https://amzn.to/2Z8PrDu *
+
+(*) Affiliate link
+Thank you very much for supporting me!
+
 # Nuget
 Get the latest version from nuget.org<br>
 [![NuGet](https://img.shields.io/nuget/v/SettingsMaui.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/SettingsMaui/)
