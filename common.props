@@ -1,0 +1,36 @@
+
+<Project>
+    <PropertyGroup>
+        <Version>1.0.8</Version>
+		<PackageIcon>ar_128.png</PackageIcon>
+        <NeutralLanguage>en</NeutralLanguage>
+		<PackageProjectUrl>https://github.com/AndreasReitberger/MauiSettings</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AndreasReitberger/MauiSettings</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+        <PackageReleaseNotes>Check GitHub releases for changelog.</PackageReleaseNotes>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Authors>Andreas Reitberger</Authors>
+        <Company>Andreas Reitberger</Company>
+        <Copyright>Andreas Reitberger</Copyright>
+		<LangVersion>12</LangVersion>
+        <PublishReadyToRun>false</PublishReadyToRun>
+		<Nullable>enable</Nullable>
+		
+        <!--Source-Linking-->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\..\art\ar_128.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+</Project>
