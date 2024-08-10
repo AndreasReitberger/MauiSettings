@@ -1,9 +1,4 @@
 ﻿using Foundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AndreasReitberger.Maui.Cloud
 {
@@ -20,7 +15,7 @@ namespace AndreasReitberger.Maui.Cloud
         #endregion
 
         #region Methods
-        public static object GetValue(string key)
+        public static object? GetValue(string key)
         {
             return Store?.GetString(key);
         }

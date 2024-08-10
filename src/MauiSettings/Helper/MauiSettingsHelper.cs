@@ -69,11 +69,11 @@ namespace AndreasReitberger.Maui.Helper
                 SetSettingsValue(key, defaultValue);
                 return defaultValue;
             }
-            return ChangeSettingsType<T>(returnValue, defaultValue);
+            return ChangeSettingsType(returnValue, defaultValue);
             //return (T)Convert.ChangeType(returnValue, typeof(T));
         }
 
-        public static T? ChangeSettingsType<T>(object settingsValue, T defaultValue) => (T)Convert.ChangeType(settingsValue, typeof(T)) ?? default;
+        public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue) => settingsValue is not null ? (T)Convert.ChangeType(settingsValue, typeof(T)) : default;
 
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
         // Only string is allowed for secure storage
