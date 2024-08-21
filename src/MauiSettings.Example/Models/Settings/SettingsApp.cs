@@ -38,6 +38,9 @@ namespace MauiSettings.Example.Models.Settings
         [MauiSetting(Name = nameof(App_SettingsVersion), DefaultValue = "1.0.0", SkipForExport = true)]
         public static Version App_SettingsVersion { get; set; }
 
+        [MauiSetting(Name = nameof(ResourcesCurrentVersionAvailable))]
+        public static string ResourcesCurrentVersionAvailable { get; set; } = string.Empty;
+
         #endregion
 
         #region Default
