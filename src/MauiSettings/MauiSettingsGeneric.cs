@@ -69,17 +69,19 @@ namespace AndreasReitberger.Maui
 
         public static Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null) => Task.Run(async delegate
         {
+            if (SettingsObject is null) return;
             await LoadObjectSettingAsync(SettingsObject, value, key: key);  
         });
 
         public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null) => Task.Run(async delegate
         {
+            if (SettingsObject is null) return;
             await LoadSecureObjectSettingAsync(SettingsObject, value, key: key);
         });
 
         public void LoadObjectSettings() => LoadSettings(this);
 
-        public static void LoadObjectSetting<T>(object settingsObject, Expression<Func<SO, T>> value)
+        public static void LoadObjectSetting<T>(object? settingsObject, Expression<Func<SO, T>> value)
             => GetExpressionMeta(settings: settingsObject, value, MauiSettingsActions.Load);
 
         public static Task LoadObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, string? key = null) => Task.Run(async delegate
@@ -91,7 +93,7 @@ namespace AndreasReitberger.Maui
             await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load, secureOnly: true, key: key);
         });
 
-        public static void LoadSettings(object settings) => GetClassMeta(settings: settings, mode: MauiSettingsActions.Load);
+        public static void LoadSettings(object? settings) => GetClassMeta(settings: settings, mode: MauiSettingsActions.Load);
 
         public static Task LoadSettingsAsync(string? key = null)
             => Task.Run(async delegate
@@ -337,6 +339,7 @@ namespace AndreasReitberger.Maui
         }
         static void GetClassMeta(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
         {
+            ArgumentNullException.ThrowIfNull(settings);
             lock (lockObject)
             {
                 // Get all member infos from the passed settingsObject
@@ -354,8 +357,9 @@ namespace AndreasReitberger.Maui
                 }
             }
         }
-        static async Task<bool> GetClassMetaAsync(object settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
+        static async Task<bool> GetClassMetaAsync(object? settings, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
         {
+            ArgumentNullException.ThrowIfNull(settings);
             // Get all member infos from the passed settingsObject
             IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
 
@@ -414,8 +418,9 @@ namespace AndreasReitberger.Maui
             return true;
         }
 
-        static void GetExpressionMeta<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
+        static void GetExpressionMeta<T>(object? settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local)
         {
+            if (settings is null) return;
             lock (lockObject)
             {
                 if (value.Body is MemberExpression memberExpression)
@@ -430,9 +435,9 @@ namespace AndreasReitberger.Maui
             }
         }
 
-        static async Task GetExpressionMetaAsync<T>(object settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null)
+        static async Task GetExpressionMetaAsync<T>(object? settings, Expression<Func<SO, T>> value, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null)
         {
-
+            if (settings is null) return;
             if (value.Body is MemberExpression memberExpression)
             {
                 _ = await ProcessSettingsInfoAsync(new MauiSettingsMemberInfo()
@@ -446,6 +451,7 @@ namespace AndreasReitberger.Maui
 
         static async Task<MauiSettingsInfo?> GetExpressionMetaAsKeyValuePairAsync<T>(object? settings, Expression<Func<SO, T>> value, string? key = null)
         {
+            if (settings is null) return null;
             if (value.Body is MemberExpression memberExpression)
             {
                 return await ProcessSettingsInfoAsKeyValuePairAsync(new MauiSettingsMemberInfo()
@@ -479,7 +485,7 @@ namespace AndreasReitberger.Maui
             }
             if (settingsObjectInfo.Info is not null)
             {
-                settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
+                settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject?.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
 
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);

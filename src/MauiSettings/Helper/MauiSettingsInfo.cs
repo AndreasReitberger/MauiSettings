@@ -10,10 +10,10 @@
     internal class MauiSettingsInfo
     {
         #region Properties
-        public string Name { get; set; }
-        public object Value { get; set; }
-        public Type SettingsType { get; set; }
-        public object Default { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public object? Value { get; set; }
+        public Type? SettingsType { get; set; }
+        public object? Default { get; set; }
         public bool IsSecure { get; set; } = false;
         public bool Encrypt { get; set; } = false;
         public bool SkipForExport { get; set; } = false;
