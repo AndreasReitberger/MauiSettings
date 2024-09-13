@@ -138,7 +138,7 @@ namespace AndreasReitberger.Maui
         public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object, Type>> dictionary, string? key = null, bool justTryLoading = true)
             => Task.Run(async delegate
             {
-                return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, key: key);
+                return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, key: key, justTryLoading: justTryLoading);
             });
 
         public static Task LoadSettingsAsync(string settingsKey, Tuple<object, Type> data, bool save = true, string? key = null)

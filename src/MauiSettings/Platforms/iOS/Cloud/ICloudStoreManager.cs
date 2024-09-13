@@ -20,11 +20,8 @@ namespace AndreasReitberger.Maui.Cloud
         #endregion
 
         #region Methods
-        public static object GetValue(string key)
-        {
-            return Store?.GetString(key);
-        }
-
+        public static object? GetValue(string key) => Store?.GetString(key);
+        
         public static void SetValue<T>(string key, T value, bool synchronize = true)
         {
             // Maximum key size - Key names cannot be longer than 64 bytes.
