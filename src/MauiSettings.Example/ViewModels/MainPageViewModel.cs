@@ -79,8 +79,8 @@ namespace MauiSettings.Example.ViewModels
         async Task ToDictionary()
         {
             // All "SkipForExport" should be missing here.
-            Dictionary<string, Tuple<object, Type>> dict = await SettingsApp.ToDictionaryAsync();
-            Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value.Item1.ToString() })];
+            Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync();
+            Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty})];
         }
         #endregion
     }

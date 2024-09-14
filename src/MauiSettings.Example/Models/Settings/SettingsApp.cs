@@ -36,7 +36,7 @@ namespace MauiSettings.Example.Models.Settings
 
         #region Version
         [MauiSetting(Name = nameof(App_SettingsVersion), DefaultValue = "1.0.0", SkipForExport = true)]
-        public static Version App_SettingsVersion { get; set; }
+        public static Version? App_SettingsVersion { get; set; }
 
         #endregion
 

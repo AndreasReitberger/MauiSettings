@@ -11,10 +11,10 @@
     public class MauiSettingBaseAttribute : Attribute
     {
         #region Properties
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        private object _default;
-        public object DefaultValue
+        private object? _default;
+        public object? DefaultValue
         {
             get
             {

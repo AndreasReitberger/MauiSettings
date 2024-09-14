@@ -62,18 +62,20 @@ namespace AndreasReitberger.Maui.Helper
             }
 #if DEBUG
             catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
 #else
             catch (Exception)
-#endif
             {
+#endif
                 SetSettingsValue(key, defaultValue);
                 return defaultValue;
             }
-            return ChangeSettingsType<T>(returnValue, defaultValue);
+            return ChangeSettingsType(returnValue, defaultValue);
             //return (T)Convert.ChangeType(returnValue, typeof(T));
         }
 
-        public static T? ChangeSettingsType<T>(object settingsValue, T defaultValue) => (T)Convert.ChangeType(settingsValue, typeof(T)) ?? default;
+        public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue) => settingsValue is not null ? (T)Convert.ChangeType(settingsValue, typeof(T)) : defaultValue;
 
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
         // Only string is allowed for secure storage
@@ -81,7 +83,7 @@ namespace AndreasReitberger.Maui.Helper
         {
             defaultValue ??= string.Empty;
             string? settingsObject = await SecureStorage.Default.GetAsync(key);
-            return settingsObject == null ? defaultValue : settingsObject;
+            return settingsObject ?? defaultValue;
         }
 
         public static void SetSettingsValue(string key, object? value)
