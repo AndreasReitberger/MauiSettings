@@ -14,6 +14,15 @@ namespace MauiSettings.Example.ViewModels
 
         [ObservableProperty]
         string currentVersionAvailable = string.Empty;
+
+        [ObservableProperty]
+        int someIntValue = 93216;
+
+        [ObservableProperty]
+        double someDoubleValue = 2651.65;
+
+        [ObservableProperty]
+        bool someBoolValue = true;
         #endregion
 
         #region Ctor

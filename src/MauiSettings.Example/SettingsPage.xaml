@@ -13,12 +13,31 @@
             Padding="30,0"
             Spacing="25">
             <Label
-                Text="Enter some text"
+                Text="Settings"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"
                 />
+            <Label
+                Text="Enter some text value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
             <Editor
                 Text="{Binding CurrentVersionAvailable}"
+                />
+            <Label
+                Text="Enter some bool value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Switch
+                Toggled="{Binding SomeBoolValue}"
+                />
+
+            <BoxView
+                Margin="10,20"
+                HeightRequest="2"
+                Background="{DynamicResource Primary}"
                 />
             <Button
                 x:Name="SaveBtn"
