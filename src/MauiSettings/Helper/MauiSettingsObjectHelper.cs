@@ -14,7 +14,7 @@ namespace AndreasReitberger.Maui.Helper
 
     internal class MauiSettingsObjectHelper
     {
-        public static object GetSettingValue(MemberInfo mi, object o)
+        public static object? GetSettingValue(MemberInfo mi, object? o)
         {
             if (mi is FieldInfo fieldInfo)
             {
@@ -24,10 +24,10 @@ namespace AndreasReitberger.Maui.Helper
             {
                 return propertyInfo.GetValue(o);
             }
-            return (mi as PropertyInfo)?.GetMethod.Invoke(o, Array.Empty<object>());
+            return (mi as PropertyInfo)?.GetMethod?.Invoke(o, []);
         }
 
-        public static void SetSettingValue(MemberInfo memberInfo, object settings, object settingValue, Type settingType)
+        public static void SetSettingValue(MemberInfo memberInfo, object? settings, object? settingValue, Type? settingType)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace AndreasReitberger.Maui.Helper
                     Debug.WriteLine($"MauiSettings: The setting value was null for {memberInfo.Name}");
                     return;
                 }
+                settingType ??= typeof(object);
                 if (memberInfo is FieldInfo fieldInfo)
                 {
                     fieldInfo.SetValue(settings, settingValue);
@@ -44,11 +45,8 @@ namespace AndreasReitberger.Maui.Helper
 
                 if (memberInfo is PropertyInfo propertyInfo)
                 {
-                    MethodInfo setMethod = propertyInfo.SetMethod;
-                    if (setMethod is null)
-                    {
-                        throw new NullReferenceException($"MauiSettings: Cannot set {memberInfo.Name} property! (Read only)");
-                    }
+                    MethodInfo? setMethod = (propertyInfo?.SetMethod) 
+                        ?? throw new NullReferenceException($"MauiSettings: Cannot set {memberInfo.Name} property! (Read only)");
                     // If the settings value type doesn't match the target type of the field.
                     // Maui saves the settings as string, so this conversion is needed.
                     if (settingValue.GetType() != settingType)
@@ -56,7 +54,7 @@ namespace AndreasReitberger.Maui.Helper
                         settingValue = GetConvertedTypeValue(settingValue, settingType);
                     }
 
-                    setMethod.Invoke(settings, new object[1] { settingValue });
+                    setMethod.Invoke(settings, [settingValue]);
                     return;
                 }
             }
@@ -67,7 +65,7 @@ namespace AndreasReitberger.Maui.Helper
 
         }
 
-        public static Type GetSettingType(MemberInfo memberInfo)
+        public static Type? GetSettingType(MemberInfo memberInfo)
         {
             try
             {
@@ -88,7 +86,7 @@ namespace AndreasReitberger.Maui.Helper
             }
         }
 
-        public static object GetTypeDefaultValue(Type type)
+        public static object? GetTypeDefaultValue(Type? type)
         {
             if (type is not null && type.GetTypeInfo().IsValueType)
             {
@@ -96,18 +94,19 @@ namespace AndreasReitberger.Maui.Helper
             }
             return null;
         }
-        public static object GetDefaultValue(MauiSettingBaseAttribute attr, Type settingType)
+        public static object? GetDefaultValue(MauiSettingBaseAttribute? attr, Type? settingType)
         {
+            settingType ??= typeof(object);
             try
             {
-                if (attr != null && attr.DefaultValueInUse)
+                if (attr is not null && attr.DefaultValueInUse)
                 {
-                    object obj = attr.DefaultValue;
+                    object? obj = attr.DefaultValue;
                     if (obj is null)
                         return GetTypeDefaultValue(settingType);
                     if (obj?.GetType() != settingType)
                     {
-                        if (obj.GetType() == typeof(string))
+                        if (obj?.GetType() == typeof(string))
                         {
                             // Try to pass the string object for the constructor
                             //return Activator.CreateInstance(settingType, new string[] { obj as string });
@@ -124,7 +123,7 @@ namespace AndreasReitberger.Maui.Helper
             }
         }
 
-        public static object GetConvertedTypeValue(object setting, Type settingsType)
+        public static object? GetConvertedTypeValue(object setting, Type settingsType)
         {
             if (settingsType is not null)
             {
@@ -132,8 +131,8 @@ namespace AndreasReitberger.Maui.Helper
                 {
                     if (setting?.GetType() == settingsType)
                         return setting;
-                    return setting.GetType() == typeof(string)
-                        ? Activator.CreateInstance(settingsType, new string[] { setting as string })
+                    return setting?.GetType() == typeof(string)
+                        ? Activator.CreateInstance(settingsType, [setting as string])
                         : Convert.ChangeType(setting, settingsType);
                 }
                 catch (Exception)
