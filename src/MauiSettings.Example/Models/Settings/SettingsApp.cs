@@ -38,6 +38,9 @@ namespace MauiSettings.Example.Models.Settings
         [MauiSetting(Name = nameof(App_SettingsVersion), DefaultValue = "1.0.0", SkipForExport = true)]
         public static Version? App_SettingsVersion { get; set; }
 
+        [MauiSetting(Name = nameof(ResourcesCurrentVersionAvailable))]
+        public static string ResourcesCurrentVersionAvailable { get; set; } = string.Empty;
+
         #endregion
 
         #region Default
@@ -56,6 +59,21 @@ namespace MauiSettings.Example.Models.Settings
         [MauiSetting(Name = nameof(Privacy_AcceptPrivacyPolicy), DefaultValue = false, SkipForExport = true)]
         public static bool Privacy_AcceptPrivacyPolicy { get; set; }
 
+        #endregion
+
+        #region Misc
+
+        [MauiSetting(Name = nameof(Misc_Boolean), DefaultValue = false)]
+        public static bool Misc_Boolean { get; set; }
+
+        [MauiSetting(Name = nameof(Misc_String))]
+        public static string Misc_String { get; set; } = string.Empty;
+
+        [MauiSetting(Name = nameof(Misc_Numeric), DefaultValue = 0)]
+        public static double Misc_Numeric { get; set; } = 0;
+
+        [MauiSetting(Name = nameof(Misc_Counter))]
+        public static int Misc_Counter { get; set; } = 0;
         #endregion
 
         #endregion

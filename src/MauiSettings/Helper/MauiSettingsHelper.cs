@@ -16,6 +16,69 @@ namespace AndreasReitberger.Maui.Helper
          * - String
          * - DateTime
         */
+        public static T? GetSettingsValue<T>(string key, Type? targetType, T? defaultValue)
+        {
+            object? returnValue = null;
+            if (targetType != defaultValue?.GetType())
+            {
+                defaultValue = (T?)MauiSettingsObjectHelper.GetTypeDefaultValue(targetType);
+            }
+            try
+            {
+                switch (defaultValue)
+                {
+                    case bool b:
+                        returnValue = Preferences.Get(key, b);
+                        break;
+                    case double d:
+                        returnValue = Preferences.Get(key, d);
+                        break;
+                    case int i:
+                        returnValue = Preferences.Get(key, i);
+                        break;
+                    case float f:
+                        returnValue = Preferences.Get(key, f);
+                        break;
+                    case long l:
+                        returnValue = Preferences.Get(key, l);
+                        break;
+                    case string s:
+                        returnValue = Preferences.Get(key, s);
+                        break;
+                    case DateTime dt:
+                        returnValue = Preferences.Get(key, dt);
+                        break;
+                    default:
+                        // For all other types try to serialize it as JSON
+                        string jsonString = Preferences.Get(key, string.Empty) ?? string.Empty;
+                        if (defaultValue == null)
+                        {
+                            // In this case it's unkown to what data type the string should be deserialized.
+                            // So just return the string as it is to avoid exceptions while converting.
+                            returnValue = jsonString;
+                        }
+                        else
+                        {
+                            returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+                        }
+                        break;
+                }
+            }
+#if DEBUG
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+#else
+            catch (Exception)
+            {
+#endif
+                SetSettingsValue(key, defaultValue);
+                return defaultValue;
+            }
+            return ChangeSettingsType(returnValue, defaultValue);
+        }
+        /**/
+        [Obsolete("Use the new method with the `targetType` parameter instead")]
         public static T? GetSettingsValue<T>(string key, T defaultValue)
         {
             object? returnValue = null;
@@ -72,7 +135,6 @@ namespace AndreasReitberger.Maui.Helper
                 return defaultValue;
             }
             return ChangeSettingsType(returnValue, defaultValue);
-            //return (T)Convert.ChangeType(returnValue, typeof(T));
         }
 
         public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue) => settingsValue is not null ? (T)Convert.ChangeType(settingsValue, typeof(T)) : defaultValue;

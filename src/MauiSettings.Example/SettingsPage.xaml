@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MauiSettings.Example.SettingsPage"
+    xmlns:viewModels="clr-namespace:MauiSettings.Example.ViewModels"
+    xmlns:settings="clr-namespace:MauiSettings.Example.Models.Settings"
+    x:DataType="viewModels:SettingsPageViewModel"
+    >
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Label
+                Text="Settings"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1"
+                />
+            <Label
+                Text="Enter some text value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Editor
+                Text="{Binding SomeTextValue}"
+                />
+            <Label
+                Text="Enter some bool value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Switch
+                IsToggled="{Binding SomeBoolValue}"
+                />
+
+            <Label
+                Text="Enter some numeric value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Editor
+                Text="{Binding SomeDoubleValue}"
+                Keyboard="Numeric"
+                />
+
+            <Label
+                Text="Enter some integer value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Label
+                Text="{Binding SomeIntValue}"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center"
+                />
+            <Grid
+                ColumnDefinitions="*,*"
+                >
+                <Button
+                    Margin="8,4"
+                    Text="+1"
+                    Command="{Binding ButtonCountUpCommand}"
+                    />
+                <Button
+                    Margin="8,4"
+                    Grid.Column="1"
+                    Text="-1"
+                    Command="{Binding ButtonCountDownCommand}"
+                    />
+            </Grid>
+            <BoxView
+                Margin="10,20"
+                HeightRequest="2"
+                Background="{DynamicResource Primary}"
+                />
+            <Button
+                x:Name="SaveBtn"
+                Text="Save Settings"
+                Command="{Binding SaveSettingsCommand}"
+                HorizontalOptions="Fill" 
+                />
+            <Button
+                x:Name="LoadBtn"
+                Text="Load Settings"
+                Command="{Binding LoadSettingsFromDeviceCommand}"
+                HorizontalOptions="Fill" 
+                />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
