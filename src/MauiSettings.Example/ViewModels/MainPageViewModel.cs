@@ -50,7 +50,7 @@ namespace MauiSettings.Example.ViewModels
 
         #region Commands
         [RelayCommand]
-        async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(key: App.Hash);
+        static async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(key: App.Hash);
 
         [RelayCommand]
         async Task LoadSettingsFromDevice()

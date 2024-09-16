@@ -527,7 +527,8 @@ namespace AndreasReitberger.Maui
 #endif
                     case MauiSettingsTarget.Local:
                     default:
-                        settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                        //settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                        settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
                         break;
 
                 }
@@ -702,7 +703,8 @@ namespace AndreasReitberger.Maui
                         case MauiSettingsTarget.Local:
                         default:
                             if (!useValueFromSettingsInfo)
-                                settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                                //settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                                settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
                             else
                                 settingsInfo.Value = MauiSettingsHelper.ChangeSettingsType(settingsInfo.Value, settingsInfo.Default);
                             break;
@@ -993,7 +995,8 @@ namespace AndreasReitberger.Maui
                     // If only secure storage should be loaded, stop here.
                     if (secureOnly)
                         return null;
-                    settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                    //settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
+                    settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
                 }
                 else if (settingsInfo.SettingsType == typeof(string))
                 {

@@ -23,7 +23,7 @@
                 SemanticProperties.HeadingLevel="Level2"
                 />
             <Editor
-                Text="{Binding CurrentVersionAvailable}"
+                Text="{Binding SomeTextValue}"
                 />
             <Label
                 Text="Enter some bool value"
@@ -31,9 +31,44 @@
                 SemanticProperties.HeadingLevel="Level2"
                 />
             <Switch
-                Toggled="{Binding SomeBoolValue}"
+                IsToggled="{Binding SomeBoolValue}"
                 />
 
+            <Label
+                Text="Enter some numeric value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Editor
+                Text="{Binding SomeDoubleValue}"
+                Keyboard="Numeric"
+                />
+
+            <Label
+                Text="Enter some integer value"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Label
+                Text="{Binding SomeIntValue}"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center"
+                />
+            <Grid
+                ColumnDefinitions="*,*"
+                >
+                <Button
+                    Margin="8,4"
+                    Text="+1"
+                    Command="{Binding ButtonCountUpCommand}"
+                    />
+                <Button
+                    Margin="8,4"
+                    Grid.Column="1"
+                    Text="-1"
+                    Command="{Binding ButtonCountDownCommand}"
+                    />
+            </Grid>
             <BoxView
                 Margin="10,20"
                 HeightRequest="2"

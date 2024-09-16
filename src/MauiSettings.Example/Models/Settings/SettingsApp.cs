@@ -61,6 +61,21 @@ namespace MauiSettings.Example.Models.Settings
 
         #endregion
 
+        #region Misc
+
+        [MauiSetting(Name = nameof(Misc_Boolean), DefaultValue = false)]
+        public static bool Misc_Boolean { get; set; }
+
+        [MauiSetting(Name = nameof(Misc_String))]
+        public static string Misc_String { get; set; } = string.Empty;
+
+        [MauiSetting(Name = nameof(Misc_Numeric), DefaultValue = 0)]
+        public static double Misc_Numeric { get; set; } = 0;
+
+        [MauiSetting(Name = nameof(Misc_Counter))]
+        public static int Misc_Counter { get; set; } = 0;
+        #endregion
+
         #endregion
 
         #region Methods
