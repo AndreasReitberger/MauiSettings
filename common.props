@@ -7,7 +7,7 @@
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
 		
-    <Version>1.0.9</Version>
+        <Version>1.0.10</Version>
 		<PackageIcon>ar_128.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
 		<PackageProjectUrl>https://github.com/AndreasReitberger/MauiSettings</PackageProjectUrl>

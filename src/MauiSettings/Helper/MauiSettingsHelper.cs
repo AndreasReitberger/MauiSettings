@@ -1,9 +1,18 @@
 ﻿using Newtonsoft.Json;
+#if WINDOWS
+using System.Text;
+#endif
 
 namespace AndreasReitberger.Maui.Helper
 {
     internal class MauiSettingsHelper
     {
+        /*
+         LocalSettings restricts the preference key names to 255 characters or less. Each preference value can be up to 8K bytes in size, 
+         and each composite setting can be up to 64 K bytes in size.
+         */
+        public static int MaxKeyLength { get; set; } = 255;
+        public static int MaxContentSize { get; set; } = 8 * 1024;
         #region Methods
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/preferences
         /*
@@ -18,6 +27,10 @@ namespace AndreasReitberger.Maui.Helper
         */
         public static T? GetSettingsValue<T>(string key, Type? targetType, T? defaultValue)
         {
+#if WINDOWS
+            ArgumentOutOfRangeException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
+#endif
             object? returnValue = null;
             if (targetType != defaultValue?.GetType())
             {
@@ -81,6 +94,10 @@ namespace AndreasReitberger.Maui.Helper
         [Obsolete("Use the new method with the `targetType` parameter instead")]
         public static T? GetSettingsValue<T>(string key, T defaultValue)
         {
+#if WINDOWS
+            ArgumentOutOfRangeException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
+#endif
             object? returnValue = null;
             try
             {
@@ -150,6 +167,10 @@ namespace AndreasReitberger.Maui.Helper
 
         public static void SetSettingsValue(string key, object? value)
         {
+#if WINDOWS
+            ArgumentOutOfRangeException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
+#endif
             switch (value)
             {
                 case bool b:
@@ -176,7 +197,15 @@ namespace AndreasReitberger.Maui.Helper
                 default:
                     // For all other types try to serialize it as JSON
                     string? jsonString = JsonConvert.SerializeObject(value, Formatting.Indented);
-                    Preferences.Set(key, jsonString);
+                    if (!string.IsNullOrWhiteSpace(jsonString))
+                    {
+#if WINDOWS && DEBUG
+                        // For testing, at the moment only for debugging
+                        byte[] bytes = Encoding.Default.GetBytes(jsonString);
+                        ArgumentOutOfRangeException.ThrowIfGreaterThan(bytes.LongLength, MaxContentSize, nameof(value));
+#endif
+                        Preferences.Set(key, jsonString);
+                    }
                     break;
             }
         }
@@ -194,6 +223,6 @@ namespace AndreasReitberger.Maui.Helper
 
         public static void ClearSecureSettings() => SecureStorage.Default.RemoveAll();
 
-        #endregion
+    #endregion
     }
 }
