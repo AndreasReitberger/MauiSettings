@@ -1,12 +1,7 @@
 
 <Project>
+	<Import Project="framework.maui.props" />
     <PropertyGroup>		
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-		<WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
-		
         <Version>1.0.10</Version>
 		<PackageIcon>ar_128.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
@@ -20,7 +15,6 @@
         <Company>Andreas Reitberger</Company>
         <Copyright>Andreas Reitberger</Copyright>
 		<LangVersion>12</LangVersion>
-        <PublishReadyToRun>false</PublishReadyToRun>
 		<Nullable>enable</Nullable>
 		
         <!--Source-Linking-->
@@ -37,6 +31,9 @@
    </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
+	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 </Project>

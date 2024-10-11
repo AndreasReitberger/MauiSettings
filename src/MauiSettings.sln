@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3CBCD659-10AB-4B69-B12E-48998DEE148E}"
 	ProjectSection(SolutionItems) = preProject
 		..\common.props = ..\common.props
+		..\framework.maui.props = ..\framework.maui.props
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
