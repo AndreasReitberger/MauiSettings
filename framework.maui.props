@@ -29,7 +29,7 @@
     </PropertyGroup>
 		
 	<!-- https://github.com/dotnet/maui/issues/9299 -->
-	<PropertyGroup Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release' ">
+	<PropertyGroup Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release' and '$(OutputType)' == 'Exe'">
 		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
 </Project>
