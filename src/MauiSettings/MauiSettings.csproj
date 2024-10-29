@@ -2,6 +2,7 @@
 	<Import Project="..\..\common.props" />
 	<PropertyGroup>
 		<TargetFrameworks>$(TargetFrameworks);net8.0</TargetFrameworks>
+		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net8.0-macos</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		
 		<RootNamespace>AndreasReitberger.Maui</RootNamespace>
@@ -21,11 +22,6 @@
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SharedNetCoreLibrary" Version="1.1.13" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.92" />
-	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
 	</ItemGroup>
 
 </Project>
