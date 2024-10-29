@@ -2,7 +2,7 @@
 <Project>
 	<Import Project="framework.maui.props" />
     <PropertyGroup>		
-        <Version>1.0.10</Version>
+        <Version>1.1.0</Version>
 		<PackageIcon>ar_128.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
 		<PackageProjectUrl>https://github.com/AndreasReitberger/MauiSettings</PackageProjectUrl>
