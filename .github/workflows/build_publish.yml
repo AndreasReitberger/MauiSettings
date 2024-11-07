@@ -21,6 +21,12 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+    - name: Install .NET MAUI
+      shell: pwsh
+      run: |
+        & dotnet nuget locals all --clear
+        & dotnet workload install maui --source https://api.nuget.org/v3/index.json
+        & dotnet workload install android ios maccatalyst tvos macos maui wasm-tools maui-maccatalyst --source https://api.nuget.org/v3/index.json
     - name: Build
       run: dotnet build --configuration Release ./src 
     - name: Package NuGets
