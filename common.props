@@ -2,7 +2,7 @@
 <Project>
 	<Import Project="framework.maui.props" />
     <PropertyGroup>		
-        <Version>1.1.0</Version>
+        <Version>1.1.0-preview1</Version>
 		<PackageIcon>ar_128.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
 		<PackageProjectUrl>https://github.com/AndreasReitberger/MauiSettings</PackageProjectUrl>
@@ -31,9 +31,9 @@
    </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.92" />
-	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.10" />
+	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.10" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 </Project>
