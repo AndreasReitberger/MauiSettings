@@ -15,7 +15,7 @@ If you want to support me, you can order over following affilate links (I'll get
 - Jake3D: https://tidd.ly/3x9JOBp * 
 - Amazon: https://amzn.to/2Z8PrDu *
 - Coinbase: https://advanced.coinbase.com/join/KTKSEBP * (10€ in BTC for you if you open an account)
-- TradeRepublic: https://refnocode.trade.re/wfnk80zm * (10€ in stocks for you open an account)
+- TradeRepublic: https://refnocode.trade.re/wfnk80zm * (10€ in stocks for you if you open an account)
 
 (*) Affiliate link
 Thank you very much for supporting me!
