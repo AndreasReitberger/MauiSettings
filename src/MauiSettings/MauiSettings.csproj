@@ -24,4 +24,9 @@
 		<PackageReference Include="SharedNetCoreLibrary" Version="1.1.13" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="9.0.12" />
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="9.0.12" />
+	</ItemGroup>
+
 </Project>

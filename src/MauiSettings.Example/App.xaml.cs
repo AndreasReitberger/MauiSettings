@@ -1,5 +1,4 @@
-﻿using AndreasReitberger.Shared.Core.Utilities;
-using MauiSettings.Example.Models.Settings;
+﻿using MauiSettings.Example.Models.Settings;
 
 namespace MauiSettings.Example
 {
@@ -14,7 +13,11 @@ namespace MauiSettings.Example
 
             // Only Async methods do support encryption!
             _ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));
-            MainPage = new AppShell();
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            return new Window(new AppShell());
         }
 
         protected override void OnSleep()
