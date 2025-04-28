@@ -14,7 +14,7 @@
         <Authors>Andreas Reitberger</Authors>
         <Company>Andreas Reitberger</Company>
         <Copyright>Andreas Reitberger</Copyright>
-		<LangVersion>12</LangVersion>
+		<LangVersion>Preview</LangVersion>
 		<Nullable>enable</Nullable>
 		
         <!--Source-Linking-->
@@ -31,9 +31,8 @@
    </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.22" />
-	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.22" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ namespace AndreasReitberger.Maui
 
         #region Variables
 
-        static readonly object lockObject = new();
+        static readonly Lock lockObject = new();
         #endregion
 
         #region Properties
@@ -341,9 +341,8 @@ namespace AndreasReitberger.Maui
             {
                 // Get all member infos from the passed settingsObject
                 IEnumerable<MemberInfo>? declaredMembers = settings?.GetType().GetTypeInfo().DeclaredMembers;
-
-                MauiSettingsMemberInfo settingsObjectInfo = new();
-                MauiSettingsInfo settingsInfo = new();
+                //MauiSettingsMemberInfo settingsObjectInfo = new();
+                //MauiSettingsInfo settingsInfo = new();
                 return declaredMembers?.ToList();
             }
         }
@@ -503,8 +502,7 @@ namespace AndreasReitberger.Maui
             if (settingsObjectInfo.Info is not null)
             {
                 List<MauiSettingAttribute> settingBaseAttributes
-                    = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
-                    .ToList();
+                    = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes.Count == 0)
                 {
                     // If the member has not the needed MauiSettingsAttribute, continue with the search
@@ -527,7 +525,6 @@ namespace AndreasReitberger.Maui
 #endif
                     case MauiSettingsTarget.Local:
                     default:
-                        //settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.Default);
                         settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
                         break;
 
@@ -662,8 +659,7 @@ namespace AndreasReitberger.Maui
             if (settingsObjectInfo.Info is not null)
             {
                 List<MauiSettingAttribute> settingBaseAttributes
-                    = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
-                    .ToList();
+                    = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes?.Count == 0)
                 {
                     // If the member has not the needed MauiSettingsAttribute, continue with the search
@@ -971,8 +967,7 @@ namespace AndreasReitberger.Maui
             if (settingsObjectInfo.Info is not null)
             {
                 List<MauiSettingAttribute> settingBaseAttributes
-                    = settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)
-                    .ToList();
+                    = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes?.Count == 0)
                 {
                     // If the member has not the needed MauiSettingsAttribute, continue with the search
