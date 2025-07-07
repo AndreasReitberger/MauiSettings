@@ -21,6 +21,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="SharedNetCoreLibrary" Version="1.1.15" />
+		<PackageReference Include="SharedNetCoreLibrary" Version="1.1.17" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="9.0.81" />
 	</ItemGroup>
 </Project>
