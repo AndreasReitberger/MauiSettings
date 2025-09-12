@@ -1,11 +1,58 @@
+#version: 2
+#updates:
+#- package-ecosystem: nuget
+#  directory: "/src"
+#  schedule:
+#    interval: daily
+#  open-pull-requests-limit: 25
+#
+#  labels:
+#      - "nuget"
+#      - "dependencies"
+      
 version: 2
+registries:
+  custom-nuget:
+    type: nuget-feed
+    url: https://api.nuget.org/v3/index.json
 updates:
 - package-ecosystem: nuget
-  directory: "/"
+  directory: "/src"
+  registries:
+    - custom-nuget
   schedule:
     interval: daily
+    # Run at 10pm Pacific time
+    time: "22:00"
+    timezone: "America/Los_Angeles"
   open-pull-requests-limit: 25
-
+  groups:
+    AndroidX:
+      patterns:
+        - "Xamarin.AndroidX.*"
+        - "Xamarin.Build.Download"
+        - "Xamarin.Google.Android.Material"
+        - "Xamarin.Google.Crypto.Tink.Android"
+        - "Xamarin.GooglePlayServices.Maps"
+        - "Xamarin.Android.Glide*"
+    Syncfusion:
+      patterns:
+        - "Syncfusion.*"
+    MicrosoftExtensions:
+      patterns:
+        - "Microsoft.Extensions.*"
+    WindowsAppSDK:
+      patterns:
+        - "Microsoft.Graphics.Win2D"
+        - "Microsoft.Windows.SDK.BuildTools"
+        - "Microsoft.WindowsAppSDK"
+    xunit:
+      patterns:
+        - "xunit"
+        - "xunit.runner.*"
+#  ignore:
+#    - dependency-name: "MicrosoftMauiGraphicsVersion"         # maestro
+      
   labels:
       - "nuget"
       - "dependencies"
