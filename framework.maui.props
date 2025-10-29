@@ -4,6 +4,8 @@
 		<TargetFrameworks>net9.0-android</TargetFrameworks>
 		<!-- Needed for GitHub action, iOS and MacOS is not workig on Linux -->
 		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<!-- Causes problems on windows?! -->
+		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('windows')) and !$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net9.0-macos</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
