@@ -210,7 +210,7 @@ public partial class MainPageViewModel : ObservableObject
     async Task ToDictionary()
     {
         // All "SkipForExport" should be missing here.
-        Dictionary<string, Tuple<object, Type>> dict = await SettingsApp.ToDictionaryAsync();
+        Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync();
         Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value.Item1.ToString() })];
     }
     #endregion
