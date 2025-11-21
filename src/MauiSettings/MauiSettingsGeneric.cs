@@ -135,38 +135,38 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, secureOnly: true, key: key);
             });
 
-        public static Task LoadSettingsAsync(Dictionary<string, Tuple<object, Type>> dictionary, bool save = true, string? key = null)
+        public static Task LoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, bool save = true, string? key = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, save: save, key: key);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object, Type>> dictionary, string? key = null, bool justTryLoading = true)
+        public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, string? key = null, bool justTryLoading = true)
             => Task.Run(async delegate
             {
                 return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, key: key, justTryLoading: justTryLoading);
             });
 
-        public static Task LoadSettingsAsync(string settingsKey, Tuple<object, Type> data, bool save = true, string? key = null)
+        public static Task LoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, bool save = true, string? key = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, save: save, key: key);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(string settingsKey, Tuple<object, Type> data, string? key = null, bool justTryLoading = true)
+        public static Task<bool> TryLoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, string? key = null, bool justTryLoading = true)
             => Task.Run(async delegate
             {
                 return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, key: key, justTryLoading: justTryLoading);
             });
 
-        public static Task LoadSettingsAsync(object? settings, Dictionary<string, Tuple<object, Type>> dictionary, bool save = true, string? key = null)
+        public static Task LoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, bool save = true, string? key = null)
             => Task.Run(async delegate
             {
                 await GetMetaFromDictionaryAsync(settings: settings, dictionary: dictionary, mode: MauiSettingsActions.Load, secureOnly: false, key: key);
                 // Save the restored settings right away
                 if (save) await SaveSettingsAsync(settings: settings, key: key);
             });
-        public static Task<bool> TryLoadSettingsAsync(object? settings, Dictionary<string, Tuple<object, Type>> dictionary, string? key = null, bool justTryLoading = true)
+        public static Task<bool> TryLoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, string? key = null, bool justTryLoading = true)
             => Task.Run(async delegate
             {
                 return await GetMetaFromDictionaryAsync(
@@ -391,7 +391,7 @@ namespace AndreasReitberger.Maui
             }
             return true;
         }
-        static async Task<bool> GetMetaFromDictionaryAsync(object? settings, Dictionary<string, Tuple<object, Type>> dictionary, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
+        static async Task<bool> GetMetaFromDictionaryAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, MauiSettingsActions mode, MauiSettingsTarget target = MauiSettingsTarget.Local, bool secureOnly = false, string? key = null, bool justTryLoading = false)
         {
             if (ThrowIfSettingsObjectIsNull)
                 ArgumentNullException.ThrowIfNull(settings);
@@ -407,7 +407,7 @@ namespace AndreasReitberger.Maui
             {
                 bool useValueFromSettingsInfo = false;
                 // Try to find the matching settingsKey
-                KeyValuePair<string, Tuple<object, Type>>? keyPair = dictionary?.FirstOrDefault(keypair =>
+                KeyValuePair<string, Tuple<object?, Type>>? keyPair = dictionary?.FirstOrDefault(keypair =>
                     mInfo.Name is not null && keypair.Key.EndsWith(mInfo.Name
                     //?.Replace("get_", string.Empty)
                     ));
