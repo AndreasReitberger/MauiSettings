@@ -10,13 +10,13 @@ namespace MauiSettings.Example.ViewModels
     {
         #region Settings
         [ObservableProperty]
-        bool isLoading = false;
+        public partial bool IsLoading { get; set; } = false;
 
         [ObservableProperty]
-        string hashKey = App.Hash;
+        public partial string HashKey { get; set; } = App.Hash;
 
         [ObservableProperty]
-        string licenseInfo = string.Empty;
+        public partial string LicenseInfo { get; set; } = string.Empty;
         partial void OnLicenseInfoChanged(string value)
         {
             if (!IsLoading)
@@ -27,7 +27,7 @@ namespace MauiSettings.Example.ViewModels
         }
 
         [ObservableProperty]
-        ObservableCollection<SettingsItem> settings = [];
+        public partial ObservableCollection<SettingsItem> Settings { get; set; } = [];
         #endregion
 
         #region Ctor
