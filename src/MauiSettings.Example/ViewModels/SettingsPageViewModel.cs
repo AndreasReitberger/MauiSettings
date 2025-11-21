@@ -8,22 +8,22 @@ namespace MauiSettings.Example.ViewModels
     {
         #region Settings
         [ObservableProperty]
-        bool isLoading = false;
+        public partial bool IsLoading { get; set; } = false;
 
         [ObservableProperty]
-        string currentVersionAvailable = string.Empty;
+        public partial string CurrentVersionAvailable { get; set; } = string.Empty;
 
         [ObservableProperty]
-        string someTextValue = "Example text incoming...";
+        public partial string SomeTextValue { get; set; } = "Example text incoming...";
 
         [ObservableProperty]
-        int someIntValue = 93216;
+        public partial int SomeIntValue { get; set; } = 93216;
 
         [ObservableProperty]
-        double someDoubleValue = 2651.65;
+        public partial double SomeDoubleValue { get; set; } = 2651.65;
 
         [ObservableProperty]
-        bool someBoolValue = true;
+        public partial bool SomeBoolValue { get; set; } = true;
         #endregion
 
         #region Ctor
@@ -61,7 +61,7 @@ namespace MauiSettings.Example.ViewModels
 
             SettingsApp.SaveSettings();
 
-            await Shell.Current.DisplayAlert("Settings saved", "Settings saved successfully...", "OK");
+            await Shell.Current.DisplayAlertAsync("Settings saved", "Settings saved successfully...", "OK");
         }
 
         [RelayCommand]
@@ -71,7 +71,7 @@ namespace MauiSettings.Example.ViewModels
             {
                 SettingsApp.LoadSettings();
                 LoadSettings();
-                await Shell.Current.DisplayAlert("Settings loaded", "Settings loaded successfully...", "OK");
+                await Shell.Current.DisplayAlertAsync("Settings loaded", "Settings loaded successfully...", "OK");
             }
             catch (Exception)
             {

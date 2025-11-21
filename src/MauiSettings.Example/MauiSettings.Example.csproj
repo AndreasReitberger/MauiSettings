@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\common.props" />
+	<Import Project="..\..\framework.maui.net9.props" Condition="'$(DefineConstants.Contains(NET9))'"/>
+	<Import Project="..\..\framework.maui.props" Condition="'$(DefineConstants.Contains(NET10))'"/>
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		
@@ -32,10 +34,28 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<!-- https://stackoverflow.com/a/75589936/10083577 -->
+		<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
+		<WindowsAppSDKSelfContained Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">true</WindowsAppSDKSelfContained>
+		<WindowsAppSdkDeploymentManagerInitialize Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">false</WindowsAppSdkDeploymentManagerInitialize>
+		<!-- set false to build an exe file instead -->
+		<GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
+	</PropertyGroup>
+
+	<!-- Used for net9-->
+	<ItemGroup Condition="'$(DefineConstants.Contains(NET9))'">
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+	</ItemGroup>
+
+	<!-- Used for net10-->
+	<ItemGroup Condition="'$(DefineConstants.Contains(NET10))'">
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.10" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
