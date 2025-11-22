@@ -45,7 +45,7 @@ namespace AndreasReitberger.Maui.Helper
 
                 if (memberInfo is PropertyInfo propertyInfo)
                 {
-                    MethodInfo? setMethod = (propertyInfo?.SetMethod) 
+                    MethodInfo? setMethod = (propertyInfo?.SetMethod)
                         ?? throw new NullReferenceException($"MauiSettings: Cannot set {memberInfo.Name} property! (Read only)");
                     // If the settings value type doesn't match the target type of the field.
                     // Maui saves the settings as string, so this conversion is needed.
