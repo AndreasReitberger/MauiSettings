@@ -40,7 +40,7 @@ namespace MauiSettings.Example.ViewModels
 
             CurrentVersionAvailable = SettingsApp.ResourcesCurrentVersionAvailable;
 
-            SomeBoolValue= SettingsApp.Misc_Boolean;
+            SomeBoolValue = SettingsApp.Misc_Boolean;
             SomeDoubleValue = SettingsApp.Misc_Numeric;
             SomeTextValue = SettingsApp.Misc_String;
             SomeIntValue = SettingsApp.Misc_Counter;

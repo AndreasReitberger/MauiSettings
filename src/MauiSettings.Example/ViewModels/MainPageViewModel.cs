@@ -80,7 +80,7 @@ namespace MauiSettings.Example.ViewModels
         {
             // All "SkipForExport" should be missing here.
             Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync();
-            Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty})];
+            Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty })];
         }
         #endregion
     }

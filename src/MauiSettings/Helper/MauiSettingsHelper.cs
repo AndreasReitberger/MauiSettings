@@ -223,6 +223,6 @@ namespace AndreasReitberger.Maui.Helper
 
         public static void ClearSecureSettings() => SecureStorage.Default.RemoveAll();
 
-    #endregion
+        #endregion
     }
 }

@@ -74,7 +74,7 @@ namespace AndreasReitberger.Maui
         public static Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null) => Task.Run(async delegate
         {
             if (SettingsObject is null) return;
-            await LoadObjectSettingAsync(SettingsObject, value, key: key);  
+            await LoadObjectSettingAsync(SettingsObject, value, key: key);
         });
 
         public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null) => Task.Run(async delegate
@@ -417,7 +417,7 @@ namespace AndreasReitberger.Maui
                     // If a matching settingsKey was found, prepare the settingsInfo with the loaded data
                     settingsInfo = new()
                     {
-                        Name = mInfo.Name.Replace("get_", string.Empty) ,
+                        Name = mInfo.Name.Replace("get_", string.Empty),
                         Value = keyPair.Value.Value.Item1,
                         SettingsType = keyPair.Value.Value.Item2,
                     };
@@ -431,7 +431,7 @@ namespace AndreasReitberger.Maui
                     settingsObjectInfo, settingsInfo, mode, target, secureOnly: secureOnly, useValueFromSettingsInfo: useValueFromSettingsInfo, key: key, justTryLoading: justTryLoading);
                 if (result == MauiSettingsResults.EncryptionError || result == MauiSettingsResults.Failed)
                 {
-                    return false; 
+                    return false;
                 }
             }
             return true;
@@ -650,7 +650,7 @@ namespace AndreasReitberger.Maui
         }
 
         static async Task<MauiSettingsResults> ProcessSettingsInfoAsync(
-            MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target, 
+            MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target,
             bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null, bool keepEncrypted = false, bool justTryLoading = false
             )
         {
@@ -766,7 +766,7 @@ namespace AndreasReitberger.Maui
                                 if (!justTryLoading)
                                     MauiSettingsObjectHelper.SetSettingValue(settingsObjectInfo.Info, settingsObjectInfo.OrignalSettingsObject, decryptedString, settingsInfo.SettingsType);
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 OnEncryptionErrorEvent(new()
                                 {
