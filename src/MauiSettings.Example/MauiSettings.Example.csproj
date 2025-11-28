@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\common.props" />
-	<Import Project="..\..\framework.maui.net9.props" Condition="'$(DefineConstants.Contains(NET9))'"/>
-	<Import Project="..\..\framework.maui.props" Condition="'$(DefineConstants.Contains(NET10))'"/>
+	<Import Project="..\..\framework.maui.net9.props" Condition="'$(DefineConstants.Contains(NET9))'" />
+	<Import Project="..\..\framework.maui.props" Condition="'$(DefineConstants.Contains(NET10))'" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		
@@ -50,7 +50,7 @@
 
 	<!-- Used for net10-->
 	<ItemGroup Condition="'$(DefineConstants.Contains(NET10))'">
-		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.10" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
 	</ItemGroup>
 	
 	<ItemGroup>
