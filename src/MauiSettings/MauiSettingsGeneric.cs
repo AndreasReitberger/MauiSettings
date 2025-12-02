@@ -1117,7 +1117,7 @@ namespace AndreasReitberger.Maui
                 default:
                     break;
             }
-            Debug.WriteLine($"MauiSettings: Called '{nameof(ProcessSettingsInfo)}' => Mode = '{mode}' / Target = '{target}' / Name = '{settingsInfo.Name}' / Value = '{settingsInfo.Value}'");
+            Debug.WriteLine($"MauiSettings: Called '{nameof(ProcessSettingsInfoAsync)}' => Mode = '{mode}' / Target = '{target}' / Name = '{settingsInfo.Name}' / Value = '{settingsInfo.Value}'");
             return MauiSettingsResults.Success;
         }
 
