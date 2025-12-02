@@ -8,6 +8,12 @@ namespace MauiSettings.Example
         {
             InitializeComponent();
             BindingContext = new MainPageViewModel();
+            Loaded += ((MainPageViewModel)BindingContext).Pages_Loaded;
+        }
+
+        ~MainPage()
+        {
+            Loaded -= ((MainPageViewModel)BindingContext).Pages_Loaded;
         }
     }
 

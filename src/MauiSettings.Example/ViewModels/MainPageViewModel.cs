@@ -83,5 +83,13 @@ namespace MauiSettings.Example.ViewModels
             Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty })];
         }
         #endregion
+
+        #region LifeCycle
+
+        public async void Pages_Loaded(object? sender, EventArgs e)
+        {
+            await LoadSettingsFromDevice();
+        }
+        #endregion
     }
 }

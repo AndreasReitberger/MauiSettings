@@ -7,12 +7,15 @@ namespace AndreasReitberger.Maui.Helper
 {
     internal class MauiSettingsHelper
     {
+        #region Variables
         /*
          LocalSettings restricts the preference key names to 255 characters or less. Each preference value can be up to 8K bytes in size, 
          and each composite setting can be up to 64 K bytes in size.
          */
         public static int MaxKeyLength { get; set; } = 255;
         public static int MaxContentSize { get; set; } = 8 * 1024;
+        #endregion 
+
         #region Methods
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/preferences
         /*
@@ -168,7 +171,7 @@ namespace AndreasReitberger.Maui.Helper
         public static void SetSettingsValue(string key, object? value)
         {
 #if WINDOWS
-            ArgumentOutOfRangeException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
             ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
 #endif
             switch (value)
