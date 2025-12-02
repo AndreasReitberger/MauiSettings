@@ -460,7 +460,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return;
-            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMeta)}' => Mode = '{mode}' / Target = '{target}'");
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMeta)}' => Mode = '{mode}' / Target = '{target}' / Value = '{value}'");
             lock (lockObject)
             {
                 if (value.Body is MemberExpression memberExpression)
@@ -482,7 +482,7 @@ namespace AndreasReitberger.Maui
             else if (settings is null)
                 return;
 
-            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMetaAsync)}' => Mode = '{mode}' / Target = '{target}'");
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMeta)}' => Mode = '{mode}' / Target = '{target}' / Value = '{value}'");
             if (value.Body is MemberExpression memberExpression)
             {
                 _ = await ProcessSettingsInfoAsync(new MauiSettingsMemberInfo()
@@ -695,6 +695,7 @@ namespace AndreasReitberger.Maui
                 default:
                     break;
             }
+            Debug.WriteLine($"MauiSettings: Called '{nameof(ProcessSettingsInfo)}' => Mode = '{mode}' / Target = '{target}' / Name = '{settingsInfo.Name}' / Value = '{settingsInfo.Value}'");
             return true;
         }
 
@@ -1116,6 +1117,7 @@ namespace AndreasReitberger.Maui
                 default:
                     break;
             }
+            Debug.WriteLine($"MauiSettings: Called '{nameof(ProcessSettingsInfo)}' => Mode = '{mode}' / Target = '{target}' / Name = '{settingsInfo.Name}' / Value = '{settingsInfo.Value}'");
             return MauiSettingsResults.Success;
         }
 
