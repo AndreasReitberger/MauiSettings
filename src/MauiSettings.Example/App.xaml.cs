@@ -12,7 +12,8 @@ namespace MauiSettings.Example
             //string t = EncryptionManager.GenerateBase64Key();
 
             // Only Async methods do support encryption!
-            _ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));
+            SettingsApp.Dispatcher = DispatcherProvider.Current.GetForCurrentThread();
+            //_ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
