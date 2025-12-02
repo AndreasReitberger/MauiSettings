@@ -12,7 +12,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Security;
 
 namespace AndreasReitberger.Maui
 {
@@ -367,6 +366,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return;
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetClassMeta)}' => Mode = '{mode}' / Target = '{target}'");
             lock (lockObject)
             {
                 // Get all member infos from the passed settingsObject
@@ -390,6 +390,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return false;
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetClassMetaAsync)}' => Mode = '{mode}' / Target = '{target}'");
             // Get all member infos from the passed settingsObject
             IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
 
@@ -412,6 +413,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return false;
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetMetaFromDictionaryAsync)}' => Mode = '{mode}' / Target = '{target}'");
             // Get all member infos from the passed settingsObject
             IEnumerable<MemberInfo> declaredMembers = settings.GetType().GetTypeInfo().DeclaredMembers;
 
@@ -458,6 +460,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return;
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMeta)}' => Mode = '{mode}' / Target = '{target}'");
             lock (lockObject)
             {
                 if (value.Body is MemberExpression memberExpression)
@@ -478,6 +481,8 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return;
+
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMetaAsync)}' => Mode = '{mode}' / Target = '{target}'");
             if (value.Body is MemberExpression memberExpression)
             {
                 _ = await ProcessSettingsInfoAsync(new MauiSettingsMemberInfo()
@@ -495,6 +500,7 @@ namespace AndreasReitberger.Maui
                 ArgumentNullException.ThrowIfNull(settings);
             else if (settings is null)
                 return null;
+            Debug.WriteLine($"MauiSettings: Called '{nameof(GetExpressionMetaAsKeyValuePairAsync)}' => Type = '{typeof(T)}' / Key = '{key}'");
             if (value.Body is MemberExpression memberExpression)
             {
                 return await ProcessSettingsInfoAsKeyValuePairAsync(new MauiSettingsMemberInfo()
@@ -542,7 +548,7 @@ namespace AndreasReitberger.Maui
                     default:
                         if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                         {
-                            Debug.WriteLine($"MauiSettings: Dispatched");
+                            //Debug.WriteLine($"MauiSettings: Dispatched");
                             Dispatcher.Dispatch(() =>
                             {
                                 settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
@@ -553,7 +559,6 @@ namespace AndreasReitberger.Maui
                             settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default);
                         }
                         break;
-
                 }
             }
             else
@@ -616,7 +621,7 @@ namespace AndreasReitberger.Maui
                         default:
                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                             {
-                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                 Dispatcher.Dispatch(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                             }
                             else
@@ -652,7 +657,7 @@ namespace AndreasReitberger.Maui
                         default:
                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                             {
-                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                 Dispatcher.Dispatch(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                             }
                             else 
@@ -679,7 +684,7 @@ namespace AndreasReitberger.Maui
                         default:
                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                             {
-                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                 Dispatcher.Dispatch(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                             }
                             else
@@ -746,7 +751,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default));
                                 }
                                 else
@@ -757,7 +762,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => settingsInfo.Value = MauiSettingsHelper.ChangeSettingsType(settingsInfo.Value, settingsInfo.Default));
                                 }
                                 else
@@ -782,7 +787,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(async () => settingsInfo.Value = await MauiSettingsHelper.GetSecureSettingsValueAsync(settingsInfo.Name, settingsInfo.Default as string));
                                 }
                                 else
@@ -795,7 +800,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => settingsInfo.Value = MauiSettingsHelper.ChangeSettingsType(settingsInfo.Value, settingsInfo.Default));
                                 }
                                 else
@@ -891,7 +896,7 @@ namespace AndreasReitberger.Maui
                                             string encryptedString = EncryptionManager.EncryptStringToBase64String(secureString, key);
                                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                             {
-                                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                                 await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, encryptedString));
                                             }
                                             else
@@ -913,7 +918,7 @@ namespace AndreasReitberger.Maui
                                     {
                                         if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                         {
-                                            Debug.WriteLine($"MauiSettings: Dispatched");
+                                            //Debug.WriteLine($"MauiSettings: Dispatched");
                                             await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString));
                                         }
                                         else
@@ -931,7 +936,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                                 }
                                 else
@@ -981,7 +986,7 @@ namespace AndreasReitberger.Maui
                                             string encryptedString = EncryptionManager.EncryptStringToBase64String(secureString, key);
                                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                             {
-                                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                                 await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, encryptedString));
                                             }
                                             else
@@ -1002,7 +1007,7 @@ namespace AndreasReitberger.Maui
                                     {
                                         if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                         {
-                                            Debug.WriteLine($"MauiSettings: Dispatched");
+                                            //Debug.WriteLine($"MauiSettings: Dispatched");
                                             await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString));
                                         }
                                         else
@@ -1019,7 +1024,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                                 }
                                 else
@@ -1060,7 +1065,7 @@ namespace AndreasReitberger.Maui
                                             string encryptedString = EncryptionManager.EncryptStringToBase64String(secureString, key);
                                             if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                             {
-                                                Debug.WriteLine($"MauiSettings: Dispatched");
+                                                //Debug.WriteLine($"MauiSettings: Dispatched");
                                                 await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, encryptedString));
                                             }
                                             else
@@ -1081,7 +1086,7 @@ namespace AndreasReitberger.Maui
                                     {
                                         if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                         {
-                                            Debug.WriteLine($"MauiSettings: Dispatched");
+                                            //Debug.WriteLine($"MauiSettings: Dispatched");
                                             await Dispatcher.DispatchAsync(async () => await MauiSettingsHelper.SetSecureSettingsValueAsync(settingsInfo.Name, secureString));
                                         }
                                         else
@@ -1098,7 +1103,7 @@ namespace AndreasReitberger.Maui
                             {
                                 if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                                 {
-                                    Debug.WriteLine($"MauiSettings: Dispatched");
+                                    //Debug.WriteLine($"MauiSettings: Dispatched");
                                     await Dispatcher.DispatchAsync(() => MauiSettingsHelper.SetSettingsValue(settingsInfo.Name, settingsInfo.Value));
                                 }
                                 else
@@ -1147,7 +1152,7 @@ namespace AndreasReitberger.Maui
 
                     if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                     {
-                        Debug.WriteLine($"MauiSettings: Dispatched");
+                        //Debug.WriteLine($"MauiSettings: Dispatched");
                         await Dispatcher.DispatchAsync(() => settingsInfo.Value = MauiSettingsHelper.GetSettingsValue(settingsInfo.Name, settingsInfo.SettingsType, settingsInfo.Default));
                     }
                     else
@@ -1158,7 +1163,7 @@ namespace AndreasReitberger.Maui
                 {
                     if (Dispatcher is not null && Dispatcher.IsDispatchRequired)
                     {
-                        Debug.WriteLine($"MauiSettings: Dispatched");
+                        //Debug.WriteLine($"MauiSettings: Dispatched");
                         await Dispatcher.DispatchAsync(async () => settingsInfo.Value = await MauiSettingsHelper.GetSecureSettingsValueAsync(settingsInfo.Name, settingsInfo.Default as string));
                     }
                     else
