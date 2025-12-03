@@ -25,7 +25,7 @@ namespace AndreasReitberger.Maui
      */
 
     //public partial class MauiSettingsGeneric<SO> where SO : IMauiSettingsGeneric<SO>, new()
-    public partial class MauiSettingsGeneric<SO> : ObservableObject where SO : new()
+    public partial class MauiSettingsGeneric<SO> : ObservableObject, IMauiSettingsGeneric<SO> where SO : new()
     {
         #region Settings Object
 
@@ -40,15 +40,15 @@ namespace AndreasReitberger.Maui
         }
         #endregion
 
-        #region Dispatcher
+        #region Properties
         public static IDispatcher? Dispatcher { get; set; }
+        public static string? Hash { get; set; }
+        public static string? PassPhrase { get; set; }
         #endregion
 
         #region Variables
 
         static readonly Lock lockObject = new();
-        //readonly string _passPhrase = string.Empty;
-        //readonly string _hash = string.Empty;
         #endregion
 
         #region Properties
@@ -68,19 +68,18 @@ namespace AndreasReitberger.Maui
         {
             _settingsObject = settingsObject;
             Dispatcher = dispatcher;
-        }
-        /*      
+        }  
         public MauiSettingsGeneric(string settingsKey, string hash)
         {
-            _passPhrase = settingsKey;
-            _hash = hash;
+            PassPhrase = settingsKey;
+            Hash = hash;
         }
         public MauiSettingsGeneric(SO settingsObject, string settingsKey, string hash)
         {
             _settingsObject = settingsObject;
-            _passPhrase = settingsKey;
-            _hash = hash;
-        }*/
+            PassPhrase = settingsKey;
+            Hash = hash;
+        }
         #endregion
 
         #region Methods

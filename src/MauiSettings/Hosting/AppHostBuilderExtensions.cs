@@ -1,4 +1,5 @@
-﻿using AndreasReitberger.Maui.Interfaces;
+﻿#if false
+using AndreasReitberger.Maui.Interfaces;
 using System.Runtime.Versioning;
 
 namespace AndreasReitberger.Maui
@@ -18,3 +19,4 @@ namespace AndreasReitberger.Maui
         }
     }
 }
+#endif

@@ -1,9 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AndreasReitberger.Maui.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AndreasReitberger.Maui
 {
     // All the code in this file is only included on Mac Catalyst.
-    public partial class MauiSettingsGeneric<SO> : ObservableObject where SO : new()
+    public partial class MauiSettingsGeneric<SO> : ObservableObject, IMauiSettingsGeneric<SO> where SO : new()
     {
     }
 }
