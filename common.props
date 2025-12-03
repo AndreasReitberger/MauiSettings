@@ -2,7 +2,7 @@
 <Project>
 	<Import Project="conditions.props" />
     <PropertyGroup>
-		<Version Condition="'$(DefineConstants.Contains(NET10))'">1.2.0</Version>
+		<Version Condition="'$(DefineConstants.Contains(NET10))'">1.2.2</Version>
 		<Version Condition="'!$(DefineConstants.Contains(NET10))'">1.1.2</Version>
 		<PackageIcon>ar_128.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
