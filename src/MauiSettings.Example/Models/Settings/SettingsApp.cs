@@ -1,6 +1,5 @@
 ﻿using AndreasReitberger.Maui;
 using AndreasReitberger.Maui.Attributes;
-using System.Runtime.CompilerServices;
 
 namespace MauiSettings.Example.Models.Settings
 {
