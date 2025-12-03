@@ -1,11 +1,12 @@
 ﻿using AndreasReitberger.Maui.Enums;
+using AndreasReitberger.Maui.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq.Expressions;
 
 namespace AndreasReitberger.Maui
 {
     // All the code in this file is only included on iOS.
-    public partial class MauiSettingsGeneric<SO> : ObservableObject where SO : new()
+    public partial class MauiSettingsGeneric<SO> : ObservableObject, IMauiSettingsGeneric<SO> where SO : new()
     {
         #region Methods
 
