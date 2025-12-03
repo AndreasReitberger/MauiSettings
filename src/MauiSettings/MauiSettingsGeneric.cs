@@ -5,6 +5,7 @@ using AndreasReitberger.Maui.Cloud;
 using AndreasReitberger.Maui.Enums;
 using AndreasReitberger.Maui.Events;
 using AndreasReitberger.Maui.Helper;
+using AndreasReitberger.Maui.Interfaces;
 using AndreasReitberger.Maui.Utilities;
 using AndreasReitberger.Shared.Core.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -23,6 +24,7 @@ namespace AndreasReitberger.Maui
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
 
+    //public partial class MauiSettingsGeneric<SO> where SO : IMauiSettingsGeneric<SO>, new()
     public partial class MauiSettingsGeneric<SO> : ObservableObject where SO : new()
     {
         #region Settings Object
@@ -45,6 +47,8 @@ namespace AndreasReitberger.Maui
         #region Variables
 
         static readonly Lock lockObject = new();
+        //readonly string _passPhrase = string.Empty;
+        //readonly string _hash = string.Empty;
         #endregion
 
         #region Properties
@@ -65,17 +69,18 @@ namespace AndreasReitberger.Maui
             _settingsObject = settingsObject;
             Dispatcher = dispatcher;
         }
-        /*
-        public MauiSettingsGeneric(string settingsKey)
+        /*      
+        public MauiSettingsGeneric(string settingsKey, string hash)
         {
             _passPhrase = settingsKey;
+            _hash = hash;
         }
-        public MauiSettingsGeneric(SO settingsObject, string settingsKey)
+        public MauiSettingsGeneric(SO settingsObject, string settingsKey, string hash)
         {
             _settingsObject = settingsObject;
             _passPhrase = settingsKey;
-        }
-        */
+            _hash = hash;
+        }*/
         #endregion
 
         #region Methods
