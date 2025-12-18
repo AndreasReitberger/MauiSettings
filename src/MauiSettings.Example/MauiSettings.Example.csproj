@@ -50,7 +50,7 @@
 
 	<!-- Used for net10-->
 	<ItemGroup Condition="'$(DefineConstants.Contains(NET10))'">
-		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
 	</ItemGroup>
 	
 	<ItemGroup>
