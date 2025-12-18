@@ -11,6 +11,17 @@ namespace MauiSettings.Example.ViewModels
         public partial bool IsLoading { get; set; } = false;
 
         [ObservableProperty]
+        public partial bool UseCustomSharedName { get; set; } = false;
+        partial void OnUseCustomSharedNameChanged(bool value)
+        {
+            if (!value)
+                SharedName = null;
+        }
+
+        [ObservableProperty]
+        public partial string? SharedName { get; set; } = null;
+
+        [ObservableProperty]
         public partial string CurrentVersionAvailable { get; set; } = string.Empty;
 
         [ObservableProperty]
@@ -59,7 +70,7 @@ namespace MauiSettings.Example.ViewModels
             SettingsApp.Misc_String = SomeTextValue;
             SettingsApp.Misc_Counter = SomeIntValue;
 
-            SettingsApp.SaveSettings();
+            SettingsApp.SaveSettings(SharedName);
 
             await Shell.Current.DisplayAlertAsync("Settings saved", "Settings saved successfully...", "OK");
         }
@@ -69,7 +80,7 @@ namespace MauiSettings.Example.ViewModels
         {
             try
             {
-                SettingsApp.LoadSettings();
+                SettingsApp.LoadSettings(SharedName);
                 LoadSettings();
                 await Shell.Current.DisplayAlertAsync("Settings loaded", "Settings loaded successfully...", "OK");
             }

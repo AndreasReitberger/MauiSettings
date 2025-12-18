@@ -17,6 +17,7 @@
         <Copyright>Andreas Reitberger</Copyright>
 		<LangVersion>Preview</LangVersion>
 		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		
         <!--Source-Linking-->
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

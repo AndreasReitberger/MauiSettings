@@ -18,6 +18,24 @@
                 SemanticProperties.HeadingLevel="Level1"
                 />
             <Label
+                Text="Shared Name (optional)"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                />
+            <Grid
+                ColumnDefinitions="Auto,*"
+                >
+                <Switch
+                    IsToggled="{Binding UseCustomSharedName}"
+                    />
+                <Editor
+                    Grid.Column="1"
+                    IsEnabled="{Binding UseCustomSharedName}"
+                    Text="{Binding SharedName}"
+                    />
+                
+            </Grid>
+            <Label
                 Text="Enter some text value"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
