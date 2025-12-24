@@ -203,6 +203,14 @@ namespace AndreasReitberger.Maui
 
         public static void SaveSettings(object? settings, string? sharedName = null) => GetClassMeta(settings, MauiSettingsActions.Save, sharedName: sharedName);
 
+        public static Task SaveSettingAsync<T>(Expression<Func<SO, T>> value, string? key = null, string? sharedName = null)
+            => SaveObjectSettingAsync(SettingsObject, value, key, sharedName);
+
+        public static Task SaveObjectSettingAsync<T>(object? settings, Expression<Func<SO, T>> value, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        {
+            await GetExpressionMetaAsync(settings, value, MauiSettingsActions.Save, key: key, sharedName: sharedName);
+        });
+
         public static Task SaveSettingsAsync(string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             await SaveSettingsAsync(settings: SettingsObject, key: key, sharedName);
@@ -568,7 +576,6 @@ namespace AndreasReitberger.Maui
             {
                 settingsInfo.Name = MauiSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject?.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
-
                 settingsInfo.Default = MauiSettingsObjectHelper.GetDefaultValue(settingBaseAttribute, settingsInfo.SettingsType);
                 switch (target)
                 {
@@ -621,7 +628,11 @@ namespace AndreasReitberger.Maui
 
                     }
 #else
-                    if (throwOnError && mode != MauiSettingsActions.LoadDefaults) throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                    if (throwOnError)
+                    {
+                        if (mode != MauiSettingsActions.LoadDefaults)
+                            throw new NotSupportedException("SecureStorage is only available in the Async methods!");
+                    }
 #endif
                 }
                 else if (settingsInfo.Encrypt)
