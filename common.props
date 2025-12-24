@@ -22,6 +22,11 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols>true</IncludeSymbols>
+
+		<IsTrimmable>true</IsTrimmable>
+		<!-- Ref: https://learn.microsoft.com/en-us/dotnet/maui/deployment/trimming?view=net-maui-10.0#suppress-analysis-warnings -->
+		<SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+		<TrimmerSingleWarn>false</TrimmerSingleWarn>
     </PropertyGroup>
 
     <ItemGroup>
