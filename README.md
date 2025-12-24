@@ -90,6 +90,37 @@ To load the settings from the storage, call `SettingsApp.LoadSettings()` (mostly
 
 ## Save
 Whenever you do make changes to a settings property of your class, call `SettingsApp.SaveSettings()`. This will write the settings to the storage.
+```cs
+        [ObservableProperty]
+        public partial bool AutoSyncOnStartup { get; set; } = true;
+        partial void OnAutoSyncOnStartupChanged(bool value)
+        {
+            if (!IsLoading)
+            {
+                SettingsApp.SevDesk_AutoSyncOnStartup = value;
+                SettingsApp.SaveSetting(setting => SettingsApp.SevDesk_AutoSyncOnStartup);
+            }
+        }
+```
+
+If you want to save a secure or/and encrypted property, you have to provide a key for encryption/decryption and use the `async` method:
+
+```cs
+        [ObservableProperty]
+        public partial string AccessToken { get; set; } = string.Empty;
+        partial void OnAccessTokenChanged(string value)
+        {
+            AccessTokenValid = !string.IsNullOrEmpty(value);
+            if (!IsLoading && AccessTokenValid && value is not null)
+            {
+                SettingsApp.SevDesk_AccessToken = value;
+                SettingsApp.SaveSettingAsync(
+                    setting => SettingsApp.SevDesk_AccessToken,
+                    SettingsApp.TryDecryptPassphrase(SettingsApp.Firebase_PassPhrase, SettingsApp.Encryption_Password)
+                    );
+            }
+        }
+```
 
 # Encryption
 Starting from version `1.0.6`, you can encrypt secure properties with a `AES`encryption. An example how it works is shown below.
