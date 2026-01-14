@@ -55,7 +55,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
