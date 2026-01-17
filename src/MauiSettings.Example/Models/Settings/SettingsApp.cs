@@ -1,5 +1,6 @@
 ﻿using AndreasReitberger.Maui;
 using AndreasReitberger.Maui.Attributes;
+using System.Text.Json.Serialization;
 
 namespace MauiSettings.Example.Models.Settings
 {
@@ -83,10 +84,10 @@ namespace MauiSettings.Example.Models.Settings
         /// Creates a copy of the current <c>SettingsApp</c>
         /// </summary>
         /// <returns>Copy of the current <c>SettingsApp</c></returns>
-        public static SettingsApp Copy()
+        public static SettingsApp Copy(JsonSerializerContext context)
         {
             SettingsApp app = new();
-            app.LoadObjectSettings();
+            app.LoadObjectSettings(context);
             return app;
         }
 

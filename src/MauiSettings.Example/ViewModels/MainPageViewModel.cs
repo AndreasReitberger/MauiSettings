@@ -50,14 +50,14 @@ namespace MauiSettings.Example.ViewModels
 
         #region Commands
         [RelayCommand]
-        static async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(key: App.Hash);
+        static async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
 
         [RelayCommand]
         async Task LoadSettingsFromDevice()
         {
             try
             {
-                await SettingsApp.LoadSettingsAsync(key: App.Hash);
+                await SettingsApp.LoadSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
                 LoadSettings();
             }
             catch (Exception)
@@ -70,7 +70,7 @@ namespace MauiSettings.Example.ViewModels
         async Task ExchangeHashKey()
         {
             string newKey = EncryptionManager.GenerateBase64Key();
-            await SettingsApp.ExhangeKeyAsync(oldKey: App.Hash, newKey: newKey);
+            await SettingsApp.ExhangeKeyAsync(newKey, AppSourceGenerationContext.Default, oldKey: App.Hash);
             App.Hash = HashKey = newKey;
             LoadSettings();
         }
@@ -79,7 +79,7 @@ namespace MauiSettings.Example.ViewModels
         async Task ToDictionary()
         {
             // All "SkipForExport" should be missing here.
-            Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync();
+            Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync(AppSourceGenerationContext.Default);
             Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty })];
         }
         #endregion

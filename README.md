@@ -26,6 +26,20 @@ Get the latest version from nuget.org<br>
 [![NuGet](https://img.shields.io/nuget/dt/SettingsMaui.svg)](https://www.nuget.org/packages/SettingsMaui)
 
 # Usage
+
+## Important
+Since `1.2.4` the library is using `System.Text.Json` for serialization. From this version on, you need to pass a `JsonSerializerContext`.
+
+## JsonSerializerContext
+See the `ExampleApp` project for an example of how to create a `JsonSerializerContext` and pass it to the `LoadSettings` and `SaveSettings` methods.
+Add each object, which needs to be serialized/deserialized as `JsonSerializable` attribute.
+
+```cs
+    [JsonSerializable(typeof(SettingsItem))]
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    public partial class AppSourceGenerationContext : JsonSerializerContext { }
+```
+
 ## Settings Object
 In the .NET MAUI project, create a new `Class` (for instance `SettingsApp.cs`) holding your setting properties.
 
@@ -87,6 +101,11 @@ public partial class SettingsApp : MauiSettings<SettingsApp>
 
 ## Load
 To load the settings from the storage, call `SettingsApp.LoadSettings()` (mostly in the `App` constructor of your App.xmls file. The project uses the `Maui.Storage.Preferences` in order to store the settings on the corresponding device.
+
+```cs
+// Load settings with the app context and a shared name...
+SettingsApp.LoadSettings(AppSourceGenerationContext.Default, SharedName);
+```
 
 ## Save
 Whenever you do make changes to a settings property of your class, call `SettingsApp.SaveSettings()`. This will write the settings to the storage.

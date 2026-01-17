@@ -29,6 +29,14 @@ namespace MauiSettings.Example.ViewModels
 
         [ObservableProperty]
         public partial int SomeIntValue { get; set; } = 93216;
+        partial void OnSomeIntValueChanged(int value)
+        {
+            if (!IsLoading)
+            {
+                SettingsApp.Misc_Numeric = value;
+                SettingsApp.SaveSetting(setting => SettingsApp.Misc_Numeric);
+            }
+        }
 
         [ObservableProperty]
         public partial double SomeDoubleValue { get; set; } = 2651.65;
@@ -70,7 +78,7 @@ namespace MauiSettings.Example.ViewModels
             SettingsApp.Misc_String = SomeTextValue;
             SettingsApp.Misc_Counter = SomeIntValue;
 
-            SettingsApp.SaveSettings(SharedName);
+            SettingsApp.SaveSettings(AppSourceGenerationContext.Default, SharedName);
 
             await Shell.Current.DisplayAlertAsync("Settings saved", "Settings saved successfully...", "OK");
         }
@@ -80,7 +88,7 @@ namespace MauiSettings.Example.ViewModels
         {
             try
             {
-                SettingsApp.LoadSettings(SharedName);
+                SettingsApp.LoadSettings(AppSourceGenerationContext.Default, SharedName);
                 LoadSettings();
                 await Shell.Current.DisplayAlertAsync("Settings loaded", "Settings loaded successfully...", "OK");
             }
