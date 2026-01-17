@@ -70,7 +70,7 @@ namespace MauiSettings.Example.ViewModels
             SettingsApp.Misc_String = SomeTextValue;
             SettingsApp.Misc_Counter = SomeIntValue;
 
-            SettingsApp.SaveSettings(SharedName);
+            SettingsApp.SaveSettings(AppSourceGenerationContext.Default, SharedName);
 
             await Shell.Current.DisplayAlertAsync("Settings saved", "Settings saved successfully...", "OK");
         }
@@ -80,7 +80,7 @@ namespace MauiSettings.Example.ViewModels
         {
             try
             {
-                SettingsApp.LoadSettings(SharedName);
+                SettingsApp.LoadSettings(AppSourceGenerationContext.Default, SharedName);
                 LoadSettings();
                 await Shell.Current.DisplayAlertAsync("Settings loaded", "Settings loaded successfully...", "OK");
             }
