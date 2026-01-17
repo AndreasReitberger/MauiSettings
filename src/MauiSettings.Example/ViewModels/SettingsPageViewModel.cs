@@ -29,14 +29,6 @@ namespace MauiSettings.Example.ViewModels
 
         [ObservableProperty]
         public partial int SomeIntValue { get; set; } = 93216;
-        partial void OnSomeIntValueChanged(int value)
-        {
-            if (!IsLoading)
-            {
-                SettingsApp.Misc_Numeric = value;
-                SettingsApp.SaveSetting(setting => SettingsApp.Misc_Numeric);
-            }
-        }
 
         [ObservableProperty]
         public partial double SomeDoubleValue { get; set; } = 2651.65;

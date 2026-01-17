@@ -44,7 +44,7 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region Serializer
-        //public static JsonSerializerContext? Context { get; set; }
+        public static JsonSerializerContext? Context { get; set; } 
         #endregion
 
         #region Variables
@@ -86,107 +86,107 @@ namespace AndreasReitberger.Maui
         #region Methods
 
         #region LoadSettings
-        public static void LoadSettings(JsonSerializerContext context, string? sharedName = null) => LoadSettings(settings: SettingsObject, context, sharedName);
+        public static void LoadSettings(JsonSerializerContext? context = null, string? sharedName = null) => LoadSettings(settings: SettingsObject, context, sharedName);
 
-        public static void LoadSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public static void LoadSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => LoadObjectSetting(SettingsObject, value, context, sharedName);
 
-        public static Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        public static Task LoadSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             if (SettingsObject is null) return;
             await LoadObjectSettingAsync(SettingsObject, value, context, key: key, sharedName: sharedName);
         });
 
-        public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null) => Task.Run(async delegate
+        public static Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
         {
             if (SettingsObject is null) return;
             await LoadSecureObjectSettingAsync(SettingsObject, value, context, key: key);
         });
 
-        public void LoadObjectSettings(JsonSerializerContext context, string? sharedName = null) => LoadSettings(this, context, sharedName);
+        public void LoadObjectSettings(JsonSerializerContext? context = null, string? sharedName = null) => LoadSettings(this, context, sharedName);
 
-        public static void LoadObjectSetting<T>(object? settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public static void LoadObjectSetting<T>(object? settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null)
             => GetExpressionMeta(settings: settingsObject, value, MauiSettingsActions.Load, context, sharedName: sharedName);
 
-        public static Task LoadObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        public static Task LoadObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load, context, key: key, sharedName: sharedName);
         });
-        public static Task LoadSecureObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null) => Task.Run(async delegate
+        public static Task LoadSecureObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
         {
             await GetExpressionMetaAsync(settings: settingsObject, value, MauiSettingsActions.Load, context, secureOnly: true, key: key);
         });
 
-        public static void LoadSettings(object? settings, JsonSerializerContext context, string? sharedName = null) => GetClassMeta(settings: settings, mode: MauiSettingsActions.Load, context, sharedName: sharedName);
+        public static void LoadSettings(object? settings, JsonSerializerContext? context = null, string? sharedName = null) => GetClassMeta(settings: settings, mode: MauiSettingsActions.Load, context, sharedName: sharedName);
 
-        public static Task LoadSettingsAsync(JsonSerializerContext context, string? key = null, string? sharedName = null)
+        public static Task LoadSettingsAsync(JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, context, key: key, sharedName: sharedName);
             });
 
-        public static Task LoadSettingsAsync(object? settings, JsonSerializerContext context, string? key = null, string? sharedName = null)
+        public static Task LoadSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, context, key: key, sharedName: sharedName);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(JsonSerializerContext context, string? key = null, bool justTryLoading = true, string? sharedName = null)
+        public static Task<bool> TryLoadSettingsAsync(JsonSerializerContext? context = null, string? key = null, bool justTryLoading = true, string? sharedName = null)
             => Task.Run(async delegate
             {
                 return await TryLoadSettingsAsync(settings: SettingsObject, context, key: key, justTryLoading: justTryLoading, sharedName: sharedName);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(object? settings, JsonSerializerContext context, string? key = null, bool justTryLoading = true, string? sharedName = null)
+        public static Task<bool> TryLoadSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null, bool justTryLoading = true, string? sharedName = null)
             => Task.Run(async delegate
             {
                 return await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, context, key: key, justTryLoading: justTryLoading, sharedName: sharedName);
             });
 
-        public static Task LoadSecureSettingsAsync(JsonSerializerContext context, string? key = null)
+        public static Task LoadSecureSettingsAsync(JsonSerializerContext? context = null, string? key = null)
             => Task.Run(async delegate
             {
                 await LoadSecureSettingsAsync(settings: SettingsObject, context, key: key);
             });
 
-        public static Task LoadSecureSettingsAsync(object? settings, JsonSerializerContext context, string? key = null)
+        public static Task LoadSecureSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null)
             => Task.Run(async delegate
             {
                 await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Load, context, secureOnly: true, key: key);
             });
 
-        public static Task LoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext context, bool save = true, string? key = null, string? sharedName = null)
+        public static Task LoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext? context = null, bool save = true, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, context, save: save, key: key, sharedName: sharedName);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext context, string? key = null, bool justTryLoading = true, string? sharedName = null)
+        public static Task<bool> TryLoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext? context = null, string? key = null, bool justTryLoading = true, string? sharedName = null)
             => Task.Run(async delegate
             {
                 return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: dictionary, context, key: key, justTryLoading: justTryLoading, sharedName: sharedName);
             });
 
-        public static Task LoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, JsonSerializerContext context, bool save = true, string? key = null, string? sharedName = null)
+        public static Task LoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, JsonSerializerContext? context = null, bool save = true, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
                 await LoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, context, save: save, key: key, sharedName: sharedName);
             });
 
-        public static Task<bool> TryLoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, JsonSerializerContext context, string? key = null, bool justTryLoading = true, string? sharedName = null)
+        public static Task<bool> TryLoadSettingsAsync(string settingsKey, Tuple<object?, Type> data, JsonSerializerContext? context = null, string? key = null, bool justTryLoading = true, string? sharedName = null)
             => Task.Run(async delegate
             {
                 return await TryLoadSettingsAsync(settings: SettingsObject, dictionary: new() { { settingsKey, data } }, context, key: key, justTryLoading: justTryLoading, sharedName: sharedName);
             });
 
-        public static Task LoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext context, bool save = true, string? key = null, string? sharedName = null)
+        public static Task LoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext? context = null, bool save = true, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
                 await GetMetaFromDictionaryAsync(settings: settings, dictionary: dictionary, mode: MauiSettingsActions.Load, context, secureOnly: false, key: key, sharedName: sharedName);
                 // Save the restored settings right away
                 if (save) await SaveSettingsAsync(settings: settings, context, key: key, sharedName: sharedName);
             });
-        public static Task<bool> TryLoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext context, string? key = null, bool justTryLoading = true, string? sharedName = null)
+        public static Task<bool> TryLoadSettingsAsync(object? settings, Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext? context = null, string? key = null, bool justTryLoading = true, string? sharedName = null)
             => Task.Run(async delegate
             {
                 return await GetMetaFromDictionaryAsync(
@@ -196,46 +196,46 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region SaveSettings
-        public static void SaveSettings(JsonSerializerContext context, string? sharedName = null) => SaveSettings(SettingsObject, context, sharedName);
+        public static void SaveSettings(JsonSerializerContext? context = null, string? sharedName = null) => SaveSettings(SettingsObject, context, sharedName);
 
-        public static void SaveSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public static void SaveSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => SaveObjectSetting(SettingsObject, value, context, sharedName);
 
-        public static void SaveObjectSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public static void SaveObjectSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null)
             => GetExpressionMeta(settings, value, MauiSettingsActions.Save, context, sharedName: sharedName);
 
-        public void SaveObjectSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public void SaveObjectSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => SaveObjectSetting(this, value, context, sharedName);
 
-        public void SaveObjectSettings(JsonSerializerContext context, string? sharedName = null) => SaveSettings(this, context, sharedName);
+        public void SaveObjectSettings(JsonSerializerContext? context = null, string? sharedName = null) => SaveSettings(this, context, sharedName);
 
-        public static void SaveSettings(object? settings, JsonSerializerContext context, string? sharedName = null) 
+        public static void SaveSettings(object? settings, JsonSerializerContext? context = null, string? sharedName = null) 
             => GetClassMeta(settings, MauiSettingsActions.Save, context, sharedName: sharedName);
 
-        public static Task SaveSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null)
+        public static Task SaveSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => SaveObjectSettingAsync(SettingsObject, value, context, key, sharedName);
 
-        public static Task SaveObjectSettingAsync<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        public static Task SaveObjectSettingAsync<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             await GetExpressionMetaAsync(settings, value, MauiSettingsActions.Save, context, key: key, sharedName: sharedName);
         });
 
-        public static Task SaveSettingsAsync(JsonSerializerContext context, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        public static Task SaveSettingsAsync(JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             await SaveSettingsAsync(settings: SettingsObject, context, key: key, sharedName);
         });
 
-        public static Task SaveSettingsAsync(object? settings, JsonSerializerContext context, string? key = null, string? sharedName = null) => Task.Run(async delegate
+        public static Task SaveSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save, context, key: key, sharedName: sharedName);
         });
 
-        public static Task SaveSecureSettingsAsync(JsonSerializerContext context, string? key = null) => Task.Run(async delegate
+        public static Task SaveSecureSettingsAsync(JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
         {
             await SaveSecureSettingsAsync(settings: SettingsObject, context, key: key);
         });
 
-        public static Task SaveSecureSettingsAsync(object? settings, JsonSerializerContext context, string? key = null) => Task.Run(async delegate
+        public static Task SaveSecureSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
         {
             await GetClassMetaAsync(settings: settings, mode: MauiSettingsActions.Save, context, secureOnly: true, key: key);
         });
@@ -243,43 +243,43 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region DeleteSettings
-        public static void DeleteSettings(JsonSerializerContext context, string? sharedName = null) 
+        public static void DeleteSettings(JsonSerializerContext? context = null, string? sharedName = null) 
             => DeleteSettings(SettingsObject, context, sharedName);
 
-        public static void DeleteSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public static void DeleteSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => DeleteObjectSetting(SettingsObject, value, context, sharedName);
 
-        public void DeleteObjectSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public void DeleteObjectSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => DeleteObjectSetting(this, value, context, sharedName);
 
-        public static void DeleteObjectSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public static void DeleteObjectSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => GetExpressionMeta(settings, value, MauiSettingsActions.Delete, context, sharedName: sharedName);
 
-        public void DeleteObjectSettings(JsonSerializerContext context, string? sharedName = null) 
+        public void DeleteObjectSettings(JsonSerializerContext? context = null, string? sharedName = null) 
             => DeleteSettings(this, context, sharedName);
 
-        public static void DeleteSettings(object? settings, JsonSerializerContext context, string? sharedName = null) 
+        public static void DeleteSettings(object? settings, JsonSerializerContext? context = null, string? sharedName = null) 
             => GetClassMeta(settings, MauiSettingsActions.Delete, context, sharedName: sharedName);
 
         #endregion
 
         #region LoadDefaults
-        public static void LoadDefaultSettings(JsonSerializerContext context, string? sharedName = null) 
+        public static void LoadDefaultSettings(JsonSerializerContext? context = null, string? sharedName = null) 
             => LoadDefaultSettings(SettingsObject, context, sharedName);
 
-        public static void LoadDefaultSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public static void LoadDefaultSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => LoadObjectDefaultSetting(SettingsObject, value, context, sharedName);
 
-        public void LoadObjectDefaultSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null) 
+        public void LoadObjectDefaultSetting<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null) 
             => LoadObjectDefaultSetting(this, value, context, sharedName);
 
-        public static void LoadObjectDefaultSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public static void LoadObjectDefaultSetting<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? sharedName = null)
             => GetExpressionMeta(settings, value, MauiSettingsActions.LoadDefaults, context, sharedName: sharedName);
 
-        public void LoadObjectDefaultSettings(JsonSerializerContext context, string? sharedName = null) 
+        public void LoadObjectDefaultSettings(JsonSerializerContext? context = null, string? sharedName = null) 
             => LoadDefaultSettings(this, context, sharedName);
 
-        public static void LoadDefaultSettings(object? settings, JsonSerializerContext context, string? sharedName = null)
+        public static void LoadDefaultSettings(object? settings, JsonSerializerContext? context = null, string? sharedName = null)
             => GetClassMeta(settings, MauiSettingsActions.LoadDefaults, context, sharedName: sharedName);
 
         #endregion
@@ -289,10 +289,10 @@ namespace AndreasReitberger.Maui
         public static Task<Dictionary<string, Tuple<object?, Type>>> ToDictionaryAsync(JsonSerializerContext context)
             => ToDictionaryAsync(settings: SettingsObject, context);
 
-        public static Task<Dictionary<string, Tuple<object?, Type>>> ToDictionaryAsync(JsonSerializerContext context, bool secureOnly = false, string? key = null, string? sharedName = null)
+        public static Task<Dictionary<string, Tuple<object?, Type>>> ToDictionaryAsync(JsonSerializerContext? context = null, bool secureOnly = false, string? key = null, string? sharedName = null)
             => ToDictionaryAsync(settings: SettingsObject, context: context, secureOnly: secureOnly, key: key, sharedName: sharedName);
 
-        public static async Task<Dictionary<string, Tuple<object?, Type>>> ToDictionaryAsync(object? settings, JsonSerializerContext context, bool secureOnly = false, string? key = null, string? sharedName = null)
+        public static async Task<Dictionary<string, Tuple<object?, Type>>> ToDictionaryAsync(object? settings, JsonSerializerContext? context = null, bool secureOnly = false, string? key = null, string? sharedName = null)
         {
             if (true)
             {
@@ -322,10 +322,10 @@ namespace AndreasReitberger.Maui
 
         public static Task<ConcurrentDictionary<string, Tuple<object?, Type>>> ToConcurrentDictionaryAsync(JsonSerializerContext context)
             => ToConcurrentDictionaryAsync(settings: SettingsObject, context: context);
-        public static Task<ConcurrentDictionary<string, Tuple<object?, Type>>> ToConcurrentDictionaryAsync(JsonSerializerContext context, bool secureOnly = false, string? key = null, string? sharedName = null)
+        public static Task<ConcurrentDictionary<string, Tuple<object?, Type>>> ToConcurrentDictionaryAsync(JsonSerializerContext? context = null, bool secureOnly = false, string? key = null, string? sharedName = null)
             => ToConcurrentDictionaryAsync(settings: SettingsObject, context: context, secureOnly: secureOnly, key: key, sharedName: sharedName);
 
-        public static async Task<ConcurrentDictionary<string, Tuple<object?, Type>>> ToConcurrentDictionaryAsync(object? settings, JsonSerializerContext context, bool secureOnly = false, string? key = null, string? sharedName = null)
+        public static async Task<ConcurrentDictionary<string, Tuple<object?, Type>>> ToConcurrentDictionaryAsync(object? settings, JsonSerializerContext? context = null, bool secureOnly = false, string? key = null, string? sharedName = null)
         {
             ConcurrentDictionary<string, Tuple<object?, Type>> setting = new();
             List<MemberInfo>? members = GetClassMetaAsList(settings);
@@ -349,10 +349,10 @@ namespace AndreasReitberger.Maui
             return setting;
         }
 
-        public static Task<Tuple<string, Tuple<object?, Type>>?> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null)
+        public static Task<Tuple<string, Tuple<object?, Type>>?> ToSettingsTupleAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => ToSettingsTupleAsync(settings: SettingsObject, value: value, context, key: key, sharedName: sharedName);
 
-        public static async Task<Tuple<string, Tuple<object?, Type>>?> ToSettingsTupleAsync<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? key = null, string? sharedName = null)
+        public static async Task<Tuple<string, Tuple<object?, Type>>?> ToSettingsTupleAsync<T>(object? settings, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
         {
             MauiSettingsInfo? info = await GetExpressionMetaAsKeyValuePairAsync(settings: settings, value: value, context, key: key, sharedName: sharedName);
             if (info is not null)
@@ -364,7 +364,7 @@ namespace AndreasReitberger.Maui
 
         #region Encryption
 
-        public static Task ExhangeKeyAsync(string newKey, JsonSerializerContext context, string? oldKey = null, bool reloadSettings = false)
+        public static Task ExhangeKeyAsync(string newKey, JsonSerializerContext? context = null, string? oldKey = null, bool reloadSettings = false)
             => Task.Run(async delegate
             {
                 if (reloadSettings) await LoadSecureSettingsAsync(context, key: oldKey);
@@ -391,7 +391,7 @@ namespace AndreasReitberger.Maui
         }
         static void GetClassMeta(
             object? settings,
-            MauiSettingsActions mode, JsonSerializerContext context, MauiSettingsTarget target = MauiSettingsTarget.Local,            
+            MauiSettingsActions mode, JsonSerializerContext? context = null, MauiSettingsTarget target = MauiSettingsTarget.Local,            
             string? sharedName = null
             )
         {
@@ -420,7 +420,7 @@ namespace AndreasReitberger.Maui
         
         static async Task<bool> GetClassMetaAsync(
             object? settings, 
-            MauiSettingsActions mode, JsonSerializerContext context, MauiSettingsTarget target = MauiSettingsTarget.Local, 
+            MauiSettingsActions mode, JsonSerializerContext? context = null, MauiSettingsTarget target = MauiSettingsTarget.Local, 
             bool secureOnly = false, string? key = null, bool justTryLoading = false, string? sharedName = null)
         {
             if (ThrowIfSettingsObjectIsNull)
@@ -448,7 +448,7 @@ namespace AndreasReitberger.Maui
         static async Task<bool> GetMetaFromDictionaryAsync(
             object? settings, 
             Dictionary<string, Tuple<object?, Type>> dictionary, 
-            MauiSettingsActions mode, JsonSerializerContext context, MauiSettingsTarget target = MauiSettingsTarget.Local, 
+            MauiSettingsActions mode, JsonSerializerContext? context = null, MauiSettingsTarget target = MauiSettingsTarget.Local, 
             bool secureOnly = false, string? key = null, bool justTryLoading = false, string? sharedName = null
             )
         {
@@ -504,7 +504,7 @@ namespace AndreasReitberger.Maui
 
         static void GetExpressionMeta<T>(
             object? settings, Expression<Func<SO, T>> value, 
-            MauiSettingsActions mode, JsonSerializerContext context, MauiSettingsTarget target = MauiSettingsTarget.Local, 
+            MauiSettingsActions mode, JsonSerializerContext? context = null, MauiSettingsTarget target = MauiSettingsTarget.Local, 
             string? sharedName = null
             )
         {
@@ -529,7 +529,7 @@ namespace AndreasReitberger.Maui
 
         static async Task GetExpressionMetaAsync<T>(
             object? settings, Expression<Func<SO, T>> value, 
-            MauiSettingsActions mode, JsonSerializerContext context, MauiSettingsTarget target = MauiSettingsTarget.Local, 
+            MauiSettingsActions mode, JsonSerializerContext? context = null, MauiSettingsTarget target = MauiSettingsTarget.Local, 
             bool secureOnly = false, string? key = null, string? sharedName = null
             )
         {
@@ -552,7 +552,7 @@ namespace AndreasReitberger.Maui
 
         static async Task<MauiSettingsInfo?> GetExpressionMetaAsKeyValuePairAsync<T>(
             object? settings, Expression<Func<SO, T>> value, 
-            JsonSerializerContext context,
+            JsonSerializerContext? context = null,
             string? key = null, string? sharedName = null
             )
         {
@@ -576,10 +576,12 @@ namespace AndreasReitberger.Maui
         static bool ProcessSettingsInfo(
             MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo,
             MauiSettingsActions mode, MauiSettingsTarget target,
-            JsonSerializerContext context,
+            JsonSerializerContext? context = null,
             bool throwOnError = false, bool justTryLoading = false, string? sharedName = null
             )
         {
+            // If the passed context is null, try to use the global context
+            context ??= Context;
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
             if (settingsObjectInfo.Info is not null)
@@ -766,11 +768,13 @@ namespace AndreasReitberger.Maui
 
         static async Task<MauiSettingsResults> ProcessSettingsInfoAsync(
             MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo, MauiSettingsActions mode, MauiSettingsTarget target,
-            JsonSerializerContext context,
+            JsonSerializerContext? context = null,
             bool secureOnly = false, bool useValueFromSettingsInfo = false, string? key = null, bool keepEncrypted = false, bool justTryLoading = false, 
             string? sharedName = null
             )
         {
+            // If the passed context is null, try to use the global context
+            context ??= Context;
             settingsInfo ??= new();
             MauiSettingBaseAttribute? settingBaseAttribute = null;
             if (settingsObjectInfo.Info is not null)
@@ -1190,7 +1194,7 @@ namespace AndreasReitberger.Maui
 
         static async Task<MauiSettingsInfo?> ProcessSettingsInfoAsKeyValuePairAsync(
             MauiSettingsMemberInfo settingsObjectInfo, MauiSettingsInfo settingsInfo,
-            JsonSerializerContext context,
+            JsonSerializerContext? context = null,
             bool secureOnly = false, string? key = null, bool keeyEncrypted = false, string? sharedName = null
             )
         {

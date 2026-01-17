@@ -13,6 +13,8 @@ namespace MauiSettings.Example
 
             // Only Async methods do support encryption!
             SettingsApp.Dispatcher = DispatcherProvider.Current.GetForCurrentThread();
+            // Set the context globally, so you don't have to pass it for each method.
+            SettingsApp.Context = AppSourceGenerationContext.Default;
             //_ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));
         }
 

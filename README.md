@@ -28,16 +28,24 @@ Get the latest version from nuget.org<br>
 # Usage
 
 ## Important
-Since `1.2.4` the library is using `System.Text.Json` for serialization. From this version on, you need to pass a `JsonSerializerContext`.
+Since `1.2.4` the library is using `System.Text.Json` for serialization. From this version on, you can pass a `JsonSerializerContext`.
 
 ## JsonSerializerContext
 See the `ExampleApp` project for an example of how to create a `JsonSerializerContext` and pass it to the `LoadSettings` and `SaveSettings` methods.
 Add each object, which needs to be serialized/deserialized as `JsonSerializable` attribute.
 
 ```cs
+    [JsonSerializable(typeof(Version))]
     [JsonSerializable(typeof(SettingsItem))]
     [JsonSourceGenerationOptions(WriteIndented = true)]
     public partial class AppSourceGenerationContext : JsonSerializerContext { }
+```
+
+Very important: Add each type which is used for your `SettingsApp` class here!
+
+You also can set the `Context` globally by setting the property in the `App.Xaml.cs` file:
+```cs
+    SettingsApp.Context = AppSourceGenerationContext.Default;
 ```
 
 ## Settings Object
@@ -160,6 +168,11 @@ public partial class App : Application
 
         // Example of how to generate a new key
         //string t = EncryptionManager.GenerateBase64Key();
+
+        // Only Async methods do support encryption!
+        SettingsApp.Dispatcher = DispatcherProvider.Current.GetForCurrentThread();
+        // Set the context globally, so you don't have to pass it for each method.
+        SettingsApp.Context = AppSourceGenerationContext.Default;
 
         // Only Async methods do support encryption!
         _ = Task.Run(async () => await SettingsApp.LoadSettingsAsync(Hash));

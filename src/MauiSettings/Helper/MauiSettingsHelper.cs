@@ -97,7 +97,7 @@ namespace AndreasReitberger.Maui.Helper
             return ChangeSettingsType(returnValue, defaultValue);
         }
         */
-        public static T? GetSettingsValue<T>(string key, Type? targetType, T? defaultValue, JsonSerializerContext context, string? sharedName = null)
+        public static T? GetSettingsValue<T>(string key, Type? targetType, T? defaultValue, JsonSerializerContext? context, string? sharedName = null)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
             ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
@@ -143,7 +143,9 @@ namespace AndreasReitberger.Maui.Helper
                         }
                         else
                         {
-                            returnValue = (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
+                            returnValue = context is null ? 
+                                JsonSerializer.Deserialize<T>(jsonString) : 
+                                (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
                         }
                         break;
                 }
@@ -173,9 +175,7 @@ namespace AndreasReitberger.Maui.Helper
             return settingsObject ?? defaultValue;
         }
 
-        /*
-        [Obsolete("Use the method with the `context` parameter.")]
-        public static void SetSettingsValue(string key, object? value, string? sharedName = null)
+        public static void SetSettingsValue(string key, object? value, JsonSerializerContext? context, string? sharedName = null)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
             ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
@@ -205,51 +205,11 @@ namespace AndreasReitberger.Maui.Helper
                     break;
                 default:
                     // For all other types try to serialize it as JSON
-                    string? jsonString = JsonConvert.SerializeObject(value, Formatting.Indented);
-                    if (!string.IsNullOrWhiteSpace(jsonString))
-                    {
-#if WINDOWS && DEBUG
-                        // For testing, at the moment only for debugging
-                        byte[] bytes = Encoding.Default.GetBytes(jsonString);
-                        ArgumentOutOfRangeException.ThrowIfGreaterThan(bytes.LongLength, MaxContentSize, nameof(value));
-#endif
-                        Preferences.Set(key, jsonString, sharedName);
-                    }
-                    break;
-            }
-        }
-        */
-        public static void SetSettingsValue(string key, object? value, JsonSerializerContext context, string? sharedName = null)
-        {
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(key.Length, MaxKeyLength, nameof(key));
-
-            switch (value)
-            {
-                case bool b:
-                    Preferences.Set(key, b, sharedName);
-                    break;
-                case double d:
-                    Preferences.Set(key, d, sharedName);
-                    break;
-                case int i:
-                    Preferences.Set(key, i, sharedName);
-                    break;
-                case float f:
-                    Preferences.Set(key, f, sharedName);
-                    break;
-                case long l:
-                    Preferences.Set(key, l, sharedName);
-                    break;
-                case string s:
-                    Preferences.Set(key, s, sharedName);
-                    break;
-                case DateTime dt:
-                    Preferences.Set(key, dt, sharedName);
-                    break;
-                default:
-                    // For all other types try to serialize it as JSON
-                    string? jsonString = value is null ? null : JsonSerializer.Serialize(value!, value.GetType(), context);
+                    string? jsonString = null;
+                    if (context is null)
+                        jsonString = value is null ? null : JsonSerializer.Serialize(value!, value.GetType());
+                    else
+                        jsonString = value is null ? null : JsonSerializer.Serialize(value!, value.GetType(), context);
                     if (!string.IsNullOrWhiteSpace(jsonString))
                     {
 #if WINDOWS && DEBUG
