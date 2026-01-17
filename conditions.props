@@ -1,7 +1,6 @@
 
 <Project>
 	<PropertyGroup>
-		<!--<DefineConstants>$(DefineConstants);NET9</DefineConstants>-->
-		<!----><DefineConstants>$(DefineConstants);NET10</DefineConstants>
+		<!--<DefineConstants>$(DefineConstants);NET10</DefineConstants>-->
 	</PropertyGroup>
 </Project>
