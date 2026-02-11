@@ -23,6 +23,6 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.31" />
 		<PackageReference Include="SharedNetCoreLibrary" Version="1.2.4" />
-	    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
+	    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3" />
 	</ItemGroup>
 </Project>
