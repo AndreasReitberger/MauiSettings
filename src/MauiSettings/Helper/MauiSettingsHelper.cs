@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 #if WINDOWS && DEBUG
 using System.Text;
@@ -143,8 +144,8 @@ namespace AndreasReitberger.Maui.Helper
                         }
                         else
                         {
-                            returnValue = context is null ? 
-                                JsonSerializer.Deserialize<T>(jsonString) : 
+                            returnValue = context is null ?
+                                JsonSerializer.Deserialize<T>(jsonString) :
                                 (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
                         }
                         break;
@@ -164,7 +165,34 @@ namespace AndreasReitberger.Maui.Helper
             return ChangeSettingsType(returnValue, defaultValue);
         }
 
-        public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue) => settingsValue is not null ? (T)Convert.ChangeType(settingsValue, typeof(T)) : defaultValue;
+        public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue)
+        {
+            if (settingsValue is null)
+                return defaultValue;
+
+            try
+            {
+                if (!typeof(IConvertible).IsAssignableFrom(defaultValue?.GetType()))
+                {
+                    return (T?)settingsValue;
+                }
+                else
+                {
+                    T? result = (T)Convert.ChangeType(settingsValue, typeof(T));
+                    return result;
+                }
+            }
+#if RELEASE
+            catch (Exception)
+            {
+#else
+            catch (Exception exc)
+            {
+                Debug.WriteLine($"{nameof(ChangeSettingsType)}: Cannot convert to `{defaultValue?.GetType()}`: {exc?.Message}");
+#endif
+                return (T?)settingsValue;
+            }
+        }
 
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage?tabs=ios
         // Only string is allowed for secure storage
