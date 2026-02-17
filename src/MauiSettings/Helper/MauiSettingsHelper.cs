@@ -162,12 +162,9 @@ namespace AndreasReitberger.Maui.Helper
                 SetSettingsValue(key, defaultValue, context, sharedName);
                 return defaultValue;
             }
-            return (T?)returnValue;
-            // Still needed???
-            //return ChangeSettingsType(returnValue, defaultValue);
+            return ChangeSettingsType(returnValue, defaultValue);
         }
 
-        //public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue) => settingsValue is not null ? (T)Convert.ChangeType(settingsValue, typeof(T)) : defaultValue;
         public static T? ChangeSettingsType<T>(object? settingsValue, T defaultValue)
         {
             if (settingsValue is null)
@@ -175,7 +172,7 @@ namespace AndreasReitberger.Maui.Helper
 
             try
             {
-                if (defaultValue?.GetType() == typeof(Version))
+                if (!typeof(IConvertible).IsAssignableFrom(defaultValue?.GetType()))
                 {
                     return (T?)settingsValue;
                 }
