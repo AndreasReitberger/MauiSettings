@@ -136,7 +136,8 @@ namespace AndreasReitberger.Maui.Helper
                     default:
                         // For all other types try to serialize it as JSON
                         string jsonString = Preferences.Get(key, string.Empty, sharedName) ?? string.Empty;
-                        if (defaultValue == null)
+                        //if (defaultValue == null)
+                        if (targetType == null)
                         {
                             // In this case it's unkown to what data type the string should be deserialized.
                             // So just return the string as it is to avoid exceptions while converting.
@@ -144,9 +145,25 @@ namespace AndreasReitberger.Maui.Helper
                         }
                         else
                         {
-                            returnValue = context is null ?
-                                JsonSerializer.Deserialize<T>(jsonString) :
-                                (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
+                            if (targetType is not null)
+                            {
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize(jsonString, targetType) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, targetType, context);
+                            }
+                            else if (defaultValue is not null)
+                            {
+                                Type dType = defaultValue.GetType();
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize(jsonString, dType) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, dType, context);
+                            }
+                            else
+                            {
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize<T>(jsonString) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
+                            }
                         }
                         break;
                 }
