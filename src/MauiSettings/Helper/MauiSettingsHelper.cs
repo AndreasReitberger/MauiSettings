@@ -136,7 +136,8 @@ namespace AndreasReitberger.Maui.Helper
                     default:
                         // For all other types try to serialize it as JSON
                         string jsonString = Preferences.Get(key, string.Empty, sharedName) ?? string.Empty;
-                        if (defaultValue == null)
+                        //if (defaultValue == null)
+                        if (targetType == null)
                         {
                             // In this case it's unkown to what data type the string should be deserialized.
                             // So just return the string as it is to avoid exceptions while converting.
