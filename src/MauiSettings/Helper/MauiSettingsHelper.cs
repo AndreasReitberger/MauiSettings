@@ -144,9 +144,25 @@ namespace AndreasReitberger.Maui.Helper
                         }
                         else
                         {
-                            returnValue = context is null ?
-                                JsonSerializer.Deserialize<T>(jsonString) :
-                                (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
+                            if (targetType is not null)
+                            {
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize(jsonString, targetType) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, targetType, context);
+                            }
+                            else if (defaultValue is not null)
+                            {
+                                Type dType = defaultValue.GetType();
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize(jsonString, dType) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, dType, context);
+                            }
+                            else
+                            {
+                                returnValue = context is null ?
+                                    JsonSerializer.Deserialize<T>(jsonString) :
+                                    (T?)JsonSerializer.Deserialize(jsonString, typeof(T), context);
+                            }
                         }
                         break;
                 }
