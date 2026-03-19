@@ -44,7 +44,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.4" />
 	</ItemGroup>
 
