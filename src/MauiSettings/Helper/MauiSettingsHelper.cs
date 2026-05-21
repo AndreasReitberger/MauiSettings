@@ -7,7 +7,11 @@ using System.Text;
 
 namespace AndreasReitberger.Maui.Helper
 {
+#if MauiAppSettings
+    internal class MauiAppSettingsHelper
+#else
     internal class MauiSettingsHelper
+#endif
     {
         #region Variables
         /*
@@ -16,7 +20,7 @@ namespace AndreasReitberger.Maui.Helper
          */
         public static int MaxKeyLength { get; set; } = 255;
         public static int MaxContentSize { get; set; } = 8 * 1024;
-        #endregion 
+        #endregion
 
         #region Methods
         // Docs: https://docs.microsoft.com/en-us/dotnet/maui/platform-integration/storage/preferences
@@ -106,7 +110,11 @@ namespace AndreasReitberger.Maui.Helper
             object? returnValue = null;
             if (targetType != defaultValue?.GetType())
             {
+#if MauiAppSettings
+                defaultValue = (T?)MauiAppSettingsObjectHelper.GetTypeDefaultValue(targetType);
+#else
                 defaultValue = (T?)MauiSettingsObjectHelper.GetTypeDefaultValue(targetType);
+#endif
             }
             try
             {
@@ -282,6 +290,6 @@ namespace AndreasReitberger.Maui.Helper
 
         public static void ClearSecureSettings() => SecureStorage.Default.RemoveAll();
 
-        #endregion
+#endregion
     }
 }

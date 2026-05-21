@@ -11,8 +11,11 @@ namespace AndreasReitberger.Maui.Helper
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
-
+#if MauiAppSettings
+    internal class MauiAppSettingsObjectHelper
+#else
     internal class MauiSettingsObjectHelper
+#endif
     {
         public static object? GetSettingValue(MemberInfo mi, object? o)
         {
@@ -94,7 +97,12 @@ namespace AndreasReitberger.Maui.Helper
             }
             return null;
         }
+
+#if MauiAppSettings
+        public static object? GetDefaultValue(MauiAppSettingBaseAttribute? attr, Type? settingType)
+#else
         public static object? GetDefaultValue(MauiSettingBaseAttribute? attr, Type? settingType)
+#endif
         {
             settingType ??= typeof(object);
             try

@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\common.props" />
+	<Import Project="..\..\framework.maui.props" />
+	<PropertyGroup>
+		<TargetFrameworks>$(TargetFrameworks);net10.0</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		
+		<RootNamespace>AndreasReitberger.Maui</RootNamespace>
+		<Description>A .NET MAUI library to store settings locally and in the cloud</Description>
+		<PackageTags> MAUI, dotnet, NET, Settings, Preference</PackageTags>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>AppSettings.Maui</Title>
+		<Product>AppSettings.Maui</Product>
+		<PackageId>AppSettingsMaui</PackageId>
+    <Version>1.0.0-preview1</Version>
+    
+    <DefineConstants>$(DefineConstants);MauiAppSettings</DefineConstants>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\MauiSettings\Attributes\MauiSettingAttribute.cs" Link="Attributes\MauiSettingAttribute.cs" />
+	  <Compile Include="..\MauiSettings\Attributes\MauiSettingBaseAttribute.cs" Link="Attributes\MauiSettingBaseAttribute.cs" />
+	  <Compile Include="..\MauiSettings\Enums\MauiSettingsActions.cs" Link="Enums\MauiSettingsActions.cs" />
+	  <Compile Include="..\MauiSettings\Enums\MauiSettingsResults.cs" Link="Enums\MauiSettingsResults.cs" />
+	  <Compile Include="..\MauiSettings\Enums\MauiSettingsTarget.cs" Link="Enums\MauiSettingsTarget.cs" />
+	  <Compile Include="..\MauiSettings\Events\EncryptionErrorEventArgs.cs" Link="Events\EncryptionErrorEventArgs.cs" />
+	  <Compile Include="..\MauiSettings\Helper\MauiSettingsHelper.cs" Link="Helper\MauiSettingsHelper.cs" />
+	  <Compile Include="..\MauiSettings\Helper\MauiSettingsInfo.cs" Link="Helper\MauiSettingsInfo.cs" />
+	  <Compile Include="..\MauiSettings\Helper\MauiSettingsMemberInfo.cs" Link="Helper\MauiSettingsMemberInfo.cs" />
+	  <Compile Include="..\MauiSettings\Helper\MauiSettingsObjectHelper.cs" Link="Helper\MauiSettingsObjectHelper.cs" />
+	  <Compile Include="..\MauiSettings\Platforms\iOS\Cloud\ICloudStoreManager.cs" Link="Platforms\iOS\Cloud\ICloudStoreManager.cs" />
+	  <Compile Include="..\MauiSettings\Utilities\MauiSettingNameFormater.cs" Link="Utilities\MauiSettingNameFormater.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="..\MauiSettings\Licenses\Advexp.Settings.Local.txt" Link="Licenses\Advexp.Settings.Local.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="readme.txt" Pack="true" PackagePath="." />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="[10.0.30,)" />
+		<PackageReference Include="SharedNetCoreLibrary" Version="1.2.8" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.8" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Events\" />
+	  <Folder Include="Licenses\" />
+	  <Folder Include="Platforms\iOS\Cloud\" />
+	  <Folder Include="Utilities\" />
+	</ItemGroup>
+</Project>

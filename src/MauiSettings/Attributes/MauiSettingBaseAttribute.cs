@@ -8,7 +8,11 @@
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+#if MauiAppSettings
+    public class MauiAppSettingBaseAttribute : Attribute
+#else
     public class MauiSettingBaseAttribute : Attribute
+#endif
     {
         #region Properties
         public string Name { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
-﻿namespace AndreasReitberger.Maui.Helper
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace AndreasReitberger.Maui.Helper
 {
     /*
      * Based on the idea of Advexp.Settings.Local by Alexey Ivakin
@@ -7,16 +9,27 @@
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
-    internal class MauiSettingsInfo
+#if MauiAppSettings
+    public partial class MauiAppSettingsInfo : ObservableObject
+#else
+    public partial class MauiSettingsInfo : ObservableObject
+#endif
     {
         #region Properties
-        public string Name { get; set; } = string.Empty;
-        public object? Value { get; set; }
-        public Type? SettingsType { get; set; }
-        public object? Default { get; set; }
-        public bool IsSecure { get; set; } = false;
-        public bool Encrypt { get; set; } = false;
-        public bool SkipForExport { get; set; } = false;
+        [ObservableProperty]
+        public partial string Name { get; set; } = string.Empty;
+        [ObservableProperty]
+        public partial object? Value { get; set; }
+        [ObservableProperty]
+        public partial Type? SettingsType { get; set; }
+        [ObservableProperty]
+        public partial object? Default { get; set; }
+        [ObservableProperty]
+        public partial bool IsSecure { get; set; } = false;
+        [ObservableProperty]
+        public partial bool Encrypt { get; set; } = false;
+        [ObservableProperty]
+        public partial bool SkipForExport { get; set; } = false;
         #endregion
     }
 }

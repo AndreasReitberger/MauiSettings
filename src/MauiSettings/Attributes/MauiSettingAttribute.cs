@@ -9,7 +9,11 @@
      */
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+#if MauiAppSettings
+    public class MauiAppSettingAttribute : MauiAppSettingBaseAttribute
+#else
     public class MauiSettingAttribute : MauiSettingBaseAttribute
+#endif
     {
         #region Properties
         public bool Secure { get; set; } = false;

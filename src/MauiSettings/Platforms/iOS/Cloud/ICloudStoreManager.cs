@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿#if IOS
+using Foundation;
 
 namespace AndreasReitberger.Maui.Cloud
 {
@@ -55,3 +56,4 @@ namespace AndreasReitberger.Maui.Cloud
         #endregion
     }
 }
+#endif
