@@ -1,4 +1,5 @@
 ﻿using AndreasReitberger.Maui.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AndreasReitberger.Maui
 {
@@ -11,9 +12,23 @@ namespace AndreasReitberger.Maui
      */
 
     // All the code in this file is included in all platforms.
-    public partial class MauiAppSettings<T> : MauiAppSettingsService<T>, IMauiAppSettings<T> where T : class, new()
+    public partial class MauiAppSettings<T> : MauiAppSettingsService<T>, IMauiAppSettings<T> where T : new()
     {
+        #region Properties
+        [ObservableProperty]
+        public partial bool SettingsChanged { get; set; } = false;
+        #endregion
+
+        #region Ctors
         public MauiAppSettings() : base() { }
         public MauiAppSettings(IDispatcher dispatcher) : base(dispatcher) { }
+        #endregion
+
+        #region DeviceSettings
+        /// <summary>
+        /// Opens the settings UI on the current device
+        /// </summary>
+        public static void OpenDeviceSettings() => AppInfo.ShowSettingsUI();
+        #endregion
     }
 }

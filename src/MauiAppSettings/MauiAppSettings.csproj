@@ -31,7 +31,7 @@
 	  <Compile Include="..\MauiSettings\Utilities\MauiSettingNameFormater.cs" Link="Utilities\MauiSettingNameFormater.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="..\MauiSettings\Licenses\Advexp.Settings.Local.txt" Link="Licenses\Advexp.Settings.Local.txt" />
+	  <None Include="..\MauiSettings\Licenses\Advexp.Settings.Local.txt" Link="Licenses\Advexp.Settings.Local.txt" />
 	</ItemGroup>
 
 	<ItemGroup>

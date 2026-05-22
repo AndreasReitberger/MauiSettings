@@ -12,7 +12,7 @@ namespace AndreasReitberger.Maui
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
 
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettings<SO> where SO : class, new()
+    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
     {
         #region Events
 

@@ -1,11 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MauiSettings.Example.Interfaces;
+#if !MauiAppSettings
 using MauiSettings.Example.Models.Settings;
+#endif
 
 namespace MauiSettings.Example.ViewModels
 {
     public partial class SettingsPageViewModel : ObservableObject
     {
+        #region Dependencies
+#if MauiAppSettings
+        readonly IAppSettingsService? appSettings;
+#endif
+#endregion
+
         #region Settings
         [ObservableProperty]
         public partial bool IsLoading { get; set; } = false;
@@ -38,10 +47,19 @@ namespace MauiSettings.Example.ViewModels
         #endregion
 
         #region Ctor
+#if MauiAppSettings
+        public SettingsPageViewModel(IAppSettingsService appSettings)
+        {
+            this.appSettings = appSettings;
+            LoadSettings();
+        }
+#else
         public SettingsPageViewModel()
         {
             LoadSettings();
         }
+#endif
+
         #endregion
 
         #region Methods
@@ -49,12 +67,22 @@ namespace MauiSettings.Example.ViewModels
         {
             IsLoading = true;
 
+#if MauiAppSettings
+            if (appSettings is not null)
+            {
+                CurrentVersionAvailable = appSettings.ResourcesCurrentVersionAvailable;
+                SomeBoolValue = appSettings.Misc_Boolean;
+                SomeDoubleValue = appSettings.Misc_Numeric;
+                SomeTextValue = appSettings.Misc_String;
+                SomeIntValue = appSettings.Misc_Counter;
+            }
+#else
             CurrentVersionAvailable = SettingsApp.ResourcesCurrentVersionAvailable;
-
             SomeBoolValue = SettingsApp.Misc_Boolean;
             SomeDoubleValue = SettingsApp.Misc_Numeric;
             SomeTextValue = SettingsApp.Misc_String;
             SomeIntValue = SettingsApp.Misc_Counter;
+#endif
 
             IsLoading = false;
         }
@@ -64,14 +92,21 @@ namespace MauiSettings.Example.ViewModels
         [RelayCommand]
         async Task SaveSettings()
         {
+#if MauiAppSettings
+            appSettings!.ResourcesCurrentVersionAvailable = CurrentVersionAvailable;
+            appSettings!.Misc_Boolean = SomeBoolValue;
+            appSettings!.Misc_Numeric = SomeDoubleValue;
+            appSettings!.Misc_String = SomeTextValue;
+            appSettings!.Misc_Counter = SomeIntValue;
+            appSettings!.SaveSettings(AppSourceGenerationContext.Default, SharedName);
+#else
             SettingsApp.ResourcesCurrentVersionAvailable = CurrentVersionAvailable;
             SettingsApp.Misc_Boolean = SomeBoolValue;
             SettingsApp.Misc_Numeric = SomeDoubleValue;
             SettingsApp.Misc_String = SomeTextValue;
             SettingsApp.Misc_Counter = SomeIntValue;
-
             SettingsApp.SaveSettings(AppSourceGenerationContext.Default, SharedName);
-
+#endif
             await Shell.Current.DisplayAlertAsync("Settings saved", "Settings saved successfully...", "OK");
         }
 
@@ -80,7 +115,11 @@ namespace MauiSettings.Example.ViewModels
         {
             try
             {
+#if MauiAppSettings
+                appSettings!.LoadSettings(AppSourceGenerationContext.Default, SharedName);
+#else
                 SettingsApp.LoadSettings(AppSourceGenerationContext.Default, SharedName);
+#endif
                 LoadSettings();
                 await Shell.Current.DisplayAlertAsync("Settings loaded", "Settings loaded successfully...", "OK");
             }
@@ -101,6 +140,6 @@ namespace MauiSettings.Example.ViewModels
         {
             SomeIntValue -= 1;
         }
-        #endregion
+#endregion
     }
 }

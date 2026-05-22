@@ -24,17 +24,35 @@ namespace AndreasReitberger.Maui
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
 
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : class, new()
+    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
+    //public partial class MauiAppSettingsService<SO> : ObservableObject where SO : new()
     {
         #region Settings Object
-
+        //Creating a new object here leads to a StackOverflow exception?!
+        /*
         [ObservableProperty]
-        public partial SO SettingsObject { get; private set; } = new();
+        public partial SO SettingsObject { get; private set; }
+        */
+        //public static SO SettingsObject { get; private set; } // = new(); ==> // Creating a new object here leads to a StackOverflow exception?!
+        static object? _settingsObject;
+        public static SO SettingsObject
+        {
+            get
+            {
+                _settingsObject ??= new SO();
+                return (SO)_settingsObject;
+            }
+        }
         #endregion
 
         #region Dispatcher
         [ObservableProperty]
         public partial IDispatcher? Dispatcher { get; set; }
+        #endregion
+
+        #region Encryption
+        [ObservableProperty]
+        public partial string? PassPhrase { get; set; }
         #endregion
 
         #region Serializer
@@ -55,30 +73,27 @@ namespace AndreasReitberger.Maui
         #endregion
 
         #region Constructor
-        public MauiAppSettingsService() : base()
+        public MauiAppSettingsService()// : base()
         {
             Dispatcher ??= DispatcherProvider.Current.GetForCurrentThread();
         }
-        public MauiAppSettingsService(IDispatcher? dispatcher) : base()
+        public MauiAppSettingsService(IDispatcher? dispatcher) : this()
         {
             Dispatcher = dispatcher;
         }
-        public MauiAppSettingsService(SO settingsObject, IDispatcher? dispatcher) : base()
-        {
-            SettingsObject = settingsObject;
-            Dispatcher = dispatcher;
-        }
-        /*
-        public MauiSettingsGeneric(string settingsKey)
-        {
-            _passPhrase = settingsKey;
-        }
-        public MauiSettingsGeneric(SO settingsObject, string settingsKey)
+        public MauiAppSettingsService(SO settingsObject, IDispatcher? dispatcher) : this(dispatcher)
         {
             _settingsObject = settingsObject;
-            _passPhrase = settingsKey;
         }
-        */
+        public MauiAppSettingsService(SO settingsObject, string? passPhrase) : this()
+        {
+            _settingsObject = settingsObject;
+            PassPhrase = passPhrase;
+        }
+        public MauiAppSettingsService(SO settingsObject, IDispatcher? dispatcher, string? passPhrase) : this(settingsObject, dispatcher)
+        {
+            PassPhrase = passPhrase;
+        }
         #endregion
 
         #region Methods
@@ -95,10 +110,10 @@ namespace AndreasReitberger.Maui
             await LoadObjectSettingAsync(SettingsObject, value, context, key: key, sharedName: sharedName);
         });
 
-        public Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
+        public Task LoadSecureSettingAsync<T>(Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
             if (SettingsObject is null) return;
-            await LoadSecureObjectSettingAsync(SettingsObject, value, context, key: key);
+            await LoadSecureObjectSettingAsync(SettingsObject, value, context, key: key, sharedName: sharedName);
         });
 
         public void LoadObjectSettings(JsonSerializerContext? context = null, string? sharedName = null) => LoadSettings(this, context, sharedName);
@@ -110,9 +125,9 @@ namespace AndreasReitberger.Maui
         {
             await GetExpressionMetaAsync(settings: settingsObject, value, MauiAppSettingsActions.Load, context, key: key, sharedName: sharedName);
         });
-        public Task LoadSecureObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null) => Task.Run(async delegate
+        public Task LoadSecureObjectSettingAsync<T>(object settingsObject, Expression<Func<SO, T>> value, JsonSerializerContext? context = null, string? key = null, string? sharedName = null) => Task.Run(async delegate
         {
-            await GetExpressionMetaAsync(settings: settingsObject, value, MauiAppSettingsActions.Load, context, secureOnly: true, key: key);
+            await GetExpressionMetaAsync(settings: settingsObject, value, MauiAppSettingsActions.Load, context, secureOnly: true, key: key, sharedName: sharedName);
         });
 
         public void LoadSettings(object? settings, JsonSerializerContext? context = null, string? sharedName = null) => GetClassMeta(settings: settings, mode: MauiAppSettingsActions.Load, context, sharedName: sharedName);
@@ -141,16 +156,16 @@ namespace AndreasReitberger.Maui
                 return await GetClassMetaAsync(settings: settings, mode: MauiAppSettingsActions.Load, context, key: key, justTryLoading: justTryLoading, sharedName: sharedName);
             });
 
-        public Task LoadSecureSettingsAsync(JsonSerializerContext? context = null, string? key = null)
+        public Task LoadSecureSettingsAsync(JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
-                await LoadSecureSettingsAsync(settings: SettingsObject, context, key: key);
+                await LoadSecureSettingsAsync(settings: SettingsObject, context, key: key, sharedName: sharedName);
             });
 
-        public Task LoadSecureSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null)
+        public Task LoadSecureSettingsAsync(object? settings, JsonSerializerContext? context = null, string? key = null, string? sharedName = null)
             => Task.Run(async delegate
             {
-                await GetClassMetaAsync(settings: settings, mode: MauiAppSettingsActions.Load, context, secureOnly: true, key: key);
+                await GetClassMetaAsync(settings: settings, mode: MauiAppSettingsActions.Load, context, secureOnly: true, key: key, sharedName: sharedName);
             });
 
         public Task LoadSettingsAsync(Dictionary<string, Tuple<object?, Type>> dictionary, JsonSerializerContext? context = null, bool save = true, string? key = null, string? sharedName = null)

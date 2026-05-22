@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using MauiSettings.Example.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 
 namespace MauiSettings.Example
 {
@@ -9,16 +12,19 @@ namespace MauiSettings.Example
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .ConfigureDispatching()
+                .ConfigureApp();
+                ;
 
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton(Dispatcher.GetForCurrentThread());
             return builder.Build();
         }
     }

@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace AndreasReitberger.Maui
 {
     // All the code in this file is only included on iOS.
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : class, new()
+    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
     {
         #region Methods
 

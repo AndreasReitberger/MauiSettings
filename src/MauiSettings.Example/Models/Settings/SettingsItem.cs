@@ -5,9 +5,9 @@ namespace MauiSettings.Example.Models.Settings
     public partial class SettingsItem : ObservableObject
     {
         [ObservableProperty]
-        string key = string.Empty;
+        public partial string Key { get; set; } = string.Empty;
 
         [ObservableProperty]
-        string value = string.Empty;
+        public partial string Value { get; set; } = string.Empty;
     }
 }
