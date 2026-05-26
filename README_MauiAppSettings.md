@@ -1,4 +1,4 @@
-﻿# MauiSettings
+# MauiSettings
 A nuget to improve settings storage (locally and eventually in the cloud) on .NET MAUI projects.
 
 The plugin idea is based on the Advexp.Settings.Local nuget by Alexey Ivakin</br>
