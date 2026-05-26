@@ -57,7 +57,7 @@ namespace AndreasReitberger.Maui.Helper
                         settingValue = GetConvertedTypeValue(settingValue, settingType);
                     }
 
-                    setMethod.Invoke(settings, [settingValue]);
+                    setMethod.Invoke(settings,[settingValue]);
                     return;
                 }
             }

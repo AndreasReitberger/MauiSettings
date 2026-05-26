@@ -3,8 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AndreasReitberger.Maui
 {
-    // All the code in this file is only included on Mac Catalyst.
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
+    // All the code in this file is only included on Mac Catalyst.   
+    public partial class MauiAppSettingsService : ObservableObject, IMauiAppSettingsService
+    //public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
     {
 
     }

@@ -7,24 +7,25 @@ using System.Text.Json.Serialization;
 namespace AndreasReitberger.Maui
 {
     // All the code in this file is only included on iOS.
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
+    public partial class MauiAppSettingsService : ObservableObject, IMauiAppSettingsService
+    //public partial class MauiAppSettingsGeneric<SO> : ObservableObject where SO : new()
     {
         #region Methods
 
         #region Save
         public async Task SyncSettingsToICloudAsync(JsonSerializerContext context, string? sharedName = null)
         {
-            ArgumentNullException.ThrowIfNull(SettingsObject);
+            ArgumentNullException.ThrowIfNull(this);
             await Task.Run(async delegate
             {
-                await SyncSettingsToICloudAsync(settings: SettingsObject, context, sharedName);
+                await SyncSettingsToICloudAsync(settings: this, context, sharedName);
             });
         }
 
-        public void SyncSettingsToICloud<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public void SyncSettingsToICloud<T>(Expression<Func<IMauiAppSettingsService, T>> value, JsonSerializerContext context, string? sharedName = null)
         {
-            ArgumentNullException.ThrowIfNull(SettingsObject);
-            SyncSettingsToICloud(settings: SettingsObject, value: value, context, sharedName);
+            ArgumentNullException.ThrowIfNull(this);
+            SyncSettingsToICloud(settings: this, value: value, context, sharedName);
         }
 
         public async Task SyncSettingsToICloudAsync(object settings, JsonSerializerContext context, string? sharedName = null)
@@ -35,7 +36,7 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiAppSettingsActions.Save, context, target: MauiAppSettingsTarget.ICloud, sharedName: sharedName);
             });
         }
-        public void SyncSettingsToICloud<T>(object settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public void SyncSettingsToICloud<T>(object settings, Expression<Func<IMauiAppSettingsService, T>> value, JsonSerializerContext context, string? sharedName = null)
         {
             ArgumentNullException.ThrowIfNull(settings);
             GetExpressionMeta(settings: settings, value: value, mode: MauiAppSettingsActions.Save, context, target: MauiAppSettingsTarget.ICloud, sharedName);
@@ -47,17 +48,17 @@ namespace AndreasReitberger.Maui
 
         public async Task SyncSettingsFromICloudAsync(JsonSerializerContext context, string? sharedName = null)
         {
-            ArgumentNullException.ThrowIfNull(SettingsObject);
+            ArgumentNullException.ThrowIfNull(this);
             await Task.Run(async delegate
             {
-                await SyncSettingsFromICloudAsync(settings: SettingsObject, context, sharedName);
+                await SyncSettingsFromICloudAsync(settings: this, context, sharedName);
             });
         }
 
-        public void SyncSettingsFromICloud<T>(Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public void SyncSettingsFromICloud<T>(Expression<Func<IMauiAppSettingsService, T>> value, JsonSerializerContext context, string? sharedName = null)
         {
-            ArgumentNullException.ThrowIfNull(SettingsObject);
-            SyncSettingsFromICloud(settings: SettingsObject, value: value, context, sharedName);
+            ArgumentNullException.ThrowIfNull(this);
+            SyncSettingsFromICloud(settings: this, value: value, context, sharedName);
         }
 
         public async Task SyncSettingsFromICloudAsync(object settings, JsonSerializerContext context, string? sharedName = null)
@@ -68,7 +69,7 @@ namespace AndreasReitberger.Maui
                 await GetClassMetaAsync(settings: settings, mode: MauiAppSettingsActions.Load, context, target: MauiAppSettingsTarget.ICloud, sharedName: sharedName);
             });
         }
-        public void SyncSettingsFromICloud<T>(object settings, Expression<Func<SO, T>> value, JsonSerializerContext context, string? sharedName = null)
+        public void SyncSettingsFromICloud<T>(object settings, Expression<Func<IMauiAppSettingsService, T>> value, JsonSerializerContext context, string? sharedName = null)
         {
             ArgumentNullException.ThrowIfNull(settings);
             GetExpressionMeta(settings: settings, value: value, mode: MauiAppSettingsActions.Load, context, target: MauiAppSettingsTarget.ICloud, sharedName: sharedName);

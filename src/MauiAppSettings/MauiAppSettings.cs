@@ -12,9 +12,11 @@ namespace AndreasReitberger.Maui
      */
 
     // All the code in this file is included in all platforms.
-    public partial class MauiAppSettings<T> : MauiAppSettingsService<T>, IMauiAppSettings<T> where T : new()
+    //public partial class MauiAppSettings<T> : MauiAppSettingsService<T>, IMauiAppSettings<T> where T : new()
+    public partial class MauiAppSettings<T> : MauiAppSettingsService, IMauiAppSettings<T>
     {
         #region Properties
+
         [ObservableProperty]
         public partial bool SettingsChanged { get; set; } = false;
         #endregion

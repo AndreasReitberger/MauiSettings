@@ -12,20 +12,21 @@ namespace AndreasReitberger.Maui
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
 
-    public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
+    public partial class MauiAppSettingsService : ObservableObject, IMauiAppSettingsService
+    //public partial class MauiAppSettingsService<SO> : ObservableObject, IMauiAppSettingsService<SO> where SO : new()
     {
         #region Events
 
         public event EventHandler? ErrorEvent;
         protected void OnErrorEvent(ErrorEventArgs e)
         {
-            ErrorEvent?.Invoke(typeof(MauiAppSettingsService<SO>), e);
+            ErrorEvent?.Invoke(typeof(MauiAppSettingsService), e);
         }
 
         public event EventHandler? EncryptionErrorEvent;
         protected void OnEncryptionErrorEvent(EncryptionErrorEventArgs e)
         {
-            EncryptionErrorEvent?.Invoke(typeof(MauiAppSettingsService<SO>), e);
+            EncryptionErrorEvent?.Invoke(typeof(MauiAppSettingsService), e);
         }
         #endregion
     }
