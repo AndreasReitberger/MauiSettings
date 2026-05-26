@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+#if MauiAppSettings
 using MauiSettings.Example.Interfaces;
-#if !MauiAppSettings
+#else
 using MauiSettings.Example.Models.Settings;
 #endif
 

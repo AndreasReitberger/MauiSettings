@@ -14,7 +14,8 @@
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
     
-    <DefineConstants>$(DefineConstants);MauiAppSettings</DefineConstants>
+    <!--<DefineConstants>$(DefineConstants);MauiAppSettings</DefineConstants>-->
+    <!----><DefineConstants>$(DefineConstants);MauiAppSettings</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>

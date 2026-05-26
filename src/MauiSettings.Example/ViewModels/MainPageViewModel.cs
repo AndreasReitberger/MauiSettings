@@ -1,7 +1,9 @@
 ﻿using AndreasReitberger.Shared.Core.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+#if MauiAppSettings
 using MauiSettings.Example.Interfaces;
+#endif
 using MauiSettings.Example.Models.Settings;
 using System.Collections.ObjectModel;
 
@@ -13,7 +15,7 @@ namespace MauiSettings.Example.ViewModels
 #if MauiAppSettings
         readonly IAppSettingsService? appSettings;
 #endif
-        #endregion
+#endregion
 
         #region Settings
         [ObservableProperty]
@@ -89,8 +91,13 @@ namespace MauiSettings.Example.ViewModels
             {
 
 #if MauiAppSettings
+
                 await appSettings!.LoadSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+                //var so = appSettings.SettingsObject;
+                var t = appSettings?.LicenseInfo;
 #else
+                var so = SettingsApp.SettingsObject;
+                var t = SettingsApp.LicenseInfo;
                 await SettingsApp.LoadSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
 #endif
                 LoadSettings();

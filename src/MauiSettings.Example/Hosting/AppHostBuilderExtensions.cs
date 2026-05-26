@@ -1,7 +1,10 @@
-﻿using MauiSettings.Example.Interfaces;
+﻿#if MauiAppSettings
+using MauiSettings.Example.Interfaces;
 using MauiSettings.Example.Services;
+#endif
 using CommunityToolkit.Maui;
 using MauiSettings.Example.ViewModels;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace MauiSettings.Example.Hosting
 {
@@ -36,19 +39,10 @@ namespace MauiSettings.Example.Hosting
                 PassPhrase = hash,
                 Context = AppSourceGenerationContext.Default
             };
-            /*
-            if (!string.IsNullOrEmpty(hash))
-            {
-                settings.LoadSettingsAsync(sharedName: sharedName, key: hash)
-                    .GetAwaiter()
-                    .GetResult();
-            }
-            else
-                settings.LoadSettingsAsync(sharedName: sharedName).GetAwaiter().GetResult();
-            */
-            builder.Services.AddSingleton<IAppSettingsService>(settings);
+            builder.Services.TryAddSingleton<IAppSettingsService>(settings);
             return builder;
         }
-    }
 #endif
+
+    }
 }

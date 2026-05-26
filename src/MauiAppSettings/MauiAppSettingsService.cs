@@ -34,8 +34,8 @@ namespace AndreasReitberger.Maui
         public partial SO SettingsObject { get; private set; }
         */
         //public static SO SettingsObject { get; private set; } // = new(); ==> // Creating a new object here leads to a StackOverflow exception?!
-        static object? _settingsObject;
-        public static SO SettingsObject
+        object? _settingsObject;
+        internal SO SettingsObject
         {
             get
             {

@@ -1,4 +1,8 @@
-﻿using MauiSettings.Example.Interfaces;
+﻿#if MauiAppSettings
+using MauiSettings.Example.Interfaces;
+#else
+using MauiSettings.Example.Models.Settings;
+#endif
 
 namespace MauiSettings.Example
 {
@@ -34,14 +38,6 @@ namespace MauiSettings.Example
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-#if MauiAppSettings
-            /*
-            appSettings!.Dispatcher = DispatcherProvider.Current.GetForCurrentThread();
-            appSettings!.LoadSettingsAsync()
-                .GetAwaiter()
-                .GetResult();
-            */
-#endif
             return new Window(new AppShell());
         }
 
