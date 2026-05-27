@@ -7,7 +7,11 @@
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
+#if MauiAppSettings
+    public enum MauiAppSettingsActions
+#else
     public enum MauiSettingsActions
+#endif
     {
         Load,
         Save,

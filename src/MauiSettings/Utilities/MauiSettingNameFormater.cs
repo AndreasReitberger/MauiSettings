@@ -10,7 +10,11 @@ namespace AndreasReitberger.Maui.Utilities
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
+#if MauiAppSettings
+    internal class MauiAppSettingNameFormater
+#else
     internal class MauiSettingNameFormater
+#endif
     {
         #region Variables
         public const string Version = "v1";
@@ -18,7 +22,11 @@ namespace AndreasReitberger.Maui.Utilities
         #endregion
 
         #region Methods
+#if MauiAppSettings
+        public static string GetFullSettingName(Type? settingsType, MemberInfo mi, MauiAppSettingBaseAttribute? baseSettingAttr)
+#else
         public static string GetFullSettingName(Type? settingsType, MemberInfo mi, MauiSettingBaseAttribute? baseSettingAttr)
+#endif
         {
             string name;
             if (string.IsNullOrEmpty(baseSettingAttr?.Name))
@@ -33,6 +41,6 @@ namespace AndreasReitberger.Maui.Utilities
             return $"{NamePrefix}_{Version}_{name}{(settingsType == null ? "" : $"_{settingsType}")}";
         }
         public static string GetSettingsNamePrefix() => $"{NamePrefix}_{Version}";
-        #endregion
+#endregion
     }
 }

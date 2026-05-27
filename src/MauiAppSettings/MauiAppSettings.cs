@@ -1,4 +1,7 @@
-﻿namespace AndreasReitberger.Maui
+﻿using AndreasReitberger.Maui.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace AndreasReitberger.Maui
 {
     /*
      * Based on the idea of Advexp.Settings.Local by Alexey Ivakin
@@ -9,11 +12,18 @@
      */
 
     // All the code in this file is included in all platforms.
-    public partial class MauiSettings<T> : MauiSettingsGeneric<T> where T : new()
+    //public partial class MauiAppSettings<T> : MauiAppSettingsService<T>, IMauiAppSettings<T> where T : new()
+    public partial class MauiAppSettings<T> : MauiAppSettingsService, IMauiAppSettings<T>
     {
+        #region Properties
+
+        [ObservableProperty]
+        public partial bool SettingsChanged { get; set; } = false;
+        #endregion
+
         #region Ctors
-        public MauiSettings() : base() { }
-        public MauiSettings(IDispatcher dispatcher) : base(dispatcher) { }
+        public MauiAppSettings() : base() { }
+        public MauiAppSettings(IDispatcher dispatcher) : base(dispatcher) { }
         #endregion
 
         #region DeviceSettings

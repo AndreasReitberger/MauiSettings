@@ -4,10 +4,16 @@ namespace MauiSettings.Example
 {
     public partial class SettingsPage : ContentPage
     {
-        public SettingsPage()
+        public SettingsPage(SettingsPageViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = new SettingsPageViewModel();
+            BindingContext = viewModel; 
+            //Loaded += ((SettingsPageViewModel)BindingContext).Pages_Loaded;
+        }
+
+        ~SettingsPage()
+        {
+            //Loaded -= ((SettingsPageViewModel)BindingContext).Pages_Loaded;
         }
     }
 

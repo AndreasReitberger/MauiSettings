@@ -1,6 +1,9 @@
 ﻿using AndreasReitberger.Shared.Core.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+#if MauiAppSettings
+using MauiSettings.Example.Interfaces;
+#endif
 using MauiSettings.Example.Models.Settings;
 using System.Collections.ObjectModel;
 
@@ -8,6 +11,12 @@ namespace MauiSettings.Example.ViewModels
 {
     public partial class MainPageViewModel : ObservableObject
     {
+        #region Dependencies
+#if MauiAppSettings
+        readonly IAppSettingsService? appSettings;
+#endif
+#endregion
+
         #region Settings
         [ObservableProperty]
         public partial bool IsLoading { get; set; } = false;
@@ -21,43 +30,76 @@ namespace MauiSettings.Example.ViewModels
         {
             if (!IsLoading)
             {
+#if MauiAppSettings
+                appSettings?.LicenseInfo = value;
+                appSettings?.SaveSetting(setting => appSettings.LicenseInfo);
+#else
                 SettingsApp.LicenseInfo = value;
-                SettingsApp.SettingsChanged = true;
+                SettingsApp.SaveSetting(setting => SettingsApp.LicenseInfo);
+#endif
             }
         }
 
         [ObservableProperty]
         public partial ObservableCollection<SettingsItem> Settings { get; set; } = [];
-        #endregion
+#endregion
 
         #region Ctor
+#if MauiAppSettings
+        public MainPageViewModel(IAppSettingsService appSettings)
+        {
+            this.appSettings = appSettings;
+            LoadSettings();
+        }
+#else
         public MainPageViewModel()
         {
             LoadSettings();
         }
-        #endregion
+#endif
+#endregion
 
         #region Methods
         void LoadSettings()
         {
             IsLoading = true;
 
+#if MauiAppSettings
+            if (appSettings is not null)
+            {
+                LicenseInfo = appSettings.LicenseInfo;
+            }
+#else
             LicenseInfo = SettingsApp.LicenseInfo;
-
+#endif
             IsLoading = false;
         }
-        #endregion
+#endregion
 
         #region Commands
-        [RelayCommand]
-        static async Task SaveSettings() => await SettingsApp.SaveSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+        [RelayCommand]       
+#if MauiAppSettings
+        Task SaveSettings() => appSettings!.SaveSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+#else
+        static Task SaveSettings() => SettingsApp.SaveSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+#endif
 
         [RelayCommand]
         async Task LoadSettingsFromDevice()
         {
             try
             {
+
+#if MauiAppSettings
+
+                await appSettings!.LoadSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+                //var so = appSettings.SettingsObject;
+                var t = appSettings?.LicenseInfo;
+#else
+                var so = SettingsApp.SettingsObject;
+                var t = SettingsApp.LicenseInfo;
                 await SettingsApp.LoadSettingsAsync(AppSourceGenerationContext.Default, key: App.Hash);
+#endif
                 LoadSettings();
             }
             catch (Exception)
@@ -70,7 +112,11 @@ namespace MauiSettings.Example.ViewModels
         async Task ExchangeHashKey()
         {
             string newKey = EncryptionManager.GenerateBase64Key();
+#if MauiAppSettings
+            await appSettings!.ExhangeKeyAsync(newKey, AppSourceGenerationContext.Default, oldKey: App.Hash);
+#else
             await SettingsApp.ExhangeKeyAsync(newKey, AppSourceGenerationContext.Default, oldKey: App.Hash);
+#endif
             App.Hash = HashKey = newKey;
             LoadSettings();
         }
@@ -79,7 +125,11 @@ namespace MauiSettings.Example.ViewModels
         async Task ToDictionary()
         {
             // All "SkipForExport" should be missing here.
+#if MauiAppSettings
+            Dictionary<string, Tuple<object?, Type>> dict = await appSettings!.ToDictionaryAsync(AppSourceGenerationContext.Default);
+#else
             Dictionary<string, Tuple<object?, Type>> dict = await SettingsApp.ToDictionaryAsync(AppSourceGenerationContext.Default);
+#endif
             Settings = [.. dict.Select(kp => new SettingsItem() { Key = kp.Key, Value = kp.Value?.Item1?.ToString() ?? string.Empty })];
         }
         #endregion

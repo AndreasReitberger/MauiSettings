@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Reflection;
 
 namespace AndreasReitberger.Maui.Helper
 {
@@ -9,12 +10,19 @@ namespace AndreasReitberger.Maui.Helper
      * 
      * Modifed by Andreas Reitberger to work on .NET MAUI
      */
-    internal class MauiSettingsMemberInfo
+#if MauiAppSettings
+    public partial class MauiAppSettingsMemberInfo : ObservableObject
+#else
+    public partial class MauiSettingsMemberInfo : ObservableObject
+#endif
     {
         #region Properties
-        public object? OrignalSettingsObject { get; set; }
-        public MemberInfo? Info { get; set; }
-        public Type? SettingsType { get; set; }
+        [ObservableProperty]
+        public partial object? OrignalSettingsObject { get; set; }
+        [ObservableProperty]
+        public partial MemberInfo? Info { get; set; }
+        [ObservableProperty]
+        public partial Type? SettingsType { get; set; }
         #endregion
     }
 }

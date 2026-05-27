@@ -1,4 +1,5 @@
-﻿using AndreasReitberger.Maui;
+﻿#if !MauiAppSettings
+using AndreasReitberger.Maui;
 using AndreasReitberger.Maui.Attributes;
 using System.Text.Json.Serialization;
 
@@ -19,16 +20,6 @@ namespace MauiSettings.Example.Models.Settings
                 if (_settingsChanged == value) return;
                 _settingsChanged = value;
             }
-        }
-        #endregion
-
-        #region DeviceSettings
-        /// <summary>
-        /// Opens the settings UI on the current device
-        /// </summary>
-        public static void OpenDeviceSettings()
-        {
-            AppInfo.ShowSettingsUI();
         }
         #endregion
 
@@ -94,3 +85,4 @@ namespace MauiSettings.Example.Models.Settings
         #endregion
     }
 }
+#endif
