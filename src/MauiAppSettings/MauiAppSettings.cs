@@ -30,7 +30,7 @@ namespace AndreasReitberger.Maui
         /// <summary>
         /// Opens the settings UI on the current device
         /// </summary>
-        public static void OpenDeviceSettings() => AppInfo.ShowSettingsUI();
+        public void OpenDeviceSettings() => AppInfo.ShowSettingsUI();
         #endregion
     }
 }
