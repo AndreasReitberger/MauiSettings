@@ -573,13 +573,28 @@ namespace AndreasReitberger.Maui
             MauiAppSettingBaseAttribute? settingBaseAttribute = null;
             if (settingsObjectInfo.Info is not null)
             {
-                List<MauiAppSettingAttribute> settingBaseAttributes
+                List<MauiAppSettingAttribute> settingBaseAttributes = GetMauiAppSettingsAttributes(settingsObjectInfo);
+                if (settingBaseAttributes.Count == 0)
+                    return false;
+                /*
                     = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes.Count == 0)
                 {
-                    // If the member has not the needed MauiSettingsAttribute, continue with the search
-                    return false;
+                    Type? type = settingsObjectInfo.OrignalSettingsObject?.GetType();
+                    PropertyInfo? prop = type?.GetProperty(settingsObjectInfo.Info?.Name);
+                    if (prop is not null)
+                    {
+                        settingBaseAttributes = [.. prop.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
+                    }
+                    // If still 0, return
+                    if (settingBaseAttributes.Count == 0)
+                    {
+                        // If the member has not the needed MauiSettingsAttribute, continue with the search
+                        Debug.WriteLine($"Attribute `{nameof(MauiAppSettingAttribute)}` not set to the property: {settingsObjectInfo.Info.Name}");
+                        return false;
+                    }
                 }
+                */
                 settingBaseAttribute = settingBaseAttributes.FirstOrDefault();
             }
             if (settingsObjectInfo.Info is not null && settingBaseAttribute is not null)
@@ -766,13 +781,28 @@ namespace AndreasReitberger.Maui
             MauiAppSettingBaseAttribute? settingBaseAttribute = null;
             if (settingsObjectInfo.Info is not null)
             {
-                List<MauiAppSettingAttribute> settingBaseAttributes
+                List<MauiAppSettingAttribute> settingBaseAttributes = GetMauiAppSettingsAttributes(settingsObjectInfo); 
+                if (settingBaseAttributes.Count == 0)
+                    return MauiAppSettingsResults.Skipped;
+                /*
                     = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes?.Count == 0)
                 {
-                    // If the member has not the needed MauiSettingsAttribute, continue with the search
-                    return MauiAppSettingsResults.Skipped;
-                }
+                    Type? type = settingsObjectInfo.OrignalSettingsObject?.GetType();
+                    PropertyInfo? prop = type?.GetProperty(settingsObjectInfo.Info?.Name);
+                    if (prop is not null)
+                    {
+                        settingBaseAttributes = [.. prop.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
+                    }
+                    // If still 0, return
+                    if (settingBaseAttributes.Count == 0)
+                    {
+                        // If the member has not the needed MauiSettingsAttribute, continue with the search
+                        Debug.WriteLine($"Attribute `{nameof(MauiAppSettingAttribute)}` not set to the property: {settingsObjectInfo.Info.Name}");
+                        // If the member has not the needed MauiSettingsAttribute, continue with the search
+                        return MauiAppSettingsResults.Skipped;
+                    }
+                }*/
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
                 settingsInfo.Name = MauiAppSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject?.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiAppSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
@@ -1189,13 +1219,28 @@ namespace AndreasReitberger.Maui
             MauiAppSettingBaseAttribute? settingBaseAttribute = null;
             if (settingsObjectInfo.Info is not null)
             {
-                List<MauiAppSettingAttribute> settingBaseAttributes
+                List<MauiAppSettingAttribute> settingBaseAttributes = GetMauiAppSettingsAttributes(settingsObjectInfo);
+                if (settingBaseAttributes.Count == 0)
+                    return null;
+                /*
                     = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
                 if (settingBaseAttributes?.Count == 0)
                 {
-                    // If the member has not the needed MauiSettingsAttribute, continue with the search
-                    return null;
+                    Type? type = settingsObjectInfo.OrignalSettingsObject?.GetType();
+                    PropertyInfo? prop = type?.GetProperty(settingsObjectInfo.Info?.Name);
+                    if (prop is not null)
+                    {
+                        settingBaseAttributes = [.. prop.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
+                    }
+                    // If still 0, return
+                    if (settingBaseAttributes.Count == 0)
+                    {
+                        // If the member has not the needed MauiSettingsAttribute, continue with the search
+                        Debug.WriteLine($"Attribute `{nameof(MauiAppSettingAttribute)}` not set to the property: {settingsObjectInfo.Info.Name}");
+                        return null;
+                    }
                 }
+                */
                 settingBaseAttribute = settingBaseAttributes?.FirstOrDefault();
                 settingsInfo.Name = MauiAppSettingNameFormater.GetFullSettingName(settingsObjectInfo.OrignalSettingsObject?.GetType(), settingsObjectInfo.Info, settingBaseAttribute);
                 settingsInfo.SettingsType = (settingsInfo.SettingsType = MauiAppSettingsObjectHelper.GetSettingType(settingsObjectInfo.Info));
@@ -1272,6 +1317,30 @@ namespace AndreasReitberger.Maui
             return settingsInfo;
         }
 
+        List<MauiAppSettingAttribute> GetMauiAppSettingsAttributes(MauiAppSettingsMemberInfo settingsObjectInfo)
+        {
+            if (settingsObjectInfo.Info is not null)
+            {
+                List<MauiAppSettingAttribute> settingBaseAttributes = [.. settingsObjectInfo.Info.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
+                if (settingBaseAttributes.Count == 0)
+                {
+                    Type? type = settingsObjectInfo.OrignalSettingsObject?.GetType();
+                    PropertyInfo? prop = type?.GetProperty(settingsObjectInfo.Info.Name);
+                    if (prop is not null)
+                    {
+                        settingBaseAttributes = [.. prop.GetCustomAttributes<MauiAppSettingAttribute>(inherit: false)];
+                    }
+                    // If still 0, return
+                    if (settingBaseAttributes.Count == 0)
+                    {
+                        // If the member has not the needed MauiSettingsAttribute, continue with the search
+                        Debug.WriteLine($"Attribute `{nameof(MauiAppSettingAttribute)}` not set to the property: {settingsObjectInfo.Info.Name}");
+                    }
+                }
+                return settingBaseAttributes;
+            }
+            return [];
+        }
         #endregion
 
         #endregion
