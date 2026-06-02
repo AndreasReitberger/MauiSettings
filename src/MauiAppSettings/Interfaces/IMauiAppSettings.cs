@@ -5,5 +5,9 @@
         #region Properties
         public bool SettingsChanged { get; set; }
         #endregion
+
+        #region Methods
+        public void OpenDeviceSettings();
+        #endregion
     }
 }
