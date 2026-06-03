@@ -12,7 +12,7 @@
 		<Title>AppSettings.Maui</Title>
 		<Product>AppSettings.Maui</Product>
 		<PackageId>AppSettingsMaui</PackageId>
-    <Version>1.0.0-preview1</Version>
+    <Version>1.0.0-preview2</Version>
     <PackageReadmeFile>README_MauiAppSettings.md</PackageReadmeFile>
     
     <DefineConstants>$(DefineConstants);MauiAppSettings</DefineConstants>
